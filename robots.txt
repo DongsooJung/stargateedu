@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://stargateedu.co.kr/sitemap.xml

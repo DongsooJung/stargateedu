@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>STARGATE EDU | 대치동 KOI · 수학정보올림피아드 · AI 교육</title>
+<meta name="description" content="STARGATE EDU — 대치동 KOI(한국정보올림피아드) 전문 교육 · 서울대 박사 강사 · AI 시대 수학/코딩 영재 양성." />
+<meta name="author" content="동수 / Stargate Corp" />
+<meta property="og:title" content="STARGATE EDU 공식 홈페이지" />
+<meta property="og:description" content="대치동 KOI 수학정보올림피아드 전문 · AI 교육 · 서울대 박사 강사" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://stargateedu.co.kr" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#0b1738;
+    --navy-2:#142150;
+    --gold:#d9a441;
+    --gold-2:#f1c77a;
+    --white:#ffffff;
+    --gray:#e9ecf3;
+    --muted:#6b7594;
+    --text:#1a2138;
+    --radius:18px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{font-family:"Noto Sans KR","Pretendard","Malgun Gothic","맑은 고딕",system-ui,sans-serif;color:var(--text);line-height:1.65;background:#fff;-webkit-font-smoothing:antialiased;word-break:keep-all}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+
+  /* ===== NAV ===== */
+  nav.top{position:sticky;top:0;z-index:50;background:rgba(11,23,56,0.92);backdrop-filter:blur(10px);color:#fff;padding:14px 0;border-bottom:1px solid rgba(217,164,65,0.25)}
+  nav.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:0.5px}
+  .brand .dot{width:10px;height:10px;border-radius:50%;background:var(--gold);box-shadow:0 0 12px var(--gold)}
+  nav.top ul{display:flex;gap:22px;list-style:none;font-size:14px}
+  nav.top a:hover{color:var(--gold-2)}
+  nav.top .cta{background:var(--gold);color:#0b1738;padding:8px 14px;border-radius:999px;font-weight:700;font-size:13px}
+  @media(max-width:720px){nav.top ul{display:none}}
+
+  /* ===== HERO ===== */
+  header.hero{position:relative;background:radial-gradient(1200px 600px at 20% -20%,rgba(217,164,65,0.18),transparent 60%),linear-gradient(180deg,#0b1738 0%,#142150 100%);color:#fff;padding:110px 0 100px;overflow:hidden}
+  header.hero::before{content:"";position:absolute;inset:0;background:
+    radial-gradient(2px 2px at 20% 30%,rgba(255,255,255,0.45) 50%,transparent 51%),
+    radial-gradient(1.5px 1.5px at 80% 20%,rgba(255,255,255,0.35) 50%,transparent 51%),
+    radial-gradient(2px 2px at 60% 70%,rgba(255,255,255,0.3) 50%,transparent 51%),
+    radial-gradient(1px 1px at 40% 85%,rgba(255,255,255,0.25) 50%,transparent 51%),
+    radial-gradient(1.5px 1.5px at 10% 60%,rgba(255,255,255,0.3) 50%,transparent 51%);
+    pointer-events:none;opacity:0.8}
+  .hero .badge{display:inline-block;padding:6px 14px;border-radius:999px;background:rgba(217,164,65,0.15);color:var(--gold-2);font-size:13px;font-weight:600;letter-spacing:0.5px;border:1px solid rgba(217,164,65,0.35);margin-bottom:20px}
+  .hero h1{font-size:clamp(32px,5vw,56px);font-weight:900;line-height:1.2;letter-spacing:-0.5px}
+  .hero h1 span{color:var(--gold-2);background:linear-gradient(180deg,var(--gold-2),var(--gold));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  .hero p.lead{margin-top:18px;font-size:18px;color:#cfd5e8;max-width:680px}
+  .hero .cta-row{margin-top:34px;display:flex;gap:12px;flex-wrap:wrap}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:14px 22px;border-radius:14px;font-weight:700;font-size:15px;transition:transform .15s ease, box-shadow .2s ease;border:1px solid transparent}
+  .btn-primary{background:var(--gold);color:#0b1738;box-shadow:0 10px 28px rgba(217,164,65,0.35)}
+  .btn-primary:hover{transform:translateY(-2px)}
+  .btn-ghost{background:transparent;color:#fff;border-color:rgba(255,255,255,0.35)}
+  .btn-ghost:hover{border-color:var(--gold-2);color:var(--gold-2)}
+
+  /* ===== SECTION COMMON ===== */
+  section{padding:90px 0}
+  .kicker{display:inline-block;font-size:12px;letter-spacing:2px;color:var(--gold);font-weight:700;text-transform:uppercase;margin-bottom:10px}
+  h2{font-size:clamp(26px,3.6vw,38px);font-weight:900;letter-spacing:-0.5px;color:var(--navy)}
+  h3{font-size:20px;font-weight:700;color:var(--navy);margin-bottom:8px}
+  p.desc{color:var(--muted);margin-top:12px;max-width:720px}
+
+  /* ===== ABOUT ===== */
+  .about{background:#f7f8fc}
+  .about-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:40px;margin-top:40px}
+  @media(max-width:820px){.about-grid{grid-template-columns:1fr}}
+  .bio{background:#fff;border-radius:var(--radius);padding:30px;box-shadow:0 10px 30px rgba(11,23,56,0.06);border:1px solid #eef0f7}
+  .bio ul{list-style:none;margin-top:14px}
+  .bio li{padding:10px 0;border-bottom:1px dashed #e7eaf4;display:flex;gap:12px;font-size:15px}
+  .bio li:last-child{border-bottom:none}
+  .bio li b{color:var(--navy);min-width:90px;display:inline-block}
+  .stats{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:10px}
+  .stat{background:linear-gradient(180deg,#fff,#f2f4fa);border:1px solid #e7eaf4;border-radius:14px;padding:18px}
+  .stat .num{font-size:28px;font-weight:900;color:var(--navy)}
+  .stat .lbl{font-size:13px;color:var(--muted);margin-top:4px}
+
+  /* ===== KOI ===== */
+  .koi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:40px}
+  @media(max-width:820px){.koi-grid{grid-template-columns:1fr}}
+  .card{background:#fff;border:1px solid #e7eaf4;border-radius:var(--radius);padding:26px;position:relative;overflow:hidden;transition:transform .2s ease, box-shadow .2s ease}
+  .card:hover{transform:translateY(-4px);box-shadow:0 14px 34px rgba(11,23,56,0.08)}
+  .card .icon{width:46px;height:46px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(135deg,var(--navy),var(--navy-2));color:var(--gold-2);font-weight:900;font-size:18px;margin-bottom:14px;font-family:"JetBrains Mono",monospace}
+  .card ul{margin-top:12px;padding-left:18px;color:var(--muted);font-size:14.5px}
+  .card ul li{margin:6px 0}
+
+  /* ===== HUB ===== */
+  .hub{background:linear-gradient(180deg,#0b1738,#142150);color:#fff}
+  .hub h2{color:#fff}
+  .hub .kicker{color:var(--gold-2)}
+  .hub-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:36px}
+  @media(max-width:820px){.hub-grid{grid-template-columns:1fr}}
+  .link{display:flex;align-items:center;justify-content:space-between;padding:20px 22px;border:1px solid rgba(255,255,255,0.14);border-radius:16px;background:rgba(255,255,255,0.04);transition:all .2s}
+  .link:hover{background:rgba(217,164,65,0.12);border-color:var(--gold-2);transform:translateY(-2px)}
+  .link .t{font-weight:700;font-size:15px}
+  .link .s{color:#a8b0c9;font-size:12px;margin-top:2px}
+  .link .arrow{color:var(--gold-2);font-size:18px}
+  .link.primary{background:var(--gold);color:#0b1738;border-color:var(--gold)}
+  .link.primary .s{color:#3a2e12}
+  .link.primary .arrow{color:#0b1738}
+
+  /* ===== CONTACT ===== */
+  .contact{background:#f7f8fc}
+  .contact-card{background:#fff;border-radius:var(--radius);padding:40px;margin-top:30px;border:1px solid #e7eaf4;display:grid;grid-template-columns:1.2fr 1fr;gap:40px;align-items:center}
+  @media(max-width:820px){.contact-card{grid-template-columns:1fr}}
+  .contact-card h3{font-size:24px}
+  .email-btn{display:inline-flex;align-items:center;gap:10px;background:var(--navy);color:#fff;padding:16px 22px;border-radius:14px;font-weight:700;margin-top:16px;font-size:15px}
+  .email-btn:hover{background:var(--gold);color:var(--navy)}
+  .info-grid{display:grid;gap:10px;font-size:14.5px}
+  .info-grid .row{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid #eef0f7}
+  .info-grid .row:last-child{border-bottom:none}
+  .info-grid b{min-width:80px;color:var(--navy)}
+
+  /* ===== FOOTER ===== */
+  footer{background:#0b1738;color:#9aa3c2;padding:40px 0;text-align:center;font-size:13px;border-top:1px solid rgba(217,164,65,0.2)}
+  footer .brand{justify-content:center;color:#fff;margin-bottom:10px;font-size:16px}
+  footer a{color:var(--gold-2)}
+
+  /* ===== PRINT / PDF ===== */
+  @media print{
+    nav.top{position:static;background:var(--navy)}
+    header.hero{padding:60px 0}
+    section{padding:50px 0;break-inside:avoid}
+    .card,.link,.bio,.contact-card{break-inside:avoid}
+    .hub{background:var(--navy)}
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="top">
+  <div class="wrap">
+    <div class="brand"><span class="dot"></span>STARGATE&nbsp;EDU</div>
+    <ul>
+      <li><a href="#about">소개</a></li>
+      <li><a href="#koi">KOI 과정</a></li>
+      <li><a href="#hub">링크 허브</a></li>
+      <li><a href="#contact">연락처</a></li>
+    </ul>
+    <a class="cta" href="https://litt.ly/stargateedu" target="_blank" rel="noopener">리틀리 바로가기 →</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="wrap">
+    <span class="badge">대치동 · KOI 수학정보올림피아드 · AI 교육</span>
+    <h1>수학과 알고리즘,<br/><span>AI 시대의 언어</span>로 가르칩니다.</h1>
+    <p class="lead">
+      STARGATE EDU는 한국정보올림피아드(KOI) · 수학올림피아드 영재를 위한
+      서울대 박사 직강 전문 교육 브랜드입니다. 대치동 현장 경험과
+      공간계량·AI 연구 역량을 결합해 "생각의 구조"를 훈련합니다.
+    </p>
+    <div class="cta-row">
+      <a class="btn btn-primary" href="https://litt.ly/stargateedu" target="_blank" rel="noopener">🔗 리틀리 링크 허브</a>
+      <a class="btn btn-ghost" href="mailto:ceo@stargateedu.co.kr">✉️ 상담 문의</a>
+    </div>
+  </div>
+</header>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="wrap">
+    <span class="kicker">About</span>
+    <h2>대표 강사 프로필</h2>
+    <p class="desc">
+      만 17세 최연소 서울대 입학, 정보올림피아드 시·도 대상 수상.
+      서울대 박사 과정에서 공간계량·AI 기반 도시분석을 수행하며
+      "수학적 사고 → 알고리즘 → 실세계 문제 해결"의 전 과정을 가르칩니다.
+    </p>
+
+    <div class="about-grid">
+      <div class="bio">
+        <h3>동수 (Jung Dongsoo)</h3>
+        <ul>
+          <li><b>역할</b><span>대치동 KOI 강사 · Stargate Corp CEO</span></li>
+          <li><b>학력</b><span>서울대 지구환경시스템공학부 학사 (만 17세 최연소 입학)</span></li>
+          <li><b>석사</b><span>북한대학원대학교 북한학 석사 (경제·IT) / 서울대 행정대학원 석사</span></li>
+          <li><b>박사</b><span>서울대 건설환경공학부 스마트도시공학 박사 수료</span></li>
+          <li><b>고교</b><span>대구과학고등학교 17기</span></li>
+          <li><b>군경력</b><span>공군 시설장교 · 서울공항 활주로 재포장 PM · 참모총장상</span></li>
+          <li><b>자격</b><span>토목기사</span></li>
+          <li><b>수상</b><span>시·도 정보올림피아드 대상</span></li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="stats">
+          <div class="stat"><div class="num">17세</div><div class="lbl">서울대 최연소 입학</div></div>
+          <div class="stat"><div class="num">3개</div><div class="lbl">서울대 소속 (학·석·박)</div></div>
+          <div class="stat"><div class="num">KOI</div><div class="lbl">시·도 대회 대상 수상</div></div>
+          <div class="stat"><div class="num">AI·GIS</div><div class="lbl">공간계량·헤도닉 연구</div></div>
+        </div>
+        <div class="bio" style="margin-top:14px">
+          <h3>교육 철학</h3>
+          <p style="color:var(--muted);font-size:14.5px;margin-top:6px">
+            "답을 푸는 기술"이 아닌 <b>"문제를 구조화하는 힘"</b>을 훈련합니다.
+            수학 증명 → 알고리즘 설계 → 코드 구현 → 실제 데이터 분석으로
+            이어지는 4단계 커리큘럼이 STARGATE 방식의 핵심입니다.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- KOI -->
+<section id="koi">
+  <div class="wrap">
+    <span class="kicker">Programs</span>
+    <h2>KOI · 수학정보올림피아드 커리큘럼</h2>
+    <p class="desc">한국정보올림피아드(KOI)는 알고리즘·자료구조·수학적 사고를 동시에 평가하는 대한민국 최고 권위 대회입니다. STARGATE EDU는 3단계 트랙으로 초·중·고 단계별 학습을 지원합니다.</p>
+
+    <div class="koi-grid">
+      <div class="card">
+        <div class="icon">L1</div>
+        <h3>Foundation · 기초 논리</h3>
+        <p style="color:var(--muted);font-size:14.5px">초등 고학년 ~ 중1 대상. 수학적 귀납·그래프 직관·재귀 사고를 게임과 퍼즐로 훈련합니다.</p>
+        <ul>
+          <li>정수론·수열 기초</li>
+          <li>Python 입문 (20시간)</li>
+          <li>KOI 초등부 기출 풀이</li>
+          <li>그리디·완전탐색</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="icon">L2</div>
+        <h3>Olympiad · 본선 대비</h3>
+        <p style="color:var(--muted);font-size:14.5px">중등 ~ 고1 대상. KOI 2차 본선 진출을 목표로 실전 알고리즘을 체계화합니다.</p>
+        <ul>
+          <li>DP·분할정복·그래프 탐색</li>
+          <li>세그먼트 트리·펜윅</li>
+          <li>최단경로·MST·강연결</li>
+          <li>주간 모의 + 개별 첨삭</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="icon">L3</div>
+        <h3>Research · AI·데이터 심화</h3>
+        <p style="color:var(--muted);font-size:14.5px">고등~대학 예비. 박사 과정 연구 방법론을 압축해 실제 데이터·ML 프로젝트로 포트폴리오를 완성합니다.</p>
+        <ul>
+          <li>공간계량·헤도닉 모형</li>
+          <li>PyTorch·시계열 딥러닝</li>
+          <li>논문 읽기·작성 워크숍</li>
+          <li>SW특기자·영재고 대비</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HUB -->
+<section class="hub" id="hub">
+  <div class="wrap">
+    <span class="kicker">Hub</span>
+    <h2>STARGATE 통합 링크 허브</h2>
+    <p class="desc" style="color:#cfd5e8">모든 서비스·리서치·포트폴리오를 한곳에서 확인하세요. 리틀리(litt.ly)가 공식 링크 허브입니다.</p>
+
+    <div class="hub-grid">
+      <a class="link primary" href="https://litt.ly/stargateedu" target="_blank" rel="noopener">
+        <div><div class="t">🔗 리틀리 링크 허브 (litt.ly/stargateedu)</div><div class="s">모든 공식 채널·서비스 모음</div></div>
+        <span class="arrow">→</span>
+      </a>
+
+      <a class="link" href="https://stargate11.com/stargate.github.io/" target="_blank" rel="noopener">
+        <div><div class="t">🛰 Stargate Portal</div><div class="s">공식 기업 포털</div></div>
+        <span class="arrow">→</span>
+      </a>
+
+      <a class="link" href="https://stargate11.com/stargate.github.io/decision.html" target="_blank" rel="noopener">
+        <div><div class="t">🧭 Decision Framework v3.0</div><div class="s">의사결정 프레임워크</div></div>
+        <span class="arrow">→</span>
+      </a>
+
+      <a class="link" href="https://stargate11.com/kmong-research/" target="_blank" rel="noopener">
+        <div><div class="t">📊 크몽 거래액·재무 리서치 2025</div><div class="s">데이터 리서치 리포트</div></div>
+        <span class="arrow">→</span>
+      </a>
+
+      <a class="link" href="http://stargate8224.cafe24.com/" target="_blank" rel="noopener">
+        <div><div class="t">🛍 스타게이트 쇼핑몰</div><div class="s">공식 커머스</div></div>
+        <span class="arrow">→</span>
+      </a>
+
+      <a class="link" href="mailto:ceo@stargateedu.co.kr">
+        <div><div class="t">✉️ CEO 직통 이메일</div><div class="s">ceo@stargateedu.co.kr</div></div>
+        <span class="arrow">→</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="wrap">
+    <span class="kicker">Contact</span>
+    <h2>상담 및 수강 문의</h2>
+    <p class="desc">대치동 현장 수업 · 1:1 개별 지도 · 온라인 그룹 클래스 모두 운영합니다. 이메일로 목표 대회·학년·현재 수준을 알려주시면 맞춤 커리큘럼을 제안해 드립니다.</p>
+
+    <div class="contact-card">
+      <div>
+        <h3>지금 바로 문의하세요</h3>
+        <p style="color:var(--muted);margin-top:10px">가장 빠른 답변: CEO 직통 이메일로 연락 주시기 바랍니다. 일반적으로 24시간 이내 회신을 드립니다.</p>
+        <a class="email-btn" href="mailto:ceo@stargateedu.co.kr?subject=STARGATE%20EDU%20%EC%88%98%EA%B0%95%20%EB%AC%B8%EC%9D%98&body=%EC%95%88%EB%85%95%ED%95%98%EC%84%B8%EC%9A%94%2C%20%EC%8A%A4%ED%83%80%EA%B2%8C%EC%9D%B4%ED%8A%B8%20%EC%97%90%EB%93%80%20%EC%88%98%EA%B0%95%20%EB%AC%B8%EC%9D%98%20%EB%93%9C%EB%A6%BD%EB%8B%88%EB%8B%A4.%0A%0A%EC%9D%B4%EB%A6%84%3A%0A%ED%95%99%EB%85%84%3A%0A%EB%AA%A9%ED%91%9C%20%EB%8C%80%ED%9A%8C%3A%0A%ED%98%84%EC%9E%AC%20%EC%88%98%EC%A4%80%3A%0A%EC%97%B0%EB%9D%BD%EC%B2%98%3A">
+          ✉️ ceo@stargateedu.co.kr 메일 보내기
+        </a>
+      </div>
+      <div class="info-grid">
+        <div class="row"><b>이메일</b><span>ceo@stargateedu.co.kr</span></div>
+        <div class="row"><b>홈페이지</b><span>stargateedu.co.kr</span></div>
+        <div class="row"><b>링크 허브</b><span>litt.ly/stargateedu</span></div>
+        <div class="row"><b>포털</b><span>stargate11.com</span></div>
+        <div class="row"><b>수업 지역</b><span>서울 대치동 · 온라인 (전국)</span></div>
+        <div class="row"><b>운영 주체</b><span>Stargate Corp</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <div class="brand"><span class="dot"></span>STARGATE&nbsp;EDU</div>
+    <div>© 2026 Stargate Corp. All rights reserved.</div>
+    <div style="margin-top:8px">
+      <a href="https://litt.ly/stargateedu" target="_blank" rel="noopener">litt.ly/stargateedu</a>
+      &nbsp;·&nbsp;
+      <a href="mailto:ceo@stargateedu.co.kr">ceo@stargateedu.co.kr</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
