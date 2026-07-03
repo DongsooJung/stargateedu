@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#0A0E1A">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="description" content="정동수 · Dongsoo Jung — Stargate Corp CEO, AI Engineer, KOI 강사, 서울대 스마트도시공학 박사">
+  <title>Stargate EDU · Mobile</title>
+  <link rel="icon" href="../favicon.ico" type="image/x-icon">
+  <style>
+    /* ===== RESET & BASE ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:        #0A0E1A;
+      --surface:   #111827;
+      --surface2:  #1A2235;
+      --fg:        #E2E8F0;
+      --muted:     #64748B;
+      --primary:   #00D4FF;
+      --accent:    #7C3AED;
+      --border:    #1E293B;
+      --tag-bg:    #1E3A5F;
+      --warning:   #F59E0B;
+      --success:   #22C55E;
+      --radius:    16px;
+      --radius-sm: 10px;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif;
+      font-size: 15px;
+      line-height: 1.6;
+      min-height: 100dvh;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { text-decoration: none; color: inherit; }
+    button { border: none; background: none; cursor: pointer; font-family: inherit; }
+
+    /* ===== LAYOUT ===== */
+    .app-shell {
+      max-width: 480px;
+      margin: 0 auto;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    /* ===== TOP NAV ===== */
+    .top-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(10,14,26,0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 20px;
+    }
+    .nav-brand { display: flex; align-items: center; gap: 10px; }
+    .nav-logo {
+      width: 32px; height: 32px;
+      background: var(--primary);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 900; font-size: 16px; color: var(--bg);
+      flex-shrink: 0;
+    }
+    .nav-title { font-size: 13px; font-weight: 700; letter-spacing: 1.5px; color: var(--fg); }
+    .nav-version { font-size: 11px; color: var(--muted); letter-spacing: 0.5px; }
+
+    /* ===== TAB BAR ===== */
+    .tab-bar {
+      position: fixed;
+      bottom: 0; left: 50%; transform: translateX(-50%);
+      width: 100%; max-width: 480px;
+      background: rgba(17,24,39,0.96);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-top: 1px solid var(--border);
+      display: flex;
+      z-index: 100;
+      padding-bottom: env(safe-area-inset-bottom, 8px);
+    }
+    .tab-item {
+      flex: 1;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 10px 4px 6px;
+      gap: 4px;
+      cursor: pointer;
+      transition: color 0.2s;
+      color: var(--muted);
+      font-size: 11px; font-weight: 500;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .tab-item.active { color: var(--primary); }
+    .tab-icon { font-size: 22px; line-height: 1; }
+
+    /* ===== MAIN CONTENT ===== */
+    .main-content {
+      flex: 1;
+      overflow-y: auto;
+      padding-bottom: calc(70px + env(safe-area-inset-bottom, 0px));
+    }
+    .screen { display: none; }
+    .screen.active { display: block; }
+
+    /* ===== HOME SCREEN ===== */
+    .hero {
+      padding: 32px 20px 20px;
+    }
+    .hero-title {
+      font-size: 30px; font-weight: 800;
+      line-height: 1.3; letter-spacing: -0.5px;
+      margin-bottom: 14px;
+      color: var(--fg);
+    }
+    .hero-title span { color: var(--primary); }
+    .hero-desc {
+      font-size: 13.5px; color: var(--muted);
+      line-height: 1.7; margin-bottom: 20px;
+    }
+
+    /* Tags */
+    .tags-scroll {
+      display: flex; gap: 8px;
+      overflow-x: auto; padding-bottom: 4px;
+      margin-bottom: 20px;
+      scrollbar-width: none;
+    }
+    .tags-scroll::-webkit-scrollbar { display: none; }
+    .tag-chip {
+      flex-shrink: 0;
+      padding: 5px 12px;
+      border-radius: 20px;
+      background: var(--tag-bg);
+      border: 1px solid var(--border);
+      font-size: 12px; font-weight: 600;
+      color: var(--primary);
+      white-space: nowrap;
+    }
+
+    /* CTA */
+    .cta-row { display: flex; gap: 10px; margin-bottom: 8px; }
+    .btn {
+      flex: 1; padding: 12px 8px;
+      border-radius: var(--radius-sm);
+      font-size: 13px; font-weight: 600;
+      text-align: center;
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+      transition: opacity 0.15s, transform 0.1s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn:active { opacity: 0.75; transform: scale(0.97); }
+    .btn-outline {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--fg);
+    }
+    .btn-primary {
+      background: var(--primary);
+      color: var(--bg);
+    }
+
+    /* Profile Card */
+    .section { padding: 8px 20px 0; }
+    .section-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 14px; margin-top: 16px;
+    }
+    .section-title { font-size: 17px; font-weight: 700; }
+    .see-all { font-size: 13px; font-weight: 600; color: var(--primary); }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+    .profile-row { display: flex; align-items: center; gap: 12px; }
+    .avatar {
+      width: 48px; height: 48px; border-radius: 24px;
+      background: var(--accent);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px; font-weight: 700; color: #fff;
+      flex-shrink: 0;
+    }
+    .avatar-lg {
+      width: 80px; height: 80px; border-radius: 40px;
+      font-size: 36px;
+    }
+    .profile-name { font-size: 15px; font-weight: 700; margin-bottom: 2px; }
+    .profile-role { font-size: 12px; font-weight: 500; color: var(--primary); }
+    .divider { height: 1px; background: var(--border); margin: 12px 0; }
+    .profile-grid { display: grid; gap: 8px; }
+    .profile-item { display: flex; gap: 8px; }
+    .profile-label { font-size: 12px; font-weight: 600; color: var(--muted); width: 36px; flex-shrink: 0; padding-top: 1px; }
+    .profile-value { font-size: 12px; line-height: 1.6; flex: 1; }
+
+    /* Project Cards */
+    .project-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      margin-bottom: 12px;
+      cursor: pointer;
+      transition: border-color 0.2s, transform 0.1s;
+      display: block;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .project-card:active { transform: scale(0.98); border-color: var(--primary); }
+    .project-card-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+    .badge {
+      padding: 3px 8px; border-radius: 6px;
+      font-size: 10px; font-weight: 700; letter-spacing: 0.5px; color: #fff;
+    }
+    .badge-corp { background: var(--tag-bg); }
+    .badge-featured { background: var(--accent); }
+    .card-emoji { font-size: 28px; }
+    .card-title { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+    .card-desc { font-size: 13px; color: var(--muted); line-height: 1.5; margin-bottom: 10px; }
+    .card-footer { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    .tag-row { display: flex; flex-wrap: wrap; gap: 6px; flex: 1; }
+    .small-tag {
+      padding: 3px 8px; border-radius: 6px;
+      background: var(--tag-bg);
+      font-size: 11px; font-weight: 500; color: var(--muted);
+    }
+    .open-link { font-size: 12px; font-weight: 700; color: var(--primary); flex-shrink: 0; }
+    .coming-badge {
+      padding: 3px 8px; border-radius: 6px;
+      background: var(--tag-bg);
+      font-size: 11px; font-weight: 600; color: var(--muted);
+    }
+    .card-coming { opacity: 0.6; cursor: default; }
+    .card-coming:active { transform: none; border-color: var(--border); }
+
+    /* ===== PROJECTS SCREEN ===== */
+    .page-header {
+      padding: 24px 20px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .page-title { font-size: 22px; font-weight: 800; margin-bottom: 4px; }
+    .page-subtitle { font-size: 13px; color: var(--muted); }
+    .section-label {
+      font-size: 12px; font-weight: 700; letter-spacing: 0.5px;
+      margin-bottom: 12px; margin-top: 20px;
+    }
+    .label-active { color: var(--primary); }
+    .label-coming { color: var(--muted); }
+
+    /* ===== ABOUT SCREEN ===== */
+    .profile-hero {
+      display: flex; flex-direction: column; align-items: center;
+      padding: 32px 20px 20px; text-align: center;
+    }
+    .name-text { font-size: 20px; font-weight: 800; margin: 16px 0 6px; }
+    .role-text { font-size: 13px; font-weight: 600; color: var(--primary); margin-bottom: 16px; }
+    .interest-row { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+    .interest-chip {
+      padding: 5px 12px; border-radius: 20px;
+      background: var(--tag-bg); border: 1px solid var(--border);
+      font-size: 12px; font-weight: 600; color: var(--primary);
+    }
+    .work-row { display: flex; align-items: flex-start; gap: 12px; padding: 4px 0; }
+    .work-icon { font-size: 20px; width: 28px; text-align: center; flex-shrink: 0; }
+    .work-title { font-size: 14px; font-weight: 700; margin-bottom: 2px; }
+    .work-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+    .list-row { display: flex; align-items: center; gap: 10px; padding: 4px 0; }
+    .bullet { width: 6px; height: 6px; border-radius: 3px; flex-shrink: 0; }
+    .bullet-primary { background: var(--primary); }
+    .bullet-accent { background: var(--accent); }
+    .bullet-warning { background: var(--warning); }
+    .list-text { font-size: 14px; line-height: 1.5; }
+
+    /* ===== CONTACT SCREEN ===== */
+    .contact-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      margin-bottom: 10px;
+      display: flex; align-items: center; gap: 14px;
+      cursor: pointer;
+      transition: border-color 0.2s, transform 0.1s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .contact-card:active { transform: scale(0.98); border-color: var(--primary); }
+    .contact-icon-box {
+      width: 48px; height: 48px; border-radius: 14px;
+      background: var(--tag-bg);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; flex-shrink: 0;
+    }
+    .contact-info { flex: 1; min-width: 0; }
+    .contact-label { font-size: 11px; font-weight: 600; color: var(--muted); letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 2px; }
+    .contact-value { font-size: 14px; font-weight: 600; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .contact-desc { font-size: 12px; color: var(--muted); }
+    .contact-arrow { font-size: 16px; font-weight: 700; color: var(--primary); flex-shrink: 0; }
+    .footer-note {
+      margin-top: 32px; padding: 20px 20px 8px;
+      border-top: 1px solid var(--border);
+      text-align: center;
+    }
+    .footer-text { font-size: 12px; color: var(--muted); line-height: 1.8; }
+
+    /* ===== SCROLLBAR ===== */
+    .main-content::-webkit-scrollbar { width: 0; }
+
+    /* ===== ANIMATIONS ===== */
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    .screen.active { animation: fadeIn 0.2s ease; }
+
+    /* ===== DESKTOP HINT ===== */
+    @media (min-width: 481px) {
+      .app-shell { box-shadow: 0 0 60px rgba(0,212,255,0.08); }
+    }
+  </style>
+</head>
+<body>
+<div class="app-shell">
+
+  <!-- TOP NAV -->
+  <nav class="top-nav">
+    <div class="nav-brand">
+      <div class="nav-logo">D</div>
+      <span class="nav-title">DONGSOO.PORTAL</span>
+    </div>
+    <span class="nav-version">v1 · 2026</span>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content" id="mainContent">
+
+    <!-- ===== HOME ===== -->
+    <section class="screen active" id="screen-home">
+      <div class="hero">
+        <h1 class="hero-title">AI · 공간계량 · 교육을<br><span>한 곳에서.</span></h1>
+        <p class="hero-desc">Stargate Corporation CEO, 대치동 KOI 수학정보올림피아드 강사, 서울대 스마트도시공학 박사 수료. 연구·사업·교육 작업물을 공개 아카이브로 연결합니다.</p>
+        <div class="tags-scroll">
+          <span class="tag-chip">AI Engineering</span>
+          <span class="tag-chip">Urban Analytics</span>
+          <span class="tag-chip">KOI · PS</span>
+          <span class="tag-chip">Cybersecurity</span>
+          <span class="tag-chip">Docker · MCP</span>
+        </div>
+        <div class="cta-row">
+          <a class="btn btn-outline" href="https://dongsoojung.github.io/stargate-ai-gallery/hub.html" target="_blank" rel="noopener">🗂 카테고리 허브</a>
+          <a class="btn btn-primary" href="https://dongsoojung.github.io/stargate-ai-gallery/" target="_blank" rel="noopener">▶ Stargate AI 열기</a>
+        </div>
+      </div>
+
+      <!-- Profile Card -->
+      <div class="section">
+        <div class="card">
+          <div class="profile-row">
+            <div class="avatar">정</div>
+            <div>
+              <div class="profile-name">정동수 · Dongsoo Jung</div>
+              <div class="profile-role">Stargate Corp CEO · AI Engineer</div>
+            </div>
+          </div>
+          <div class="divider"></div>
+          <div class="profile-grid">
+            <div class="profile-item">
+              <span class="profile-label">학력</span>
+              <span class="profile-value">서울대 BS · 북한대 IT MA · 서울대 행정 MA · 스마트도시 PhD(수료)</span>
+            </div>
+            <div class="profile-item">
+              <span class="profile-label">경력</span>
+              <span class="profile-value">공군 시설장교(서울공항 PM) · 공군참모총장상 · 토목기사</span>
+            </div>
+            <div class="profile-item">
+              <span class="profile-label">강의</span>
+              <span class="profile-value">대치동 KOI 수학정보올림피아드</span>
+            </div>
+            <div class="profile-item">
+              <span class="profile-label">관심</span>
+              <span class="profile-value">AI Agents · 공간계량 · MCP · 사이버보안</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Featured Projects -->
+      <div class="section">
+        <div class="section-header">
+          <span class="section-title">프로젝트 · Projects</span>
+          <button class="see-all" onclick="switchTab('projects')">전체 보기 →</button>
+        </div>
+        <a class="project-card" href="https://stargateedu.co.kr/stargate-main/" target="_blank" rel="noopener">
+          <div class="project-card-top">
+            <span class="badge badge-corp">CORP</span>
+            <span class="card-emoji">⭐</span>
+          </div>
+          <div class="card-title">STARGATE 본사 · 주식회사 별의문</div>
+          <div class="card-desc">AI · 공간계량 · 도시공학 컴퍼니 본사. 헤더로 본사·블로그·쇼핑몰 3사이트 통합 네비게이션.</div>
+          <div class="card-footer">
+            <div class="tag-row"><span class="small-tag">Corp Site</span><span class="small-tag">3-Site Nav</span></div>
+            <span class="open-link">열기 →</span>
+          </div>
+        </a>
+        <a class="project-card" href="https://dongsoojung.github.io/stargate-ai-gallery/hub.html" target="_blank" rel="noopener">
+          <div class="project-card-top">
+            <span class="badge badge-featured">FEATURED</span>
+            <span class="card-emoji">🛰️</span>
+          </div>
+          <div class="card-title">Stargate AI Gallery</div>
+          <div class="card-desc">AI로 생성한 랜딩·대시보드·인포그래픽 33개 공개 아카이브. 전체 링크 한눈에 보기(카테고리 허브)가 기본 진입점입니다.</div>
+          <div class="card-footer">
+            <div class="tag-row"><span class="small-tag">HTML</span><span class="small-tag">AI 갤러리</span><span class="small-tag">Hub</span></div>
+            <span class="open-link">열기 →</span>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <!-- ===== PROJECTS ===== -->
+    <section class="screen" id="screen-projects">
+      <div class="page-header">
+        <div class="page-title">프로젝트 · Projects</div>
+        <div class="page-subtitle">공개 가능한 산출물 모음</div>
+      </div>
+      <div class="section">
+        <div class="section-label label-active">● 활성 프로젝트</div>
+        <a class="project-card" href="https://stargateedu.co.kr/stargate-main/" target="_blank" rel="noopener">
+          <div class="project-card-top"><span class="badge badge-corp">CORP</span><span class="card-emoji">⭐</span></div>
+          <div class="card-title">STARGATE 본사 · 주식회사 별의문</div>
+          <div class="card-desc">AI · 공간계량 · 도시공학 컴퍼니 본사. 헤더로 본사·블로그·쇼핑몰 3사이트 통합 네비게이션.</div>
+          <div class="card-footer"><div class="tag-row"><span class="small-tag">Corp Site</span><span class="small-tag">3-Site Nav</span></div><span class="open-link">열기 →</span></div>
+        </a>
+        <a class="project-card" href="https://dongsoojung.github.io/stargate-ai-gallery/hub.html" target="_blank" rel="noopener">
+          <div class="project-card-top"><span class="badge badge-featured">FEATURED</span><span class="card-emoji">🛰️</span></div>
+          <div class="card-title">Stargate AI Gallery</div>
+          <div class="card-desc">AI로 생성한 랜딩·대시보드·인포그래픽 33개 공개 아카이브. 전체 링크 한눈에 보기(카테고리 허브)가 기본 진입점입니다.</div>
+          <div class="card-footer"><div class="tag-row"><span class="small-tag">HTML</span><span class="small-tag">AI 갤러리</span><span class="small-tag">Hub</span></div><span class="open-link">열기 →</span></div>
+        </a>
+        <a class="project-card" href="https://dongsoojung.github.io/stargate-ai-gallery/" target="_blank" rel="noopener">
+          <div class="project-card-top"><div></div><span class="card-emoji">🔍</span></div>
+          <div class="card-title">Gallery 검색 인덱스</div>
+          <div class="card-desc">파일명·카테고리·원본 경로로 갤러리 항목을 검색·정렬하는 인덱스 페이지.</div>
+          <div class="card-footer"><div class="tag-row"><span class="small-tag">Search</span><span class="small-tag">Index</span></div><span class="open-link">열기 →</span></div>
+        </a>
+        <a class="project-card" href="https://stargateedu.co.kr/kmong-research/" target="_blank" rel="noopener">
+          <div class="project-card-top"><div></div><span class="card-emoji">📊</span></div>
+          <div class="card-title">Kmong 거래액 &amp; 재무 리서치 2025</div>
+          <div class="card-desc">크몽(Kmong) 2022~2025 거래액·매출·영업이익 등 B2B 시장 분석 리포트.</div>
+          <div class="card-footer"><div class="tag-row"><span class="small-tag">Market Research</span><span class="small-tag">Chart.js</span></div><span class="open-link">열기 →</span></div>
+        </a>
+        <a class="project-card" href="https://stargateedu.co.kr/cover_designs.html" target="_blank" rel="noopener">
+          <div class="project-card-top"><div></div><span class="card-emoji">📖</span></div>
+          <div class="card-title">Cover Designs — Storyboard</div>
+          <div class="card-desc">스토리북·미니멀 커버 레이아웃 6종 디자인 프로토타입.</div>
+          <div class="card-footer"><div class="tag-row"><span class="small-tag">Design</span><span class="small-tag">Typography</span></div><span class="open-link">열기 →</span></div>
+        </a>
+        <a class="project-card" href="https://stargateedu.co.kr/math-library/" target="_blank" rel="noopener">
+          <div class="project-card-top"><div></div><span class="card-emoji">📚</span></div>
+          <div class="card-title">수학 교재 라이브러리 · Tree Viz</div>
+          <div class="card-desc">대치동 KOI 강사 자산 — 수학 교재 25GB · 437권 · 20개 카테고리를 트리맵·선버스트·접히는 트리·막대차트 4종으로 인터랙티브 탐색.</div>
+          <div class="card-footer"><div class="tag-row"><span class="small-tag">D3.js</span><span class="small-tag">Interactive</span></div><span class="open-link">열기 →</span></div>
+        </a>
+
+        <div class="section-label label-coming" style="margin-top:24px;">○ 준비중</div>
+        <div class="project-card card-coming">
+          <div class="project-card-top"><div></div><span class="card-emoji">🧠</span></div>
+          <div class="card-title" style="color:var(--muted)">KOI Coach</div>
+          <div class="card-desc">수학정보올림피아드 대비 문제 큐레이션·풀이 아카이브. 학생별 진도 관리.</div>
+          <div class="card-footer"><div class="tag-row"><span class="small-tag">Education</span></div><span class="coming-badge">Coming</span></div>
+        </div>
+        <div class="project-card card-coming">
+          <div class="project-card-top"><div></div><span class="card-emoji">🗺️</span></div>
+          <div class="card-title" style="color:var(--muted)">Spatial Econometrics Lab</div>
+          <div class="card-desc">DID·공간 자기상관·choropleth 등 도시공학 박사 연구 시각화 모음.</div>
+          <div class="card-footer"><div class="tag-row"><span class="small-tag">Research</span></div><span class="coming-badge">Coming</span></div>
+        </div>
+        <div class="project-card card-coming">
+          <div class="project-card-top"><div></div><span class="card-emoji">🏠</span></div>
+          <div class="card-title" style="color:var(--muted)">Stargate Airbnb Pipeline</div>
+          <div class="card-desc">서울 에어비앤비 수익·가격 예측 파이프라인 대시보드 프리뷰.</div>
+          <div class="card-footer"><div class="tag-row"><span class="small-tag">Real Estate</span><span class="small-tag">ML</span></div><span class="coming-badge">Coming</span></div>
+        </div>
+        <div class="project-card card-coming">
+          <div class="project-card-top"><div></div><span class="card-emoji">🔐</span></div>
+          <div class="card-title" style="color:var(--muted)">MCP &amp; Security Notes</div>
+          <div class="card-desc">Claude Desktop MCP 구축기, 시크릿 관리, Push Protection 우회 실패기 등 필드 노트.</div>
+          <div class="card-footer"><div class="tag-row"><span class="small-tag">DevSec</span><span class="small-tag">MCP</span></div><span class="coming-badge">Coming</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== ABOUT ===== -->
+    <section class="screen" id="screen-about">
+      <div class="page-header">
+        <div class="page-title">About</div>
+        <div class="page-subtitle">역할과 관심사 요약</div>
+      </div>
+      <div class="profile-hero">
+        <div class="avatar avatar-lg">정</div>
+        <div class="name-text">정동수 · Dongsoo Jung</div>
+        <div class="role-text">Stargate Corp CEO · AI Engineer</div>
+        <div class="interest-row">
+          <span class="interest-chip">AI Agents</span>
+          <span class="interest-chip">공간계량</span>
+          <span class="interest-chip">MCP</span>
+          <span class="interest-chip">사이버보안</span>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title" style="margin-bottom:10px;margin-top:8px;">현재 하는 일</div>
+        <div class="card">
+          <div class="work-row">
+            <span class="work-icon">🏢</span>
+            <div><div class="work-title">Stargate Corporation CEO</div><div class="work-desc">AI/공간 데이터 기반 프로덕트 기획·개발</div></div>
+          </div>
+          <div class="divider"></div>
+          <div class="work-row">
+            <span class="work-icon">📐</span>
+            <div><div class="work-title">대치동 KOI 수학정보올림피아드 강사</div><div class="work-desc">알고리즘·수학 교육</div></div>
+          </div>
+          <div class="divider"></div>
+          <div class="work-row">
+            <span class="work-icon">🎓</span>
+            <div><div class="work-title">서울대 스마트도시공학 박사 과정</div><div class="work-desc">공간계량·도시모형 연구</div></div>
+          </div>
+          <div class="divider"></div>
+          <div class="work-row">
+            <span class="work-icon">⚙️</span>
+            <div><div class="work-title">Claude Desktop / Cowork / Claude Code</div><div class="work-desc">멀티 MCP 워크플로우 구축</div></div>
+          </div>
+        </div>
+
+        <div class="section-title" style="margin-bottom:10px;margin-top:16px;">학력</div>
+        <div class="card">
+          <div class="list-row"><div class="bullet bullet-primary"></div><span class="list-text">서울대 지구환경 BS</span></div>
+          <div class="divider"></div>
+          <div class="list-row"><div class="bullet bullet-primary"></div><span class="list-text">북한대학원대학교 IT MA</span></div>
+          <div class="divider"></div>
+          <div class="list-row"><div class="bullet bullet-primary"></div><span class="list-text">서울대 행정대학원 MA</span></div>
+          <div class="divider"></div>
+          <div class="list-row"><div class="bullet bullet-primary"></div><span class="list-text">서울대 스마트도시공학 PhD (수료)</span></div>
+        </div>
+
+        <div class="section-title" style="margin-bottom:10px;margin-top:16px;">경력</div>
+        <div class="card">
+          <div class="list-row"><div class="bullet bullet-accent"></div><span class="list-text">공군 시설장교 (서울공항 PM)</span></div>
+          <div class="divider"></div>
+          <div class="list-row"><div class="bullet bullet-accent"></div><span class="list-text">공군참모총장상 수상</span></div>
+          <div class="divider"></div>
+          <div class="list-row"><div class="bullet bullet-accent"></div><span class="list-text">토목기사 자격증</span></div>
+        </div>
+
+        <div class="section-title" style="margin-bottom:10px;margin-top:16px;">강의</div>
+        <div class="card">
+          <div class="list-row"><div class="bullet bullet-warning"></div><span class="list-text">대치동 KOI 수학정보올림피아드</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== CONTACT ===== -->
+    <section class="screen" id="screen-contact">
+      <div class="page-header">
+        <div class="page-title">연락 / 링크</div>
+        <div class="page-subtitle">협업·강의·컨설팅 문의는 아래 메일로 부탁드립니다.</div>
+      </div>
+      <div class="section" style="padding-top:20px;">
+        <a class="contact-card" href="mailto:jds068888@gmail.com">
+          <div class="contact-icon-box">📧</div>
+          <div class="contact-info">
+            <div class="contact-label">이메일</div>
+            <div class="contact-value">jds068888@gmail.com</div>
+            <div class="contact-desc">협업·강의·컨설팅 문의</div>
+          </div>
+          <span class="contact-arrow">↗</span>
+        </a>
+        <a class="contact-card" href="https://github.com/DongsooJung" target="_blank" rel="noopener">
+          <div class="contact-icon-box">🐙</div>
+          <div class="contact-info">
+            <div class="contact-label">GitHub</div>
+            <div class="contact-value">github.com/DongsooJung</div>
+            <div class="contact-desc">소스코드 및 프로젝트</div>
+          </div>
+          <span class="contact-arrow">↗</span>
+        </a>
+        <a class="contact-card" href="https://dongsoojung.github.io/stargate-ai-gallery/" target="_blank" rel="noopener">
+          <div class="contact-icon-box">🛰️</div>
+          <div class="contact-info">
+            <div class="contact-label">AI Gallery</div>
+            <div class="contact-value">stargate-ai-gallery</div>
+            <div class="contact-desc">AI 생성 갤러리 아카이브</div>
+          </div>
+          <span class="contact-arrow">↗</span>
+        </a>
+        <a class="contact-card" href="https://stargateedu.co.kr" target="_blank" rel="noopener">
+          <div class="contact-icon-box">🌐</div>
+          <div class="contact-info">
+            <div class="contact-label">포털 사이트</div>
+            <div class="contact-value">stargateedu.co.kr</div>
+            <div class="contact-desc">메인 포털 홈페이지</div>
+          </div>
+          <span class="contact-arrow">↗</span>
+        </a>
+        <a class="contact-card" href="https://stargateedu.co.kr/stargate-main/" target="_blank" rel="noopener">
+          <div class="contact-icon-box">🏢</div>
+          <div class="contact-info">
+            <div class="contact-label">Stargate 본사</div>
+            <div class="contact-value">stargateedu.co.kr/stargate-main</div>
+            <div class="contact-desc">주식회사 별의문 공식 페이지</div>
+          </div>
+          <span class="contact-arrow">↗</span>
+        </a>
+        <a class="contact-card" href="https://github.com/DongsooJung/dongsoojung.github.io" target="_blank" rel="noopener">
+          <div class="contact-icon-box">💻</div>
+          <div class="contact-info">
+            <div class="contact-label">포털 소스</div>
+            <div class="contact-value">github.com/DongsooJung/dongsoojung.github.io</div>
+            <div class="contact-desc">포털 소스코드 저장소</div>
+          </div>
+          <span class="contact-arrow">↗</span>
+        </a>
+      </div>
+      <div class="footer-note">
+        <div class="footer-text">© 2026 Dongsoo Jung · Stargate Corporation<br>stargateedu.co.kr</div>
+      </div>
+    </section>
+
+  </main><!-- end main-content -->
+
+  <!-- TAB BAR -->
+  <nav class="tab-bar">
+    <button class="tab-item active" id="tab-home" onclick="switchTab('home')">
+      <span class="tab-icon">🏠</span>
+      <span>홈</span>
+    </button>
+    <button class="tab-item" id="tab-projects" onclick="switchTab('projects')">
+      <span class="tab-icon">📁</span>
+      <span>프로젝트</span>
+    </button>
+    <button class="tab-item" id="tab-about" onclick="switchTab('about')">
+      <span class="tab-icon">👤</span>
+      <span>소개</span>
+    </button>
+    <button class="tab-item" id="tab-contact" onclick="switchTab('contact')">
+      <span class="tab-icon">✉️</span>
+      <span>연락</span>
+    </button>
+  </nav>
+
+</div><!-- end app-shell -->
+
+<script>
+  function switchTab(name) {
+    // Screens
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById('screen-' + name).classList.add('active');
+    // Tabs
+    document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+    document.getElementById('tab-' + name).classList.add('active');
+    // Scroll to top
+    document.getElementById('mainContent').scrollTop = 0;
+  }
+</script>
+</body>
+</html>
