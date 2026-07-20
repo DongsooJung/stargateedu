@@ -1,0 +1,43 @@
+name: Update Korea Eximbank exchange rates
+
+on:
+  schedule:
+    - cron: "30 2 * * 1-5"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-exim-rates
+  cancel-in-progress: true
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Fetch latest exchange rates
+        env:
+          EXIM_AUTH_KEY: ${{ secrets.EXIM_AUTH_KEY }}
+        run: node scripts/fetch-exim-rates.mjs
+
+      - name: Commit updated data
+        run: |
+          if git diff --quiet -- trade/data/latest.json; then
+            echo "No exchange-rate changes to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add trade/data/latest.json
+          git commit -m "data: update Korea Eximbank exchange rates"
+          git push
