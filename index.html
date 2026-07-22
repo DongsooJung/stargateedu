@@ -143,6 +143,12 @@
   footer{background:#0b1738;color:#9aa3c2;padding:40px 0;text-align:center;font-size:13px;border-top:1px solid rgba(217,164,65,0.2)}
   footer .brand{justify-content:center;color:#fff;margin-bottom:10px;font-size:16px}
   footer a{color:var(--gold-2)}
+  .visitor-counter{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;max-width:560px;margin:0 auto 26px}
+  .visitor-card{padding:16px 18px;border:1px solid rgba(217,164,65,.3);border-radius:14px;background:rgba(255,255,255,.045);box-shadow:inset 0 1px 0 rgba(255,255,255,.04)}
+  .visitor-label{display:block;color:#aeb7d3;font-size:12px;font-weight:700;letter-spacing:.5px}
+  .visitor-number{display:block;margin-top:4px;color:var(--gold-2);font:700 27px/1.2 "JetBrains Mono",monospace;letter-spacing:1px;font-variant-numeric:tabular-nums}
+  .visitor-note{grid-column:1/-1;color:#7782a5;font-size:11px;line-height:1.5}
+  @media(max-width:480px){.visitor-counter{grid-template-columns:1fr;max-width:280px}.visitor-note{grid-column:auto}}
 
   /* ===== PRINT / PDF ===== */
   @media print{
@@ -419,6 +425,17 @@
 <!-- FOOTER -->
 <footer>
   <div class="wrap">
+    <div class="visitor-counter" aria-label="방문자 통계">
+      <div class="visitor-card">
+        <span class="visitor-label">TODAY · 오늘 방문자</span>
+        <strong class="visitor-number" id="visitor-today" aria-live="polite">—</strong>
+      </div>
+      <div class="visitor-card">
+        <span class="visitor-label">TOTAL · 총 방문자</span>
+        <strong class="visitor-number" id="visitor-total" aria-live="polite">—</strong>
+      </div>
+      <div class="visitor-note" id="visitor-status">한국시간 기준 · 동일 브라우저 하루 1회 집계 · 개인정보 미수집</div>
+    </div>
     <div class="brand"><span class="dot"></span>STARGATE&nbsp;EDU</div>
     <div>© 2026 Stargate Corp. All rights reserved.</div>
     <div style="margin-top:8px">
@@ -497,6 +514,72 @@
     }
 
     refreshButton.addEventListener("click", refreshData);
+  })();
+</script>
+
+<script>
+  (() => {
+    const namespace = "stargateedu-co-kr";
+    const apiBase = `https://api.counterapi.dev/v1/${namespace}`;
+    const todayElement = document.getElementById("visitor-today");
+    const totalElement = document.getElementById("visitor-total");
+    const statusElement = document.getElementById("visitor-status");
+    const productionHosts = new Set(["stargateedu.co.kr", "www.stargateedu.co.kr"]);
+
+    function getKoreaDateKey() {
+      const parts = new Intl.DateTimeFormat("en-CA", {
+        timeZone:"Asia/Seoul",
+        year:"numeric",
+        month:"2-digit",
+        day:"2-digit"
+      }).formatToParts(new Date());
+      const values = Object.fromEntries(parts.map(({ type, value }) => [type, value]));
+      return `${values.year}-${values.month}-${values.day}`;
+    }
+
+    function formatCount(value) {
+      const count = Number(value);
+      return Number.isFinite(count) ? count.toLocaleString("ko-KR") : "—";
+    }
+
+    async function loadCounter(name, storageKey, element) {
+      let countedToday = false;
+      try {
+        countedToday = localStorage.getItem(storageKey) === "1";
+      } catch (_) {
+        countedToday = false;
+      }
+
+      const shouldIncrement = productionHosts.has(location.hostname) && !countedToday;
+      const url = `${apiBase}/${encodeURIComponent(name)}${shouldIncrement ? "/up" : ""}`;
+      const response = await fetch(url, { cache:"no-store", mode:"cors" });
+      if (!response.ok) throw new Error(`COUNTER_${response.status}`);
+      const payload = await response.json();
+      element.textContent = formatCount(payload.count);
+
+      if (shouldIncrement) {
+        try {
+          localStorage.setItem(storageKey, "1");
+        } catch (_) {
+          // 저장소 접근이 제한된 브라우저에서는 현재 요청만 정상 처리합니다.
+        }
+      }
+    }
+
+    async function updateVisitorCounters() {
+      const dateKey = getKoreaDateKey();
+      const dailyName = `daily-${dateKey}`;
+      const results = await Promise.allSettled([
+        loadCounter(dailyName, `stargateedu-daily-counted-${dateKey}`, todayElement),
+        loadCounter("total-visitors", `stargateedu-total-counted-${dateKey}`, totalElement)
+      ]);
+
+      if (results.some((result) => result.status === "rejected")) {
+        statusElement.textContent = "방문자 집계 서버 연결이 지연되고 있습니다. 잠시 후 다시 확인해 주세요.";
+      }
+    }
+
+    updateVisitorCounters();
   })();
 </script>
 
