@@ -1,0 +1,69 @@
+name: Add commerce sync homepage buttons
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/add-commerce-main-buttons.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  patch-and-deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Add visible commerce sync buttons
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          path = Path('index.html')
+          html = path.read_text(encoding='utf-8')
+
+          nav_marker = '      <li><a href="https://stargateedu.co.kr/faq/" style="color:var(--gold-2);font-weight:700">FAQ</a></li>'
+          nav_button = '      <li><a href="/commerce-sync/" data-commerce-nav="true" style="color:var(--gold-2);font-weight:700">🔄 상거래 동기화</a></li>\n'
+          if 'data-commerce-nav="true"' not in html:
+              if nav_marker not in html:
+                  raise SystemExit('navigation insertion point not found')
+              html = html.replace(nav_marker, nav_button + nav_marker, 1)
+
+          hero_marker = '      <a class="btn btn-ghost" href="#live-data">↻ 최신 환율 데이터</a>'
+          hero_button = '      <a class="btn btn-primary" href="/commerce-sync/" data-commerce-hero="true">🔄 상거래 동기화</a>\n'
+          if 'data-commerce-hero="true"' not in html:
+              if hero_marker not in html:
+                  raise SystemExit('hero insertion point not found')
+              html = html.replace(hero_marker, hero_button + hero_marker, 1)
+
+          path.write_text(html, encoding='utf-8')
+          PY
+
+      - name: Commit homepage update
+        run: |
+          if ! git diff --quiet -- index.html; then
+            git config user.name github-actions[bot]
+            git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+            git add index.html
+            git commit -m "feat: expose commerce sync from homepage"
+            git push
+          fi
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+      - name: Deploy GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
