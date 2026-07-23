@@ -1,306 +1,60 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>STARGATE 별의문 · 상담 신청</title>
-<meta name="description" content="대치동 KOI·수학 프리미엄 1:1 상담 신청. 카카오·네이버 간편 로그인." />
-<link rel="canonical" href="https://stargateedu.co.kr/consult/" />
-<meta property="og:title" content="STARGATE 별의문 · 상담 신청" />
-<meta property="og:description" content="대치동 KOI·수학 프리미엄 1:1 상담 신청" />
-<meta property="og:type" content="website" />
-<meta property="og:url" content="https://stargateedu.co.kr/consult/" />
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+<meta name="description" content="대치동 KOI·수학 프리미엄 1:1 상담 신청. 카카오·네이버 간편 로그인.">
+<link rel="canonical" href="https://stargateedu.co.kr/consult/">
+<meta property="og:title" content="STARGATE 별의문 · 상담 신청">
+<meta property="og:description" content="대치동 KOI·수학 프리미엄 1:1 상담 신청">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://stargateedu.co.kr/consult/">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
 <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
 <script src="https://static.nid.naver.com/js/naveridlogin_js_sdk_2.0.0.js" charset="utf-8"></script>
 <style>
-  :root{
-    --ink:#0B1026;
-    --ink-2:#0E1430;
-    --surface:#151C3A;
-    --surface-2:#1D2650;
-    --line:rgba(255,255,255,.09);
-    --line-gold:rgba(229,195,120,.22);
-    --gold:#E5C378;
-    --gold-bright:#F3D98E;
-    --star-blue:#8FA4F6;
-    --text:#EEF1FB;
-    --muted:#9AA2C2;
-    --muted-2:#727AA0;
-    --naver:#03C75A;
-    --kakao:#FEE500;
-    --danger:#F08A8A;
-    --ok:#7FD6A4;
-    --radius:16px;
-    --font:"Pretendard Variable",Pretendard,-apple-system,system-ui,"Segoe UI",Roboto,"Helvetica Neue","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
-  }
-  *{box-sizing:border-box}
-  html,body{margin:0;padding:0}
-  body{
-    font-family:var(--font);
-    background:var(--ink);
-    color:var(--text);
-    min-height:100vh;
-    -webkit-font-smoothing:antialiased;
-    text-rendering:optimizeLegibility;
-    display:flex;align-items:center;justify-content:center;
-    padding:32px 18px;
-    position:relative;overflow-x:hidden;
-  }
-  #starfield{position:fixed;inset:0;z-index:0;pointer-events:none}
-  body::before{
-    content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
-    background:
-      radial-gradient(1100px 620px at 50% -8%, rgba(143,164,246,.16), transparent 60%),
-      radial-gradient(900px 520px at 88% 108%, rgba(229,195,120,.10), transparent 62%),
-      linear-gradient(180deg,#0B1026 0%,#0A0E22 55%,#080B1B 100%);
-  }
-  .card{
-    position:relative;z-index:1;
-    width:100%;max-width:460px;
-    background:linear-gradient(180deg,rgba(29,38,80,.55),rgba(21,28,58,.72));
-    border:1px solid var(--line);
-    border-radius:calc(var(--radius) + 6px);
-    padding:38px 30px 30px;
-    box-shadow:0 40px 90px -30px rgba(0,0,0,.75), inset 0 1px 0 rgba(255,255,255,.05);
-    backdrop-filter:blur(6px);
-  }
-  .brand{text-align:center;margin-bottom:26px;position:relative}
-  .meridian{width:64px;height:64px;margin:0 auto 14px;position:relative}
-  .meridian svg{display:block;width:100%;height:100%;overflow:visible}
-  .eyebrow{font-size:11px;letter-spacing:.42em;text-transform:uppercase;color:var(--gold);font-weight:600;margin:0 0 8px;padding-left:.42em}
-  .wordmark{font-size:15px;letter-spacing:.34em;font-weight:700;color:var(--text);margin:0 0 4px;padding-left:.34em}
-  .kor-mark{font-size:12px;letter-spacing:.5em;color:var(--muted-2);padding-left:.5em}
-  h1{font-size:26px;line-height:1.28;font-weight:700;letter-spacing:-.01em;margin:20px 0 6px}
-  h1 .accent{color:var(--gold-bright)}
-  .sub{font-size:13.5px;color:var(--muted);margin:0;line-height:1.6}
-  .social{display:flex;flex-direction:column;gap:10px;margin:26px 0 18px}
-  .social-btn{
-    display:flex;align-items:center;justify-content:center;gap:9px;
-    width:100%;height:50px;border:0;border-radius:12px;cursor:pointer;
-    font-family:var(--font);font-size:15px;font-weight:700;letter-spacing:-.01em;
-    transition:transform .12s ease, filter .18s ease, box-shadow .18s ease;
-  }
-  .social-btn:hover{transform:translateY(-1px);filter:brightness(1.03)}
-  .social-btn:active{transform:translateY(0)}
-  .social-btn:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
-  .btn-kakao{background:var(--kakao);color:#191600}
-  .btn-naver{background:var(--naver);color:#fff}
-  .social-btn svg{flex:none}
-  .divider{display:flex;align-items:center;gap:14px;margin:18px 2px 20px;color:var(--muted-2);font-size:12px;letter-spacing:.06em}
-  .divider::before,.divider::after{content:"";flex:1;height:1px;background:var(--line)}
-  .field{margin-bottom:16px}
-  .field label{display:block;font-size:13px;font-weight:600;color:var(--text);margin-bottom:7px}
-  .field label .req{color:var(--gold);margin-left:3px}
-  .field input[type=text],.field input[type=tel]{
-    width:100%;height:50px;padding:0 15px;
-    background:rgba(8,11,27,.55);color:var(--text);
-    border:1px solid var(--line);border-radius:12px;
-    font-family:var(--font);font-size:15px;letter-spacing:-.01em;
-    transition:border-color .18s ease, box-shadow .18s ease, background .18s ease;
-  }
-  .field input::placeholder{color:var(--muted-2)}
-  .field input:focus{outline:none;border-color:var(--gold);background:rgba(8,11,27,.8);box-shadow:0 0 0 3px rgba(229,195,120,.14)}
-  .field input[aria-invalid="true"]{border-color:var(--danger);box-shadow:0 0 0 3px rgba(240,138,138,.13)}
-  .field-error{display:none;font-size:12px;color:var(--danger);margin-top:6px}
-  .field-error.show{display:block}
-  .prefilled{display:none;font-size:11.5px;color:var(--ok);margin-top:6px;align-items:center;gap:5px}
-  .prefilled.show{display:flex}
-  .consent{margin:18px 0 6px;padding:14px 14px 4px;background:rgba(8,11,27,.4);border:1px solid var(--line);border-radius:12px}
-  .consent-row{display:flex;align-items:flex-start;gap:11px}
-  .consent-row input[type=checkbox]{
-    appearance:none;-webkit-appearance:none;flex:none;
-    width:20px;height:20px;margin-top:1px;border:1.5px solid var(--muted-2);
-    border-radius:6px;background:transparent;cursor:pointer;position:relative;
-    transition:border-color .15s ease, background .15s ease;
-  }
-  .consent-row input[type=checkbox]:checked{background:var(--gold);border-color:var(--gold)}
-  .consent-row input[type=checkbox]:checked::after{content:"";position:absolute;left:6px;top:2px;width:5px;height:10px;border:solid #191600;border-width:0 2px 2px 0;transform:rotate(43deg)}
-  .consent-row input[type=checkbox]:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
-  .consent-row label{font-size:13.5px;line-height:1.5;color:var(--text);cursor:pointer;font-weight:500}
-  .consent-row label .req{color:var(--gold)}
-  .consent-toggle{background:none;border:0;color:var(--star-blue);font-family:var(--font);font-size:12px;cursor:pointer;padding:8px 0 10px 31px;text-decoration:underline;text-underline-offset:2px}
-  .consent-detail{display:none;padding:0 2px 12px 31px;font-size:12px;line-height:1.7;color:var(--muted)}
-  .consent-detail.show{display:block}
-  .consent-detail table{width:100%;border-collapse:collapse;margin:4px 0}
-  .consent-detail th,.consent-detail td{text-align:left;padding:6px 8px;border:1px solid var(--line);vertical-align:top}
-  .consent-detail th{color:var(--muted);font-weight:600;width:34%;background:rgba(255,255,255,.02)}
-  .consent-detail .note{color:var(--muted-2);margin-top:8px}
-  .submit-btn{
-    width:100%;height:54px;margin-top:14px;border:0;border-radius:12px;cursor:pointer;
-    font-family:var(--font);font-size:16px;font-weight:700;letter-spacing:-.01em;color:#141019;
-    background:linear-gradient(135deg,var(--gold-bright),var(--gold));
-    box-shadow:0 14px 30px -12px rgba(229,195,120,.5);
-    transition:transform .12s ease, box-shadow .18s ease, filter .18s ease;
-    position:relative;overflow:hidden;
-  }
-  .submit-btn:hover{transform:translateY(-1px);filter:brightness(1.04);box-shadow:0 18px 38px -12px rgba(229,195,120,.6)}
-  .submit-btn:active{transform:translateY(0)}
-  .submit-btn:focus-visible{outline:2px solid #fff;outline-offset:3px}
-  .submit-btn[disabled]{opacity:.6;cursor:not-allowed;transform:none;filter:none}
-  .form-note{text-align:center;font-size:11.5px;color:var(--muted-2);margin:14px 0 0;line-height:1.6}
-  .success{display:none;text-align:center;padding:14px 4px}
-  .success.show{display:block}
-  .success .mark{width:66px;height:66px;margin:0 auto 20px;border-radius:50%;background:radial-gradient(circle at 50% 40%,rgba(127,214,164,.28),rgba(127,214,164,.06));border:1px solid rgba(127,214,164,.4);display:flex;align-items:center;justify-content:center}
-  .success h2{font-size:22px;margin:0 0 10px;font-weight:700}
-  .success p{font-size:14px;color:var(--muted);line-height:1.65;margin:0 0 4px}
-  .success .again{margin-top:22px;background:none;border:1px solid var(--line);color:var(--muted);font-family:var(--font);font-size:13px;padding:11px 20px;border-radius:10px;cursor:pointer;transition:border-color .18s ease,color .18s ease}
-  .success .again:hover{border-color:var(--gold);color:var(--gold)}
-  .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
-  @media (max-width:420px){.card{padding:32px 22px 26px}h1{font-size:23px}}
-  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+:root{--ink:#0b1026;--panel:#151c3a;--gold:#e5c378;--gold2:#f3d98e;--blue:#8fa4f6;--text:#eef1fb;--muted:#9aa2c2;--line:rgba(255,255,255,.1);--danger:#f08a8a;--ok:#7fd6a4;--font:"Pretendard Variable",Pretendard,system-ui,sans-serif}*{box-sizing:border-box}html,body{margin:0}body{min-height:100vh;display:grid;place-items:center;padding:30px 18px;background:radial-gradient(900px 520px at 50% -10%,rgba(143,164,246,.18),transparent 60%),linear-gradient(#0b1026,#080b1b);color:var(--text);font-family:var(--font);overflow-x:hidden}#stars{position:fixed;inset:0;pointer-events:none}.card{position:relative;width:min(100%,460px);padding:36px 30px 30px;border:1px solid var(--line);border-radius:22px;background:linear-gradient(180deg,rgba(29,38,80,.62),rgba(21,28,58,.78));box-shadow:0 40px 90px -30px #000;backdrop-filter:blur(8px)}.brand{text-align:center}.logo{width:64px;height:64px;margin:0 auto 14px}.eyebrow{margin:0 0 8px;padding-left:.4em;color:var(--gold);font-size:11px;font-weight:700;letter-spacing:.4em}.wordmark{margin:0;padding-left:.34em;font-size:15px;font-weight:800;letter-spacing:.34em}.kor{margin:5px 0 0;padding-left:.5em;color:#727aa0;font-size:12px;letter-spacing:.5em}h1{margin:22px 0 7px;font-size:26px;line-height:1.28}h1 span{color:var(--gold2)}.sub{margin:0;color:var(--muted);font-size:13.5px;line-height:1.65}.social{display:grid;gap:10px;margin:26px 0 18px}.social button,.submit{width:100%;height:50px;border:0;border-radius:12px;font:700 15px var(--font);cursor:pointer}.social button{display:flex;align-items:center;justify-content:center;gap:9px}.kakao{background:#fee500;color:#191600}.naver{background:#03c75a;color:#fff}.divider{display:flex;align-items:center;gap:14px;margin:18px 2px 20px;color:#727aa0;font-size:12px}.divider:before,.divider:after{content:"";flex:1;height:1px;background:var(--line)}.field{margin-bottom:16px}.field label{display:block;margin-bottom:7px;font-size:13px;font-weight:700}.req{color:var(--gold)}input[type=text],input[type=tel]{width:100%;height:50px;padding:0 15px;border:1px solid var(--line);border-radius:12px;background:rgba(8,11,27,.58);color:var(--text);font:15px var(--font)}input:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(229,195,120,.14)}input[aria-invalid=true]{border-color:var(--danger)}.error{display:none;margin:6px 0 0;color:var(--danger);font-size:12px}.error.show{display:block}.prefill{display:none;margin:6px 0 0;color:var(--ok);font-size:11.5px}.prefill.show{display:block}.consent{margin:18px 0 6px;padding:14px;border:1px solid var(--line);border-radius:12px;background:rgba(8,11,27,.4)}.consent-row{display:flex;gap:10px;align-items:flex-start}.consent-row input{width:20px;height:20px;margin:1px 0 0}.consent-row label{font-size:13.5px}.toggle{margin:8px 0 0;padding:0;border:0;background:none;color:var(--blue);font:12px var(--font);text-decoration:underline;cursor:pointer}.detail{display:none;margin-top:10px;color:var(--muted);font-size:12px;line-height:1.65}.detail.show{display:block}.detail table{width:100%;border-collapse:collapse}.detail th,.detail td{padding:6px;border:1px solid var(--line);text-align:left;vertical-align:top}.detail th{width:34%}.submit{height:54px;margin-top:14px;background:linear-gradient(135deg,var(--gold2),var(--gold));color:#17121a;font-size:16px;box-shadow:0 14px 30px -12px rgba(229,195,120,.5)}.submit:disabled{opacity:.6}.note{text-align:center;color:#727aa0;font-size:11.5px;line-height:1.6}.success{display:none;text-align:center;padding:20px 4px}.success.show{display:block}.success h2{font-size:22px}.success p{color:var(--muted);line-height:1.65}.again{margin-top:16px;padding:11px 20px;border:1px solid var(--line);border-radius:10px;background:none;color:var(--muted);cursor:pointer}.hp{position:absolute;left:-9999px}@media(max-width:420px){.card{padding:30px 22px}h1{font-size:23px}}
 </style>
 </head>
 <body>
-<canvas id="starfield" aria-hidden="true"></canvas>
-<main class="card" role="main">
-  <div id="formView">
-    <div class="brand">
-      <div class="meridian" aria-hidden="true">
-        <svg viewBox="0 0 64 64" fill="none">
-          <circle cx="32" cy="32" r="30" stroke="rgba(229,195,120,.35)" stroke-width="1"/>
-          <path d="M32 6 A26 26 0 0 1 32 58" stroke="url(#g)" stroke-width="1.4" fill="none"/>
-          <circle cx="32" cy="6" r="2.4" fill="#F3D98E"/>
-          <circle cx="46" cy="18" r="1.5" fill="#8FA4F6"/>
-          <circle cx="50" cy="40" r="1.7" fill="#E5C378"/>
-          <circle cx="20" cy="46" r="1.4" fill="#8FA4F6"/>
-          <path d="M32 6 L46 18 L50 40 L32 6" stroke="rgba(143,164,246,.35)" stroke-width=".7"/>
-          <defs><linearGradient id="g" x1="32" y1="6" x2="32" y2="58" gradientUnits="userSpaceOnUse"><stop stop-color="#F3D98E"/><stop offset="1" stop-color="#8FA4F6"/></linearGradient></defs>
-        </svg>
-      </div>
-      <p class="eyebrow">Premium Tutoring</p>
-      <p class="wordmark">STARGATE</p>
-      <p class="kor-mark">별 의 문</p>
-    </div>
-    <h1>대치동 <span class="accent">KOI·수학</span><br/>1:1 상담을 신청하세요</h1>
-    <p class="sub">연락처를 남겨 주시면 담당 강사가 직접 안내드립니다.<br/>카카오·네이버로 간편하게 시작할 수 있습니다.</p>
-    <div class="social">
-      <button type="button" class="social-btn btn-kakao" id="kakaoBtn">
-        <svg width="19" height="19" viewBox="0 0 24 24" fill="#191600" aria-hidden="true"><path d="M12 3C6.5 3 2 6.6 2 11c0 2.8 1.9 5.3 4.8 6.7-.2.7-.8 2.6-.9 3-.1.5.2.5.4.4.2-.1 2.6-1.8 3.7-2.5.7.1 1.4.1 2 .1 5.5 0 10-3.6 10-8S17.5 3 12 3z"/></svg>
-        카카오로 시작하기
-      </button>
-      <button type="button" class="social-btn btn-naver" id="naverBtn">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M16.3 12.6 7.4 0H0v24h7.7V11.4L16.6 24H24V0h-7.7v12.6z"/></svg>
-        네이버로 시작하기
-      </button>
-    </div>
-    <div class="divider">또는 직접 입력</div>
-    <form id="leadForm" novalidate>
-      <div class="field">
-        <label for="name">이름<span class="req">*</span></label>
-        <input type="text" id="name" name="name" autocomplete="name" placeholder="성함을 입력해 주세요" />
-        <p class="field-error" id="nameErr">이름을 입력해 주세요.</p>
-        <p class="prefilled" id="namePre"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#7FD6A4" stroke-width="3"><path d="M5 12l5 5L20 6"/></svg><span id="namePreText">소셜 계정 정보로 자동 입력됨</span></p>
-      </div>
-      <div class="field">
-        <label for="phone">휴대전화번호<span class="req">*</span></label>
-        <input type="tel" id="phone" name="phone" inputmode="numeric" autocomplete="tel" placeholder="010-0000-0000" maxlength="13" />
-        <p class="field-error" id="phoneErr">올바른 휴대전화번호를 입력해 주세요.</p>
-      </div>
-      <div class="hp" aria-hidden="true"><label>이 칸은 비워 두세요<input type="text" id="website" name="website" tabindex="-1" autocomplete="off" /></label></div>
-      <div class="consent">
-        <div class="consent-row">
-          <input type="checkbox" id="consent" name="consent" />
-          <label for="consent">개인정보 수집·이용에 동의합니다 <span class="req">(필수)</span></label>
-        </div>
-        <button type="button" class="consent-toggle" id="consentToggle" aria-expanded="false">약관 자세히 보기</button>
-        <div class="consent-detail" id="consentDetail">
-          <table>
-            <tr><th>수집 항목</th><td>이름, 휴대전화번호 (소셜 로그인 시 닉네임·이메일 포함)</td></tr>
-            <tr><th>수집·이용 목적</th><td>상담 신청 접수 및 상담 안내 연락</td></tr>
-            <tr><th>보유·이용 기간</th><td>상담 종료 후 1년 (동의 철회 시 지체 없이 파기)</td></tr>
-          </table>
-          <p class="note">귀하는 동의를 거부할 권리가 있으며, 동의를 거부할 경우 상담 신청이 제한됩니다.</p>
-        </div>
-      </div>
-      <p class="field-error" id="consentErr" style="padding-left:2px">개인정보 수집·이용에 동의해 주세요.</p>
-      <button type="submit" class="submit-btn" id="submitBtn">상담 신청하기</button>
-      <p class="form-note">제출 즉시 담당자에게 전달되며, 영업일 기준 24시간 내 연락드립니다.</p>
-    </form>
-  </div>
-  <div class="success" id="successView">
-    <div class="mark" aria-hidden="true"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#7FD6A4" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12l5 5L20 6"/></svg></div>
-    <h2>신청이 접수되었습니다</h2>
-    <p><strong id="successName" style="color:var(--gold-bright)"></strong>님, 감사합니다.</p>
-    <p>담당 강사가 남겨 주신 번호로<br/>영업일 기준 24시간 내 연락드리겠습니다.</p>
-    <button type="button" class="again" id="againBtn">새 신청 작성</button>
-  </div>
+<canvas id="stars" aria-hidden="true"></canvas>
+<main class="card">
+<section id="formView">
+<div class="brand">
+<svg class="logo" viewBox="0 0 64 64" fill="none" aria-hidden="true"><circle cx="32" cy="32" r="30" stroke="rgba(229,195,120,.35)"/><path d="M32 6A26 26 0 0 1 32 58" stroke="url(#g)" stroke-width="1.4"/><circle cx="32" cy="6" r="2.4" fill="#f3d98e"/><circle cx="46" cy="18" r="1.5" fill="#8fa4f6"/><circle cx="50" cy="40" r="1.7" fill="#e5c378"/><path d="M32 6 46 18 50 40 32 6" stroke="rgba(143,164,246,.35)"/><defs><linearGradient id="g" x1="32" y1="6" x2="32" y2="58"><stop stop-color="#f3d98e"/><stop offset="1" stop-color="#8fa4f6"/></linearGradient></defs></svg>
+<p class="eyebrow">PREMIUM TUTORING</p><p class="wordmark">STARGATE</p><p class="kor">별 의 문</p>
+</div>
+<h1>대치동 <span>KOI·수학</span><br>1:1 상담을 신청하세요</h1>
+<p class="sub">연락처를 남겨 주시면 담당 강사가 직접 안내드립니다.<br>카카오·네이버로 간편하게 시작할 수 있습니다.</p>
+<div class="social"><button class="kakao" id="kakaoBtn" type="button">● 카카오로 시작하기</button><button class="naver" id="naverBtn" type="button">N 네이버로 시작하기</button></div>
+<div class="divider">또는 직접 입력</div>
+<form id="leadForm" novalidate>
+<div class="field"><label for="name">이름 <span class="req">*</span></label><input id="name" name="name" type="text" autocomplete="name" placeholder="성함을 입력해 주세요"><p class="error" id="nameErr">이름을 입력해 주세요.</p><p class="prefill" id="namePre">✓ <span id="namePreText">소셜 계정 정보로 자동 입력됨</span></p></div>
+<div class="field"><label for="phone">휴대전화번호 <span class="req">*</span></label><input id="phone" name="phone" type="tel" inputmode="numeric" autocomplete="tel" maxlength="13" placeholder="010-0000-0000"><p class="error" id="phoneErr">올바른 휴대전화번호를 입력해 주세요.</p></div>
+<div class="hp"><input id="website" name="website" type="text" tabindex="-1" autocomplete="off"></div>
+<div class="consent"><div class="consent-row"><input id="consent" name="consent" type="checkbox"><label for="consent">개인정보 수집·이용에 동의합니다 <span class="req">(필수)</span></label></div><button class="toggle" id="consentToggle" type="button" aria-expanded="false">약관 자세히 보기</button><div class="detail" id="consentDetail"><table><tr><th>수집 항목</th><td>이름, 휴대전화번호, 소셜 로그인 시 닉네임·이메일</td></tr><tr><th>이용 목적</th><td>상담 신청 접수 및 안내 연락</td></tr><tr><th>보유 기간</th><td>상담 종료 후 1년</td></tr></table><p>동의를 거부할 수 있으나 상담 신청이 제한됩니다.</p></div></div>
+<p class="error" id="consentErr">개인정보 수집·이용에 동의해 주세요.</p>
+<button class="submit" id="submitBtn" type="submit">상담 신청하기</button><p class="note">제출 즉시 담당자에게 전달되며, 영업일 기준 24시간 내 연락드립니다.</p>
+</form>
+</section>
+<section class="success" id="successView"><div style="font-size:42px;color:var(--ok)">✓</div><h2>신청이 접수되었습니다</h2><p><strong id="successName" style="color:var(--gold2)"></strong>님, 감사합니다.<br>영업일 기준 24시간 내 연락드리겠습니다.</p><button class="again" id="againBtn" type="button">새 신청 작성</button></section>
 </main>
 <div id="naverIdLogin" style="display:none"></div>
 <script>
-const CONFIG = {
-  KAKAO_JS_KEY: "905616cdf1787cf31ec8d92a8ab81cd2",
-  NAVER_CLIENT_ID: "g4D5rUY0nirxqHeC1bHc",
-  NAVER_CALLBACK_URL: "https://stargateedu.co.kr/consult/",
-  BACKEND_TYPE: "supabase",
-  APPS_SCRIPT_URL: "여기에_Apps_Script_웹앱_URL_입력",
-  SUPABASE_URL: "https://inftexpcnfinglwlrvsj.supabase.co",
-  SUPABASE_ANON_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJIUzI1NiIsInJlZiI6ImluZnRleHBjbmZpbmdsd2xydnNqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI5MTMyMzgsImV4cCI6MjA4ODQ4OTIzOH0.HONuULp0L3B5T0gTiwJMnowjJonJzzNHhUV_LtpDQoI"
-};
-(function(){
-  const c=document.getElementById('starfield'),x=c.getContext('2d');
-  const reduce=window.matchMedia('(prefers-reduced-motion:reduce)').matches;
-  let stars=[],w,h,raf;
-  function resize(){w=c.width=innerWidth;h=c.height=innerHeight;init()}
-  function init(){const n=Math.min(140,Math.floor(w*h/12000));stars=[];for(let i=0;i<n;i++)stars.push({x:Math.random()*w,y:Math.random()*h,r:Math.random()*1.3+.2,a:Math.random(),s:Math.random()*.008+.002});}
-  function draw(){x.clearRect(0,0,w,h);for(const st of stars){if(!reduce){st.a+=st.s;if(st.a>1||st.a<0)st.s*=-1;}x.beginPath();x.arc(st.x,st.y,st.r,0,7);x.fillStyle='rgba('+(st.r>1?'243,217,142':'200,212,255')+','+(0.25+st.a*0.6)+')';x.fill();}if(!reduce)raf=requestAnimationFrame(draw);}
-  addEventListener('resize',resize);resize();draw();if(reduce)draw();
-})();
-const $=id=>document.getElementById(id);
-const nameI=$('name'),phoneI=$('phone'),consentI=$('consent');
-let social={provider:'',id:'',email:''};
-phoneI.addEventListener('input',e=>{let v=e.target.value.replace(/[^0-9]/g,'').slice(0,11);if(v.length<4)e.target.value=v;else if(v.length<8)e.target.value=v.slice(0,3)+'-'+v.slice(3);else e.target.value=v.slice(0,3)+'-'+v.slice(3,7)+'-'+v.slice(7);});
-$('consentToggle').addEventListener('click',function(){const d=$('consentDetail'),open=d.classList.toggle('show');this.textContent=open?'약관 접기':'약관 자세히 보기';this.setAttribute('aria-expanded',open);});
-function validPhone(v){return /^01[016789]-?\d{3,4}-?\d{4}$/.test(v.replace(/\s/g,''))}
-function clearErr(inp,err){inp&&inp.setAttribute('aria-invalid','false');$(err).classList.remove('show')}
-nameI.addEventListener('input',()=>clearErr(nameI,'nameErr'));
-phoneI.addEventListener('input',()=>clearErr(phoneI,'phoneErr'));
-consentI.addEventListener('change',()=>$('consentErr').classList.remove('show'));
-function applySocial(provider,name,email,id){social={provider:provider,id:id||'',email:email||''};if(name){nameI.value=name;clearErr(nameI,'nameErr');$('namePreText').textContent=(provider==='kakao'?'카카오':'네이버')+' 계정 정보로 자동 입력됨';$('namePre').classList.add('show');}phoneI.focus();}
-(function(){if(!window.Kakao)return;try{if(!Kakao.isInitialized())Kakao.init(CONFIG.KAKAO_JS_KEY);}catch(e){}})();
-$('kakaoBtn').addEventListener('click',function(){
-  if(!window.Kakao||CONFIG.KAKAO_JS_KEY.indexOf('여기에')===0){alert('카카오 JavaScript 키가 아직 설정되지 않았습니다.\nCONFIG.KAKAO_JS_KEY 값을 입력해 주세요.');return;}
-  Kakao.Auth.login({scope:'profile_nickname,account_email',success:function(){Kakao.API.request({url:'/v2/user/me',success:function(res){const acc=res.kakao_account||{};const nick=(acc.profile&&acc.profile.nickname)||'';applySocial('kakao',nick,acc.email||'',String(res.id||''));},fail:function(){applySocial('kakao','','','')}});},fail:function(err){console.warn('kakao login fail',err);}});
-});
-let naverLogin=null;
-(function(){
-  if(!window.naver)return;
-  try{
-    naverLogin=new naver.LoginWithNaverId({clientId:CONFIG.NAVER_CLIENT_ID,callbackUrl:CONFIG.NAVER_CALLBACK_URL,isPopup:true,loginButton:{color:'green',type:3,height:48}});
-    naverLogin.init();
-    if(location.hash.indexOf('access_token')>-1){naverLogin.getLoginStatus(function(status){if(status&&naverLogin.user){try{opener.postMessage({__naver:true,name:naverLogin.user.getName()||naverLogin.user.getNickName()||'',email:naverLogin.user.getEmail()||'',id:naverLogin.user.getId()||''},location.origin);}catch(e){}}window.close();});}
-  }catch(e){console.warn('naver init',e);}
-})();
-addEventListener('message',function(ev){if(ev.origin!==location.origin||!ev.data||!ev.data.__naver)return;applySocial('naver',ev.data.name,ev.data.email,ev.data.id);});
-$('naverBtn').addEventListener('click',function(){
-  if(!window.naver||CONFIG.NAVER_CLIENT_ID.indexOf('여기에')===0){alert('네이버 Client ID 가 아직 설정되지 않았습니다.\nCONFIG.NAVER_CLIENT_ID 값을 입력해 주세요.');return;}
-  const anchor=document.querySelector('#naverIdLogin a')||document.querySelector('#naverIdLogin');
-  if(anchor&&anchor.click){anchor.click();}else if(naverLogin){location.href=naverLogin.generateAuthorizeUrl?naverLogin.generateAuthorizeUrl():'#';}
-});
-$('leadForm').addEventListener('submit',async function(e){
-  e.preventDefault();
-  let ok=true;
-  if(!nameI.value.trim()){nameI.setAttribute('aria-invalid','true');$('nameErr').classList.add('show');ok=false;}
-  if(!validPhone(phoneI.value)){phoneI.setAttribute('aria-invalid','true');$('phoneErr').classList.add('show');ok=false;}
-  if(!consentI.checked){$('consentErr').classList.add('show');ok=false;}
-  if($('website').value){return;}
-  if(!ok){(document.querySelector('[aria-invalid="true"]')||consentI).focus();return;}
-  const btn=$('submitBtn');btn.disabled=true;btn.textContent='전송 중…';
-  const payload={name:nameI.value.trim(),phone:phoneI.value.trim(),consent:'Y',provider:social.provider||'direct',social_email:social.email||'',social_id:social.id||'',source:'stargateedu.co.kr/consult',submitted_at:new Date().toISOString()};
-  try{
-    if(CONFIG.BACKEND_TYPE==='supabase'){
-      const r=await fetch(CONFIG.SUPABASE_URL+'/rest/v1/leads',{method:'POST',headers:{'Content-Type':'application/json','apikey':CONFIG.SUPABASE_ANON_KEY,'Authorization':'Bearer '+CONFIG.SUPABASE_ANON_KEY,'Prefer':'return=minimal'},body:JSON.stringify(payload)});
-      if(!r.ok)throw new Error('supabase '+r.status);
-    }else{
-      await fetch(CONFIG.APPS_SCRIPT_URL,{method:'POST',body:new URLSearchParams(payload)});
-    }
-    $('successName').textContent=payload.name;
-    $('formView').style.display='none';
-    $('successView').classList.add('show');
-    window.scrollTo({top:0,behavior:'smooth'});
-  }catch(err){console.error(err);btn.disabled=false;btn.textContent='상담 신청하기';alert('전송 중 문제가 발생했습니다. 잠시 후 다시 시도하시거나 전화로 문의해 주세요.');}
-});
-$('againBtn').addEventListener('click',function(){$('leadForm').reset();$('namePre').classList.remove('show');social={provider:'',id:'',email:''};$('successView').classList.remove('show');$('formView').style.display='block';$('submitBtn').disabled=false;$('submitBtn').textContent='상담 신청하기';});
+const CONFIG={KAKAO_JS_KEY:"905616cdf1787cf31ec8d92a8ab81cd2",NAVER_CLIENT_ID:"g4D5rUY0nirxqHeC1bHc",NAVER_CALLBACK_URL:"https://stargateedu.co.kr/consult/",SUPABASE_URL:"https://inftexpcnfinglwlrvsj.supabase.co",SUPABASE_ANON_KEY:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImluZnRleHBjbmZpbmdsd2xydnNqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI5MTMyMzgsImV4cCI6MjA4ODQ4OTIzOH0.HONuULp0L3B5T0gTiwJMnowjJonJzzNHhUV_LtpDQoI"};
+const $=id=>document.getElementById(id),nameI=$('name'),phoneI=$('phone'),consentI=$('consent');let social={provider:'',id:'',email:''};
+(()=>{const c=$('stars'),x=c.getContext('2d'),reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;let stars=[],w,h;function resize(){w=c.width=innerWidth;h=c.height=innerHeight;stars=Array.from({length:Math.min(140,Math.floor(w*h/12000))},()=>({x:Math.random()*w,y:Math.random()*h,r:Math.random()*1.3+.2,a:Math.random(),s:Math.random()*.008+.002}))}function draw(){x.clearRect(0,0,w,h);for(const s of stars){if(!reduce){s.a+=s.s;if(s.a>1||s.a<0)s.s*=-1}x.beginPath();x.arc(s.x,s.y,s.r,0,7);x.fillStyle=`rgba(220,225,255,${.25+s.a*.6})`;x.fill()}if(!reduce)requestAnimationFrame(draw)}addEventListener('resize',resize);resize();draw()})();
+phoneI.addEventListener('input',e=>{let v=e.target.value.replace(/\D/g,'').slice(0,11);e.target.value=v.length<4?v:v.length<8?`${v.slice(0,3)}-${v.slice(3)}`:`${v.slice(0,3)}-${v.slice(3,7)}-${v.slice(7)}`});
+$('consentToggle').onclick=function(){const d=$('consentDetail'),open=d.classList.toggle('show');this.textContent=open?'약관 접기':'약관 자세히 보기';this.setAttribute('aria-expanded',open)};
+function clear(inp,id){inp.setAttribute('aria-invalid','false');$(id).classList.remove('show')}nameI.oninput=()=>clear(nameI,'nameErr');phoneI.oninput=()=>clear(phoneI,'phoneErr');consentI.onchange=()=>$('consentErr').classList.remove('show');
+function applySocial(provider,name,email,id){social={provider,id:id||'',email:email||''};if(name){nameI.value=name;$('namePreText').textContent=`${provider==='kakao'?'카카오':'네이버'} 계정 정보로 자동 입력됨`;$('namePre').classList.add('show')}phoneI.focus()}
+if(window.Kakao){try{if(!Kakao.isInitialized())Kakao.init(CONFIG.KAKAO_JS_KEY)}catch(e){console.warn(e)}}
+$('kakaoBtn').onclick=()=>{if(!window.Kakao)return alert('카카오 로그인 SDK를 불러오지 못했습니다.');Kakao.Auth.login({scope:'profile_nickname,account_email',success:()=>Kakao.API.request({url:'/v2/user/me',success:r=>{const a=r.kakao_account||{};applySocial('kakao',a.profile?.nickname||'',a.email||'',String(r.id||''))},fail:()=>applySocial('kakao','','','')}),fail:e=>console.warn(e)})};
+let naverLogin=null;if(window.naver){try{naverLogin=new naver.LoginWithNaverId({clientId:CONFIG.NAVER_CLIENT_ID,callbackUrl:CONFIG.NAVER_CALLBACK_URL,isPopup:true,loginButton:{color:'green',type:3,height:48}});naverLogin.init();if(location.hash.includes('access_token'))naverLogin.getLoginStatus(status=>{if(status&&naverLogin.user){try{opener.postMessage({__naver:true,name:naverLogin.user.getName()||naverLogin.user.getNickName()||'',email:naverLogin.user.getEmail()||'',id:naverLogin.user.getId()||''},location.origin)}catch(e){}}close()})}catch(e){console.warn(e)}}
+addEventListener('message',e=>{if(e.origin===location.origin&&e.data?.__naver)applySocial('naver',e.data.name,e.data.email,e.data.id)});$('naverBtn').onclick=()=>{const a=document.querySelector('#naverIdLogin a');if(a)a.click();else alert('네이버 로그인을 초기화하지 못했습니다.')};
+$('leadForm').onsubmit=async e=>{e.preventDefault();let ok=true;if(!nameI.value.trim()){nameI.setAttribute('aria-invalid','true');$('nameErr').classList.add('show');ok=false}if(!/^01[016789]-?\d{3,4}-?\d{4}$/.test(phoneI.value)){phoneI.setAttribute('aria-invalid','true');$('phoneErr').classList.add('show');ok=false}if(!consentI.checked){$('consentErr').classList.add('show');ok=false}if($('website').value||!ok)return;const btn=$('submitBtn');btn.disabled=true;btn.textContent='전송 중…';const payload={name:nameI.value.trim(),phone:phoneI.value.trim(),consent:'Y',provider:social.provider||'direct',social_email:social.email,social_id:social.id,source:'stargateedu.co.kr/consult',submitted_at:new Date().toISOString()};try{const r=await fetch(`${CONFIG.SUPABASE_URL}/rest/v1/leads`,{method:'POST',headers:{'Content-Type':'application/json',apikey:CONFIG.SUPABASE_ANON_KEY,Authorization:`Bearer ${CONFIG.SUPABASE_ANON_KEY}`,Prefer:'return=minimal'},body:JSON.stringify(payload)});if(!r.ok)throw new Error(`supabase ${r.status}`);$('successName').textContent=payload.name;$('formView').style.display='none';$('successView').classList.add('show')}catch(err){console.error(err);btn.disabled=false;btn.textContent='상담 신청하기';alert('전송 중 문제가 발생했습니다. 잠시 후 다시 시도해 주세요.')}};
+$('againBtn').onclick=()=>{$('leadForm').reset();social={provider:'',id:'',email:''};$('namePre').classList.remove('show');$('successView').classList.remove('show');$('formView').style.display='block';$('submitBtn').disabled=false;$('submitBtn').textContent='상담 신청하기'};
 </script>
 </body>
 </html>
