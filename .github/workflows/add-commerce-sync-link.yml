@@ -1,0 +1,36 @@
+name: Add commerce sync link
+on:
+  push:
+    branches: [main]
+    paths:
+      - commerce-sync/index.html
+      - .github/workflows/add-commerce-sync-link.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  patch-home:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Add idempotent homepage card
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('index.html')
+          s=p.read_text()
+          marker='href="/commerce-sync/"'
+          if marker not in s:
+              needle='      <a class="link" href="mailto:ceo@stargateedu.co.kr">'
+              card='''      <a class="link" href="/commerce-sync/" rel="nofollow">\n        <div><div class="t">🔄 상거래 동기화 관리자</div><div class="s">도매꾹·도매매 ↔ 네이버 스마트스토어 상품·재고·주문 연동</div></div>\n        <span class="arrow">→</span>\n      </a>\n\n'''
+              if needle not in s: raise SystemExit('homepage insertion point not found')
+              p.write_text(s.replace(needle,card+needle))
+          PY
+      - name: Commit change
+        run: |
+          if git diff --quiet; then exit 0; fi
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add index.html
+          git commit -m "feat: link commerce sync dashboard"
+          git push
