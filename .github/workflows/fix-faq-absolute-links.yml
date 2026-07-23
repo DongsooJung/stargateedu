@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - '.github/workflows/fix-faq-absolute-links.yml'
+      - '.github/faq-nav-trigger'
   workflow_dispatch:
 
 permissions:
