@@ -1,0 +1,55 @@
+name: Add OpenDART homepage link
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/add-dart-home-link.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  patch-homepage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Insert OpenDART dashboard link
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          path = Path('index.html')
+          html = path.read_text(encoding='utf-8')
+          marker = '''      <a class="link" href="https://stargateshop.co.kr" target="_blank" rel="noopener">
+          <div><div class="t">🛍 스타게이트 쇼핑몰</div><div class="s">공식 커머스</div></div>
+          <span class="arrow">→</span>
+        </a>'''
+          card = '''      <a class="link" href="https://stargateedu.co.kr/dart-top100/">
+          <div><div class="t">📈 OpenDART 상위 100 기업 실적</div><div class="s">금융감독원 전자공시 · 분기별 매출액·영업이익 대시보드</div></div>
+          <span class="arrow">→</span>
+        </a>
+
+'''
+          if 'href="https://stargateedu.co.kr/dart-top100/"' in html:
+              print('OpenDART link already exists; no change needed.')
+          elif marker not in html:
+              raise SystemExit('Homepage insertion marker not found')
+          else:
+              path.write_text(html.replace(marker, card + marker, 1), encoding='utf-8')
+              print('Inserted OpenDART dashboard link.')
+          PY
+
+      - name: Commit homepage link
+        run: |
+          if git diff --quiet -- index.html; then
+            echo "변경 없음 — 커밋 생략"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git commit -m "feat: link OpenDART top 100 dashboard from homepage"
+          git push
