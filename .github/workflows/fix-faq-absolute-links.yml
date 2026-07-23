@@ -1,0 +1,46 @@
+name: Fix FAQ absolute links
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/fix-faq-absolute-links.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  patch-faq-links:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Replace FAQ relative links with canonical absolute URL
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          path = Path('index.html')
+          html = path.read_text(encoding='utf-8')
+          old = 'href="/faq/"'
+          new = 'href="https://stargateedu.co.kr/faq/"'
+          count = html.count(old)
+          if count == 0:
+              print('No relative FAQ links found; no change needed.')
+          else:
+              path.write_text(html.replace(old, new), encoding='utf-8')
+              print(f'Replaced {count} FAQ link(s).')
+          PY
+
+      - name: Commit FAQ button links
+        run: |
+          if git diff --quiet -- index.html; then
+            echo "No changes to commit"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git commit -m "fix: use canonical FAQ URL for homepage buttons"
+          git push
