@@ -1,4 +1,4 @@
-name: Fix FAQ absolute links
+name: Place FAQ next to GitHub in top navigation
 
 on:
   push:
@@ -11,29 +11,56 @@ permissions:
   contents: write
 
 jobs:
-  patch-faq-links:
+  patch-top-navigation:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Replace FAQ relative links with canonical absolute URL
+      - name: Place GitHub and FAQ links together
         run: |
           python3 - <<'PY'
           from pathlib import Path
+          import re
 
           path = Path('index.html')
           html = path.read_text(encoding='utf-8')
-          old = 'href="/faq/"'
-          new = 'href="https://stargateedu.co.kr/faq/"'
-          count = html.count(old)
-          if count == 0:
-              print('No relative FAQ links found; no change needed.')
+
+          nav_start = html.index('<nav class="top">')
+          nav_end = html.index('</nav>', nav_start) + len('</nav>')
+          nav = html[nav_start:nav_end]
+
+          nav = re.sub(
+              r'^[ \t]*<li><a\b[^>]*href="https://github\.com/dongsoojung/?"[^>]*>.*?</a></li>\s*\n?',
+              '',
+              nav,
+              flags=re.IGNORECASE | re.MULTILINE,
+          )
+          nav = re.sub(
+              r'^[ \t]*<li><a\b[^>]*href="https://(?:www\.)?stargateedu\.co\.kr/faq/?"[^>]*>.*?</a></li>\s*\n?',
+              '',
+              nav,
+              flags=re.IGNORECASE | re.MULTILINE,
+          )
+
+          anchor = '      <li><a href="#contact">연락처</a></li>'
+          if anchor not in nav:
+              raise SystemExit('Top navigation contact anchor not found')
+
+          links = (
+              '      <li><a href="https://github.com/DongsooJung" target="_blank" rel="noopener">GitHub</a></li>\n'
+              '      <li><a href="https://stargateedu.co.kr/faq" style="color:var(--gold-2);font-weight:700">FAQ</a></li>'
+          )
+          nav = nav.replace(anchor, f'{links}\n{anchor}', 1)
+          updated = html[:nav_start] + nav + html[nav_end:]
+
+          if updated == html:
+              print('No navigation changes needed.')
           else:
-              path.write_text(html.replace(old, new), encoding='utf-8')
-              print(f'Replaced {count} FAQ link(s).')
+              path.write_text(updated, encoding='utf-8')
+              print('Placed FAQ immediately next to GitHub in the top navigation.')
           PY
 
-      - name: Commit FAQ button links
+      - name: Commit top navigation update
         run: |
           if git diff --quiet -- index.html; then
             echo "No changes to commit"
@@ -42,5 +69,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add index.html
-          git commit -m "fix: use canonical FAQ URL for homepage buttons"
+          git commit -m "feat: place FAQ next to GitHub in top navigation"
           git push
