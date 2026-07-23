@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>STARGATE Commerce Sync</title>
+<meta name="robots" content="noindex,nofollow">
+<style>
+:root{--navy:#0b1738;--navy2:#142150;--gold:#d9a441;--bg:#f5f7fb;--line:#dde3ef;--text:#17213a;--muted:#66708a;--ok:#17894b;--bad:#c33b3b}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:"Noto Sans KR","Malgun Gothic",system-ui,sans-serif}.wrap{max-width:1060px;margin:auto;padding:28px 20px 56px}.top{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;border-radius:22px;padding:30px;box-shadow:0 18px 46px rgba(11,23,56,.18)}h1{margin:0;font-size:clamp(27px,5vw,42px)}.lead{color:#d6dcef;max-width:760px}.badge{display:inline-block;padding:6px 11px;border:1px solid rgba(217,164,65,.45);border-radius:999px;color:#f1c77a;font-size:12px}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:18px}.card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:0 8px 28px rgba(11,23,56,.05)}.card h2{font-size:18px;margin:0 0 12px}.wide{grid-column:span 2}.label{font-size:12px;font-weight:700;color:var(--muted);margin:12px 0 6px}input,textarea,button{width:100%;font:inherit;border-radius:11px;border:1px solid var(--line);padding:12px}textarea{min-height:112px;resize:vertical}button{cursor:pointer;background:var(--navy);color:#fff;font-weight:700;border:0;margin-top:9px}button.gold{background:var(--gold);color:var(--navy)}button:disabled{opacity:.55;cursor:wait}.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.status{display:flex;align-items:center;gap:9px;font-size:14px}.dot{width:10px;height:10px;border-radius:50%;background:#9aa3b5}.ok .dot{background:var(--ok);box-shadow:0 0 0 4px rgba(23,137,75,.12)}.bad .dot{background:var(--bad);box-shadow:0 0 0 4px rgba(195,59,59,.12)}pre{background:#0c1530;color:#dbe5ff;border-radius:13px;padding:16px;overflow:auto;min-height:150px;white-space:pre-wrap}.steps{padding-left:20px;color:var(--muted)}a{color:inherit}.footer{margin-top:18px;text-align:center;color:var(--muted);font-size:13px}@media(max-width:760px){.grid{grid-template-columns:1fr}.wide{grid-column:auto}.row{grid-template-columns:1fr}}</style>
+</head>
+<body><main class="wrap">
+<section class="top"><span class="badge">ADMIN · COMMERCE AUTOMATION</span><h1>STARGATE Commerce Sync</h1><p class="lead">도매꾹·도매매 상품을 네이버 스마트스토어 형식으로 변환하고 가격·재고·주문 상태를 동기화하는 운영 콘솔입니다.</p><div class="status" id="status"><span class="dot"></span><span>API 주소를 입력하고 상태 확인을 실행하세요.</span></div></section>
+<section class="grid">
+<div class="card wide"><h2>연결 설정</h2><div class="label">API Base URL</div><input id="base" placeholder="https://stargate-commerce-sync.onrender.com"><div class="label">관리자 키</div><input id="key" type="password" autocomplete="off" placeholder="x-admin-key (브라우저 세션에만 보관)"><div class="row"><button id="save">설정 저장</button><button class="gold" id="health">상태 확인</button></div></div>
+<div class="card"><h2>안전 상태</h2><p>자동 공급사 발주는 기본 비활성화입니다.</p><p><b>ALLOW_SUPPLIER_ORDERING=false</b></p><p style="color:var(--muted);font-size:13px">상품 등록 전 미리보기와 소액 테스트를 권장합니다.</p></div>
+<div class="card"><h2>상품 동기화</h2><p style="color:var(--muted);font-size:14px">연결 상품의 가격·재고·판매 상태를 즉시 갱신합니다.</p><button id="syncProducts">상품 동기화 실행</button></div>
+<div class="card"><h2>주문 변경 조회</h2><div class="label">조회 시작 시각</div><input id="from" type="datetime-local"><button id="orderChanges">변경 주문 조회</button></div>
+<div class="card"><h2>배포 체크리스트</h2><ol class="steps"><li>Render Blueprint 생성</li><li>도매꾹·네이버 API 키 입력</li><li>Supabase 스키마 실행</li><li>고정 출구 IP 등록</li><li>테스트 상품 1건 검증</li></ol></div>
+<div class="card wide"><h2>응답</h2><pre id="output">아직 실행된 요청이 없습니다.</pre></div>
+<div class="card"><h2>바로가기</h2><p><a href="/">← STARGATE EDU 홈</a></p><p><a href="https://shop.stargateedu.co.kr/">쇼핑몰</a></p><p><a href="https://github.com/DongsooJung/stargateedu">GitHub 저장소</a></p></div>
+</section><div class="footer">© 2026 Stargate Corp · 관리자 키는 서버에 저장되지 않습니다.</div></main>
+<script>
+const $=id=>document.getElementById(id), out=$('output'), status=$('status');
+$('base').value=localStorage.getItem('stargateCommerceApi')||'';$('key').value=sessionStorage.getItem('stargateCommerceKey')||'';
+const now=new Date(Date.now()-6*60*60*1000);$('from').value=now.toISOString().slice(0,16);
+function cfg(){return {base:$('base').value.trim().replace(/\/$/,''),key:$('key').value.trim()}}
+function setStatus(type,text){status.className='status '+type;status.lastElementChild.textContent=text}
+async function call(path,opt={}){const c=cfg();if(!c.base)throw new Error('API Base URL을 입력하세요.');const headers={...(opt.headers||{})};if(c.key)headers['x-admin-key']=c.key;if(opt.body)headers['Content-Type']='application/json';out.textContent='요청 중...';const r=await fetch(c.base+path,{...opt,headers});const text=await r.text();let data;try{data=JSON.parse(text)}catch{data=text}out.textContent=JSON.stringify(data,null,2);if(!r.ok)throw new Error(data?.error||('HTTP '+r.status));return data}
+$('save').onclick=()=>{const c=cfg();localStorage.setItem('stargateCommerceApi',c.base);sessionStorage.setItem('stargateCommerceKey',c.key);setStatus('', '설정을 저장했습니다.')};
+$('health').onclick=async()=>{try{const d=await call('/health');setStatus('ok','API 정상 · '+(d.time||''))}catch(e){setStatus('bad','연결 실패 · '+e.message)}};
+$('syncProducts').onclick=async()=>{if(!confirm('연결된 상품의 가격·재고 동기화를 실행할까요?'))return;try{await call('/api/sync/products',{method:'POST'});setStatus('ok','상품 동기화 요청 완료')}catch(e){setStatus('bad',e.message)}};
+$('orderChanges').onclick=async()=>{try{const v=$('from').value;if(!v)throw new Error('시작 시각을 입력하세요.');await call('/api/orders/changes?from='+encodeURIComponent(new Date(v).toISOString()));setStatus('ok','주문 변경 조회 완료')}catch(e){setStatus('bad',e.message)}};
+</script></body></html>
