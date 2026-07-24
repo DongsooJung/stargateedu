@@ -34,9 +34,52 @@
   .contact{background:#f7f8fc}.contact-card{background:#fff;border-radius:var(--radius);padding:40px;margin-top:30px;border:1px solid #e7eaf4;display:grid;grid-template-columns:1.2fr 1fr;gap:40px;align-items:center}@media(max-width:820px){.contact-card{grid-template-columns:1fr}}.contact-card h3{font-size:24px}.email-btn{display:inline-flex;align-items:center;gap:10px;background:var(--navy);color:#fff;padding:16px 22px;border-radius:14px;font-weight:700;margin-top:16px;font-size:15px}.email-btn:hover{background:var(--gold);color:var(--navy)}.info-grid{display:grid;gap:10px;font-size:14.5px}.info-grid .row{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid #eef0f7}.info-grid .row:last-child{border-bottom:none}.info-grid b{min-width:80px;color:var(--navy)}
   footer{background:#0b1738;color:#9aa3c2;padding:40px 0;text-align:center;font-size:13px;border-top:1px solid rgba(217,164,65,0.2)}footer .brand{justify-content:center;color:#fff;margin-bottom:10px;font-size:16px}footer a{color:var(--gold-2)}.visitor-counter{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;max-width:560px;margin:0 auto 26px}.visitor-card{padding:16px 18px;border:1px solid rgba(217,164,65,.3);border-radius:14px;background:rgba(255,255,255,.045);box-shadow:inset 0 1px 0 rgba(255,255,255,.04)}.visitor-label{display:block;color:#aeb7d3;font-size:12px;font-weight:700;letter-spacing:.5px}.visitor-number{display:block;margin-top:4px;color:var(--gold-2);font:700 27px/1.2 "JetBrains Mono",monospace;letter-spacing:1px;font-variant-numeric:tabular-nums}.visitor-note{grid-column:1/-1;color:#7782a5;font-size:11px;line-height:1.5}@media(max-width:480px){.visitor-counter{grid-template-columns:1fr;max-width:280px}.visitor-note{grid-column:auto}}
   @media print{nav.top{position:static;background:var(--navy)}header.hero{padding:60px 0}section{padding:50px 0;break-inside:avoid}.card,.link,.bio,.contact-card{break-inside:avoid}.hub{background:var(--navy)}}
+
+/* FLOATING FAQ SHORTCUT */
+.floating-faq-shortcut{
+  position:fixed;
+  right:22px;
+  bottom:22px;
+  z-index:9999;
+  display:inline-flex;
+  align-items:center;
+  gap:9px;
+  padding:15px 20px;
+  border:1px solid rgba(255,255,255,.45);
+  border-radius:999px;
+  background:linear-gradient(135deg,var(--gold-2),var(--gold));
+  color:var(--navy);
+  font-size:14px;
+  font-weight:900;
+  box-shadow:0 14px 34px rgba(11,23,56,.32);
+  transition:transform .18s ease,box-shadow .18s ease;
+}
+.floating-faq-shortcut:hover{
+  color:var(--navy);
+  transform:translateY(-3px);
+  box-shadow:0 18px 40px rgba(11,23,56,.4);
+}
+@media(max-width:720px){
+  .floating-faq-shortcut{
+    right:14px;
+    bottom:14px;
+    padding:13px 17px;
+    font-size:13px;
+  }
+}
+
 </style>
 </head>
 <body>
+
+<a class="floating-faq-shortcut"
+   data-floating-faq-shortcut
+   href="https://stargateedu.co.kr/faq/"
+   aria-label="FAQ와 고객센터 바로가기">
+  <span aria-hidden="true">❓</span>
+  <span>FAQ · 고객센터</span>
+</a>
+
 <nav class="top"><div class="wrap"><a class="brand" href="https://www.stargateedu.co.kr/"><span class="dot"></span>STARGATE&nbsp;EDU</a><ul><li><a href="#about">소개</a></li><li><a href="#koi">KOI 과정</a></li><li><a href="/koi-coach/" style="color:var(--gold-2);font-weight:700">🏆 KOI Coach</a></li><li><a href="/research/" style="color:var(--gold-2);font-weight:700">🔬 연구</a></li><li><a href="/trade/">무역·환율</a></li><li><a href="#live-data">CODEF 데이터</a></li><li><a href="#pubstats">출판통계</a></li><li><a href="#hub">링크 허브</a></li><li><a href="/commerce-sync/" data-commerce-nav="true" style="color:var(--gold-2);font-weight:700">🔄 상거래 동기화</a></li><li><a href="https://stargateedu.co.kr/faq/" style="color:var(--gold-2);font-weight:700">FAQ</a></li><li><a href="#contact">연락처</a></li><li><a href="/consult/" style="color:var(--gold-2);font-weight:700">상담 신청</a></li></ul><a class="cta" href="/consult/">1:1 상담 신청 →</a></div></nav>
 <header class="hero"><div class="wrap"><span class="badge">대치동 · KOI 수학정보올림피아드 · AI 교육</span><h1>수학과 알고리즘,<br/><span>AI 시대의 언어</span>로 가르칩니다.</h1><p class="lead">STARGATE EDU는 한국정보올림피아드(KOI) · 수학올림피아드 영재를 위한 서울대 박사 직강 전문 교육 브랜드입니다. 대치동 현장 경험과 공간계량·AI 연구 역량을 결합해 "생각의 구조"를 훈련합니다.</p><div class="cta-row"><a class="btn btn-primary" href="/consult/">✨ 1:1 상담 신청</a><a class="btn btn-ghost" href="/research/">🔬 공공데이터 연구</a><a class="btn btn-ghost" href="https://stargateedu.co.kr/faq/">❓ FAQ · 고객센터</a><a class="btn btn-ghost" href="https://litt.ly/stargateedu" target="_blank" rel="noopener">🔗 리틀리 링크 허브</a><a class="btn btn-primary" href="/commerce-sync/" data-commerce-hero="true">🔄 상거래 동기화</a><a class="btn btn-ghost" href="#live-data">↻ 최신 환율 데이터</a><a class="btn btn-ghost" href="#pubstats">📊 2025 출판생산 통계</a><a class="btn btn-ghost" href="mailto:ceo@stargateedu.co.kr">✉️ 상담 문의</a></div></div></header>
 <section class="live-data" id="live-data"><div class="wrap"><div class="data-head"><div><span class="kicker">CODEF · Live Data</span><h2>최신 환율 데이터</h2><p class="desc">CODEF 은행 환율조회 API를 통해 서버에서 안전하게 가져온 최신 고시 환율입니다.</p></div><button class="refresh-btn" id="data-refresh" type="button" aria-controls="rate-grid" aria-describedby="data-status"><span class="refresh-icon" aria-hidden="true">↻</span><span>새 데이터 가져오기</span></button></div><div class="data-status" id="data-status" role="status" aria-live="polite">버튼을 누르면 최신 데이터를 확인합니다.</div><div class="rate-grid" id="rate-grid" aria-busy="false"><article class="rate-card"><div class="currency">USD · 미국 달러</div><div class="rate">—</div><div class="unit">KRW 기준</div></article><article class="rate-card"><div class="currency">JPY · 일본 엔</div><div class="rate">—</div><div class="unit">KRW 기준</div></article><article class="rate-card"><div class="currency">EUR · 유로</div><div class="rate">—</div><div class="unit">KRW 기준</div></article><article class="rate-card"><div class="currency">CNY · 중국 위안</div><div class="rate">—</div><div class="unit">KRW 기준</div></article></div><p class="data-note">환율은 선택한 CODEF 연동 금융기관의 고시값이며 실제 거래 적용값과 다를 수 있습니다.</p></div></section>
