@@ -1,0 +1,101 @@
+name: Add floating FAQ button
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/add-faq-floating-button.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  add-button:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Insert floating FAQ shortcut
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          path = Path('index.html')
+          html = path.read_text(encoding='utf-8')
+
+          css_marker = '/* FLOATING FAQ SHORTCUT */'
+          button_marker = 'data-floating-faq-shortcut'
+
+          css = '''
+          /* FLOATING FAQ SHORTCUT */
+          .floating-faq-shortcut{
+            position:fixed;
+            right:22px;
+            bottom:22px;
+            z-index:9999;
+            display:inline-flex;
+            align-items:center;
+            gap:9px;
+            padding:15px 20px;
+            border:1px solid rgba(255,255,255,.45);
+            border-radius:999px;
+            background:linear-gradient(135deg,var(--gold-2),var(--gold));
+            color:var(--navy);
+            font-size:14px;
+            font-weight:900;
+            box-shadow:0 14px 34px rgba(11,23,56,.32);
+            transition:transform .18s ease,box-shadow .18s ease;
+          }
+          .floating-faq-shortcut:hover{
+            color:var(--navy);
+            transform:translateY(-3px);
+            box-shadow:0 18px 40px rgba(11,23,56,.4);
+          }
+          @media(max-width:720px){
+            .floating-faq-shortcut{
+              right:14px;
+              bottom:14px;
+              padding:13px 17px;
+              font-size:13px;
+            }
+          }
+          '''
+
+          button = '''
+          <a class="floating-faq-shortcut"
+             data-floating-faq-shortcut
+             href="https://stargateedu.co.kr/faq/"
+             aria-label="FAQ와 고객센터 바로가기">
+            <span aria-hidden="true">❓</span>
+            <span>FAQ · 고객센터</span>
+          </a>
+          '''
+
+          changed = False
+          if css_marker not in html:
+              html = html.replace('</style>', css + '\n</style>', 1)
+              changed = True
+
+          if button_marker not in html:
+              html = html.replace('<body>', '<body>\n' + button, 1)
+              changed = True
+
+          if changed:
+              path.write_text(html, encoding='utf-8')
+              print('Floating FAQ shortcut inserted.')
+          else:
+              print('Floating FAQ shortcut already exists.')
+          PY
+
+      - name: Commit homepage button
+        run: |
+          if git diff --quiet -- index.html; then
+            echo "No changes to commit"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git commit -m "feat: add floating FAQ shortcut to homepage"
+          git push
