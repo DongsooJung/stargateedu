@@ -1,0 +1,51 @@
+name: Add PMO links
+
+on:
+  push:
+    paths:
+      - '.github/workflows/add-pmo-links.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  patch-index:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Add PMO links safely
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path('index.html')
+          text = path.read_text(encoding='utf-8')
+
+          nav_anchor = '<li><a href="/research/" style="color:var(--gold-2);font-weight:700">🔬 연구</a></li>'
+          nav_link = nav_anchor + '<li><a href="/pmo/" style="color:var(--gold-2);font-weight:700">📊 Executive PMO</a></li>'
+          if 'href="/pmo/"' not in text:
+              if nav_anchor not in text:
+                  raise SystemExit('Navigation anchor not found')
+              text = text.replace(nav_anchor, nav_link, 1)
+
+          hub_anchor = '<a class="link" href="/research/"><div><div class="t">🔬 공공데이터 자동 수집 연구</div><div class="s">data.go.kr API · Python 수집 파이프라인 · 연구 데이터 적재</div></div><span class="arrow">→</span></a>'
+          hub_link = hub_anchor + '<a class="link" href="/pmo/"><div><div class="t">📊 Executive PMO · 목표·CPM 관리</div><div class="s">프로젝트 평가표 · Critical Path · 칸반 · 리스크 추적</div></div><span class="arrow">→</span></a>'
+          if 'Executive PMO · 목표·CPM 관리' not in text:
+              if hub_anchor not in text:
+                  raise SystemExit('Hub anchor not found')
+              text = text.replace(hub_anchor, hub_link, 1)
+
+          path.write_text(text, encoding='utf-8')
+          PY
+      - name: Commit changes
+        run: |
+          if git diff --quiet; then
+            echo "No changes needed"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git commit -m "Link Executive PMO from homepage"
+          git push
