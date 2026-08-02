@@ -10,7 +10,7 @@ GitHub Pages로 호스팅되는 STARGATE EDU 공식 원페이지 랜딩 사이�
 - `robots.txt` — 크롤링 허용 + sitemap 지시
 - `sitemap.xml` — 검색엔진 색인용
 - `trade/` — 한국수출입은행 Open API 기반 무역 환율 대시보드
-- `teacher-screening/` — 승인 데이터 기반 교사 후보 주간 100명 스크리닝 대시보드
+- `teacher-screening/` — 승인 데이터 기반 과외학생 주간 100명 스크리닝 대시보드
 - `scripts/fetch-exim-rates.mjs` — 최근 영업일 환율 수집·정규화 스크립트
 - `.github/workflows/update-exim-rates.yml` — 평일 11:30 KST 자동 갱신
 
@@ -24,16 +24,16 @@ GitHub Pages로 호스팅되는 STARGATE EDU 공식 원페이지 랜딩 사이�
 
 저장소 `Settings → Secrets and variables → Actions`에 `EXIM_AUTH_KEY`를 등록하면 평일 11:30 KST에 최신 환율을 가져와 `trade/data/latest.json`을 자동 갱신합니다. 인증키는 HTML·JSON·로그에 저장하지 않습니다.
 
-### 교사 후보 주간 스크리닝
+### 과외학생 주간 스크리닝
 
-매주 월요일 09:15 KST에 최대 100명의 승인 후보 데이터를 평가합니다. `AUTHORIZED_CANDIDATE_EXPORT_URL` 저장소 시크릿에 공식 API 또는 제공 동의를 받은 JSON 내보내기 URL을 등록하면 실데이터 모드로 전환됩니다. 김과외 페이지 직접 크롤링은 차단하며, 시크릿이 없을 때는 개인정보가 없는 익명 데모 데이터만 생성합니다.
+매주 월요일 09:15 KST에 최대 100명의 승인된 과외학생 문의를 평가합니다. `AUTHORIZED_STUDENT_EXPORT_URL` 저장소 시크릿에 공식 API 또는 학생·보호자 동의를 받은 JSON 내보내기 URL을 등록하면 실데이터 모드로 전환됩니다. 김과외 페이지 직접 크롤링은 차단하며, 시크릿이 없을 때는 개인정보가 없는 익명 학생 데모 데이터만 생성합니다.
 
 ## 핵심 링크
 
 - 링크 허브: https://litt.ly/stargateedu
 - 포털: https://portal.stargateedu.co.kr
 - 무역 환율: https://stargateedu.co.kr/trade/
-- 교사 후보 스크리닝: https://www.stargateedu.co.kr/stargateedu/teacher-screening/
+- 과외학생 스크리닝: https://www.stargateedu.co.kr/stargateedu/teacher-screening/
 - 이메일: ceo@stargateedu.co.kr
 
 ## 운영
