@@ -33,7 +33,7 @@ GitHub Pages로 호스팅되는 STARGATE EDU 공식 원페이지 랜딩 사이�
 - 링크 허브: https://litt.ly/stargateedu
 - 포털: https://portal.stargateedu.co.kr
 - 무역 환율: https://stargateedu.co.kr/trade/
-- 교사 후보 스크리닝: https://stargateedu.co.kr/teacher-screening/
+- 교사 후보 스크리닝: https://www.stargateedu.co.kr/stargateedu/teacher-screening/
 - 이메일: ceo@stargateedu.co.kr
 
 ## 운영
