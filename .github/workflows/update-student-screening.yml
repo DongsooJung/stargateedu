@@ -30,6 +30,12 @@ jobs:
           AUTHORIZED_STUDENT_EXPORT_URL: ${{ secrets.AUTHORIZED_STUDENT_EXPORT_URL }}
         run: node scripts/update-student-screening.mjs
 
+      - name: Save screening history to Supabase
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: node scripts/sync-student-screening-to-supabase.mjs
+
       - name: Commit updated dashboard data
         run: |
           if git diff --quiet -- teacher-screening/data/latest.json; then
