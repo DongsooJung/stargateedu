@@ -11,6 +11,7 @@ GitHub Pages로 호스팅되는 STARGATE EDU 공식 원페이지 랜딩 사이�
 - `sitemap.xml` — 검색엔진 색인용
 - `trade/` — 한국수출입은행 Open API 기반 무역 환율 대시보드
 - `strategy/kimstudy-math/` — 김과외 수학·과외시장 전략 데이터 테이블(페이지당 100건)
+- `strategy/used-car/` — 중고차 일일 가격 전략 대시보드(페이지당 100건·CSV 내보내기)
 - `teacher-screening/` — 승인 데이터 기반 과외학생 스크리닝 운영 화면
 - `scripts/fetch-exim-rates.mjs` — 최근 영업일 환율 수집·정규화 스크립트
 - `.github/workflows/update-exim-rates.yml` — 평일 11:30 KST 자동 갱신
@@ -36,6 +37,10 @@ GitHub Pages로 호스팅되는 STARGATE EDU 공식 원페이지 랜딩 사이�
 3. 주간 실행 시 회차 요약과 학생별 평가 결과가 `student_screening_batches`, `student_screening_candidates`에 누적 저장됩니다.
 
 두 테이블은 RLS를 활성화하고 브라우저의 익명·로그인 사용자 접근을 차단합니다. 서버용 키는 GitHub Actions에서만 사용하며 HTML이나 JSON에 포함하지 않습니다.
+
+### 중고차 가격 일일 갱신
+
+매일 09:30 KST에 승인된 CSV 또는 JSON 피드를 최대 10,000건까지 정규화하고 100건 단위 페이지로 제공합니다. Actions secret `USED_CAR_FEED_URL`에 계약된 HTTPS 피드 주소를 등록하고, 토큰형 피드는 `USED_CAR_FEED_TOKEN`을 함께 등록합니다. 직접 엔카·KB차차차 공개 화면을 수집하지 않으며, 피드가 없을 때는 실매물이 아닌 익명 샘플 데이터만 표시합니다.
 
 #### Firecrawl 확인
 
