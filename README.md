@@ -10,7 +10,8 @@ GitHub Pages로 호스팅되는 STARGATE EDU 공식 원페이지 랜딩 사이�
 - `robots.txt` — 크롤링 허용 + sitemap 지시
 - `sitemap.xml` — 검색엔진 색인용
 - `trade/` — 한국수출입은행 Open API 기반 무역 환율 대시보드
-- `teacher-screening/` — 승인 데이터 기반 과외학생 주간 100명 스크리닝 대시보드
+- `strategy/kimstudy-math/` — 김과외 수학·과외시장 전략 데이터 테이블(페이지당 100건)
+- `teacher-screening/` — 승인 데이터 기반 과외학생 스크리닝 운영 화면
 - `scripts/fetch-exim-rates.mjs` — 최근 영업일 환율 수집·정규화 스크립트
 - `.github/workflows/update-exim-rates.yml` — 평일 11:30 KST 자동 갱신
 
@@ -26,7 +27,7 @@ GitHub Pages로 호스팅되는 STARGATE EDU 공식 원페이지 랜딩 사이�
 
 ### 과외학생 주간 스크리닝
 
-매주 월요일 09:15 KST에 최대 100명의 승인된 과외학생 문의를 평가합니다. `AUTHORIZED_STUDENT_EXPORT_URL` 저장소 시크릿에 공식 API 또는 학생·보호자 동의를 받은 JSON 내보내기 URL을 등록하면 실데이터 모드로 전환됩니다. 김과외 페이지 직접 크롤링은 차단하며, 시크릿이 없을 때는 개인정보가 없는 익명 학생 데모 데이터만 생성합니다.
+매주 월요일 09:15 KST에 최대 5,000명의 승인된 과외학생 문의를 평가하고 전략 대시보드에서 페이지당 100건씩 표시합니다. `AUTHORIZED_STUDENT_EXPORT_URL` 저장소 시크릿에 공식 API 또는 학생·보호자 동의를 받은 JSON 내보내기 URL을 등록하면 실데이터 모드로 전환됩니다. 김과외의 현재 `robots.txt`는 일반 수집 봇의 전체 경로 접근을 차단하므로 직접 대량 크롤링은 중지하며, 시크릿이 없을 때는 개인정보가 없는 익명 학생 데모 데이터만 생성합니다.
 
 #### Supabase 이력 저장
 

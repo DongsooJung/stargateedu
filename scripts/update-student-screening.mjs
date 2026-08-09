@@ -1,7 +1,9 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 
-const MAX_BATCH_SIZE = 100;
+const PAGE_SIZE = 100;
+const MAX_RECORDS = 5_000;
+const DEMO_RECORDS = 200;
 const outputPath = resolve("teacher-screening/data/latest.json");
 const exportUrl = (
   process.env.AUTHORIZED_STUDENT_EXPORT_URL ??
@@ -15,7 +17,7 @@ const goals = ["내신 향상", "수능 대비", "경시·올림피아드", "코
 
 function sampleCandidates() {
   const now = Date.now();
-  return Array.from({ length: MAX_BATCH_SIZE }, (_, index) => ({
+  return Array.from({ length: DEMO_RECORDS }, (_, index) => ({
     externalId: `STUDENT-${String(index + 1).padStart(3, "0")}`,
     displayName: `익명 학생 ${String(index + 1).padStart(3, "0")}`,
     subject: subjects[index % subjects.length],
@@ -118,7 +120,7 @@ function scoreCandidate(candidate) {
 
 const { candidates, mode } = await loadCandidates();
 const screened = candidates
-  .slice(0, MAX_BATCH_SIZE)
+  .slice(0, MAX_RECORDS)
   .map(scoreCandidate)
   .sort((a, b) => b.score - a.score)
   .map((candidate, index) => ({ ...candidate, rank: index + 1 }));
@@ -134,6 +136,14 @@ const output = {
   updatedAt: updatedAt.toISOString(),
   nextRunAt: nextRunAt.toISOString(),
   batchSize: screened.length,
+  pageSize: PAGE_SIZE,
+  pageCount: Math.ceil(screened.length / PAGE_SIZE),
+  collectionPolicy: {
+    target: "kimstudy.com",
+    robotsStatus: "blocked-for-generic-bots",
+    acquisition: mode === "authorized" ? "authorized-export" : "anonymous-demo",
+    note: "김과외 공개 페이지 직접 대량 수집은 robots.txt에 따라 중지하며, 공식 API 또는 권한이 확인된 내보내기만 적재합니다.",
+  },
   summary: {
     priority: screened.filter((item) => item.status === "priority").length,
     review: screened.filter((item) => item.status === "review").length,
@@ -147,4 +157,4 @@ const output = {
 
 await mkdir(dirname(outputPath), { recursive: true });
 await writeFile(outputPath, `${JSON.stringify(output, null, 2)}\n`, "utf8");
-console.log(`과외학생 후보 ${screened.length}명 스크리닝 완료 (${mode})`);
+console.log(`과외학생 후보 ${screened.length}명 스크리닝 완료 (${mode}, 페이지당 ${PAGE_SIZE}명)`);

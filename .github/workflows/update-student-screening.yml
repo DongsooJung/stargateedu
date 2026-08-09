@@ -25,7 +25,7 @@ jobs:
         with:
           node-version: "22"
 
-      - name: Screen up to 100 authorized student inquiries
+      - name: Collect and screen authorized inquiries in 100-row pages
         env:
           AUTHORIZED_STUDENT_EXPORT_URL: ${{ secrets.AUTHORIZED_STUDENT_EXPORT_URL }}
         run: node scripts/update-student-screening.mjs
