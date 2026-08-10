@@ -12,6 +12,7 @@ GitHub Pages로 호스팅되는 STARGATE EDU 공식 원페이지 랜딩 사이�
 - `trade/` — 한국수출입은행 Open API 기반 무역 환율 대시보드
 - `strategy/kimstudy-math/` — 김과외 수학·과외시장 전략 데이터 테이블(페이지당 100건)
 - `strategy/used-car/` — 중고차 일일 가격 전략 대시보드(페이지당 100건·CSV 내보내기)
+- `strategy/job-opportunities/` — 채용·체험공고 일일 TOP 20 전략 대시보드(JSON·CSV·날짜별 보관)
 - `teacher-screening/` — 승인 데이터 기반 과외학생 스크리닝 운영 화면
 - `scripts/fetch-exim-rates.mjs` — 최근 영업일 환율 수집·정규화 스크립트
 - `.github/workflows/update-exim-rates.yml` — 평일 11:30 KST 자동 갱신
@@ -41,6 +42,10 @@ GitHub Pages로 호스팅되는 STARGATE EDU 공식 원페이지 랜딩 사이�
 ### 중고차 가격 일일 갱신
 
 매일 09:30 KST에 승인된 CSV 또는 JSON 피드를 최대 10,000건까지 정규화하고 100건 단위 페이지로 제공합니다. Actions secret `USED_CAR_FEED_URL`에 계약된 HTTPS 피드 주소를 등록하고, 토큰형 피드는 `USED_CAR_FEED_TOKEN`을 함께 등록합니다. 직접 엔카·KB차차차 공개 화면을 수집하지 않으며, 피드가 없을 때는 실매물이 아닌 익명 샘플 데이터만 표시합니다.
+
+### 채용·체험공고 일일 선별
+
+매일 09:00 KST에 승인된 잡코리아 API·CSV 또는 합법적으로 내보낸 채용공고를 최대 5,000건까지 읽고, AI·데이터·GIS·도시정책·PM·교육 적합도 순으로 상위 20건을 선별합니다. Actions secret `JOB_FEED_URL`에 HTTPS CSV/JSON 주소를 등록하고 토큰형 피드는 `JOB_FEED_TOKEN`을 추가합니다. 잡코리아 도메인의 피드를 직접 연결하려면 공급 승인을 확인한 뒤 Actions variable `JOB_FEED_LICENSED=true`를 설정합니다. 결과는 `latest.json`, `latest.csv`, `archive/YYYY-MM-DD.csv`로 저장됩니다.
 
 #### Firecrawl 확인
 
