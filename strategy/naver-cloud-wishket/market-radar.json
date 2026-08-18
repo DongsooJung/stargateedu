@@ -1,0 +1,92 @@
+{
+  "updated_at": "2026-08-18T09:50:00+09:00",
+  "note": "공개 검색으로 확인 가능한 최근 위시켓 AI 프로젝트 벤치마크입니다. 지원 가능 여부는 위시켓 로그인 후 반드시 재확인합니다.",
+  "scoring": {
+    "problem_roi": 30,
+    "ncp_fit": 25,
+    "budget": 20,
+    "expansion": 15,
+    "delivery": 10,
+    "apply_threshold": 70
+  },
+  "benchmarks": [
+    {
+      "project_id": 157299,
+      "title": "LLM 기반 AI Agent 개발 (Python / FastAPI)",
+      "registered": "2026-07-30",
+      "deadline": "2026-08-13",
+      "budget": "550만원/월",
+      "duration": "90일",
+      "stack": ["Python", "FastAPI", "LLM", "RAG"],
+      "ncp_mapping": ["CLOVA Studio", "Maps", "API Gateway"],
+      "fit_score": 88,
+      "status": "closed_reference",
+      "url": "https://www.wishket.com/project/157299/"
+    },
+    {
+      "project_id": 157289,
+      "title": "Python/FastAPI 기반 B2B AI 서비스 백엔드 시스템 구축 개발",
+      "registered": "2026-07-29",
+      "deadline": "2026-08-12",
+      "budget": "협의 후 결정",
+      "duration": "180일",
+      "stack": ["Python", "FastAPI", "Docker", "B2B AI"],
+      "ncp_mapping": ["API Gateway", "Cloud Functions", "CLOVA Studio"],
+      "fit_score": 84,
+      "status": "closed_reference",
+      "url": "https://www.wishket.com/project/157289/"
+    },
+    {
+      "project_id": 157142,
+      "title": "FastAPI/NestJS 기반 AI 교육 플랫폼 백엔드 API 개발",
+      "registered": "2026-07-23",
+      "deadline": "2026-08-06",
+      "budget": "500만원/월",
+      "duration": "180일",
+      "stack": ["FastAPI", "RAG", "LLM", "교육"],
+      "ncp_mapping": ["CLOVA Studio", "API Gateway"],
+      "fit_score": 82,
+      "status": "closed_reference",
+      "url": "https://www.wishket.com/project/157142/"
+    },
+    {
+      "project_id": 157051,
+      "title": "Python 기반 CS AI Agent 개발",
+      "registered": "2026-07-21",
+      "deadline": "2026-08-03",
+      "budget": "600만원/월",
+      "duration": "120일",
+      "stack": ["Python", "AI Agent", "CS"],
+      "ncp_mapping": ["CLOVA Studio", "API Gateway"],
+      "fit_score": 79,
+      "status": "closed_reference",
+      "url": "https://www.wishket.com/project/157051/"
+    },
+    {
+      "project_id": 155481,
+      "title": "구매업무 자동화 AI Agent 구축",
+      "registered": "2026-05-21",
+      "deadline": "2026-06-04",
+      "budget": "2,000만원",
+      "duration": "120일",
+      "stack": ["Python", "FastAPI", "LangChain", "ERP", "AI Agent"],
+      "ncp_mapping": ["CLOVA Studio", "OCR", "API Gateway"],
+      "fit_score": 91,
+      "status": "closed_reference",
+      "url": "https://www.wishket.com/project/155481/"
+    },
+    {
+      "project_id": 153755,
+      "title": "OCR 및 Rule엔진 기반 통관 데이터 자동 검증",
+      "registered": "2026-03-19",
+      "deadline": "2026-03-31",
+      "budget": "4,500만원",
+      "duration": "75일",
+      "stack": ["OCR", "Rule Engine", "PDF", "업무자동화"],
+      "ncp_mapping": ["CLOVA OCR", "API Gateway", "Cloud Functions"],
+      "fit_score": 94,
+      "status": "closed_reference",
+      "url": "https://www.wishket.com/project/153755/"
+    }
+  ]
+}
