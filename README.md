@@ -14,6 +14,7 @@ GitHub Pages로 호스팅되는 STARGATE EDU 공식 원페이지 랜딩 사이�
 - `strategy/used-car/` — 중고차 일일 가격 전략 대시보드(페이지당 100건·CSV 내보내기)
 - `strategy/job-opportunities/` — 채용·체험공고 일일 TOP 20 전략 대시보드(JSON·CSV·날짜별 보관)
 - `teacher-screening/` — 승인 데이터 기반 과외학생 스크리닝 운영 화면
+- `research/seoul-realtors/` — 강남·서초·송파 공인중개사사무소 3,000개 공간지도 시범판
 - `scripts/fetch-exim-rates.mjs` — 최근 영업일 환율 수집·정규화 스크립트
 - `.github/workflows/update-exim-rates.yml` — 평일 11:30 KST 자동 갱신
 
@@ -50,6 +51,10 @@ GitHub Pages로 호스팅되는 STARGATE EDU 공식 원페이지 랜딩 사이�
 #### Firecrawl 확인
 
 `scripts/check-firecrawl-access.mjs`는 대상 사이트의 `robots.txt`를 먼저 확인한 후 허용된 URL만 Firecrawl v2 Scrape API로 시험합니다. API 키는 환경변수로만 전달하고 저장소에 저장하지 않습니다. 김과외는 전체 자동 수집을 금지하므로 Firecrawl을 통한 직접 수집 대상에서도 제외합니다.
+
+### 서울 강남권 공인중개사 공간지도
+
+`scripts/update-seoul-realtors.mjs`는 강남·서초·송파 영업 중 중개사무소를 최대 3,000건으로 정규화합니다. `SEOUL_OPEN_DATA_KEY`가 있으면 서울 열린데이터광장 `landBizInfo`를 원장으로 사용하고, `KAKAO_REST_API_KEY`가 있으면 좌표가 없는 주소를 서버 측에서 지오코딩합니다. 두 키는 HTML·JSON에 포함하지 않습니다. 키가 없으면 공공데이터포털 전국 표준데이터의 공개 좌표만 사용하며, 좌표 미확인 레코드는 지도에서 제외됩니다.
 
 ## 핵심 링크
 
