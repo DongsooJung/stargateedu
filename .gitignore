@@ -1,4 +1,4 @@
 .env
 .env.local
 .env.*.local
-
+research/seoul-realtors/data/geocode-cache.json
