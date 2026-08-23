@@ -1,0 +1,40 @@
+name: Update Seoul realtor map
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "20 18 * * 0" # Monday 03:20 KST
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-seoul-realtors
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Collect and geocode pilot data
+        env:
+          SEOUL_OPEN_DATA_KEY: ${{ secrets.SEOUL_OPEN_DATA_KEY }}
+          KAKAO_REST_API_KEY: ${{ secrets.KAKAO_REST_API_KEY }}
+          REALTOR_TARGET_COUNT: "3000"
+        run: node scripts/update-seoul-realtors.mjs
+      - name: Commit changed data
+        run: |
+          if git diff --quiet -- research/seoul-realtors/data; then
+            echo "No data changes"
+            exit 0
+          fi
+          git config user.name "stargate-data-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add -- research/seoul-realtors/data/latest.json
+          git commit -m "data: refresh Seoul realtor map"
+          git push
