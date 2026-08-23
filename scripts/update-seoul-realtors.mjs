@@ -139,8 +139,8 @@ async function geocodeNominatim(address, district) {
   url.searchParams.set("q", query);
   const payload = await fetchJson(url, {
     headers: {
-      "User-Agent": "STARGATE-Seoul-Realtor-Research/1.0 (https://www.stargateedu.co.kr/research/seoul-realtors/)",
-      Referer: "https://www.stargateedu.co.kr/research/seoul-realtors/",
+      "User-Agent": "STARGATE-Seoul-Realtor-Research/1.0 (https://www.stargateedu.co.kr/stargateedu/research/seoul-realtors/)",
+      Referer: "https://www.stargateedu.co.kr/stargateedu/research/seoul-realtors/",
     },
   }, 2);
   const result = payload.find((item) => {
@@ -168,7 +168,7 @@ async function fetchOverpassAddressIndex() {
     url.searchParams.set("data", query);
     const payload = await fetchJson(url, {
       headers: {
-        "User-Agent": "STARGATE-Seoul-Realtor-Research/1.0 (https://www.stargateedu.co.kr/research/seoul-realtors/)",
+        "User-Agent": "STARGATE-Seoul-Realtor-Research/1.0 (https://www.stargateedu.co.kr/stargateedu/research/seoul-realtors/)",
       },
     }, 2);
     for (const element of payload.elements || []) {
