@@ -1,0 +1,51 @@
+name: Update Notion OneNote workspace status
+
+on:
+  schedule:
+    - cron: "17 */6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-workspace-status
+  cancel-in-progress: true
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Fetch official APIs
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_OWNER: DongsooJung
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          NOTION_DATA_SOURCE_IDS: ${{ vars.NOTION_DATA_SOURCE_IDS }}
+          MS_CLIENT_ID: ${{ secrets.MS_CLIENT_ID }}
+          MS_CLIENT_SECRET: ${{ secrets.MS_CLIENT_SECRET }}
+          MS_TENANT_ID: ${{ vars.MS_TENANT_ID }}
+          MS_REFRESH_TOKEN: ${{ secrets.MS_REFRESH_TOKEN }}
+          ONENOTE_SECTION_IDS: ${{ vars.ONENOTE_SECTION_IDS }}
+          ONENOTE_PUBLIC_PREFIX: "[PUBLIC]"
+        run: node scripts/update-workspace-status.mjs
+
+      - name: Commit refreshed snapshot
+        run: |
+          if git diff --quiet -- pmo/data/latest.json; then
+            echo "No workspace status changes"
+            exit 0
+          fi
+          git config user.name "stargate-status-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add -- pmo/data/latest.json
+          git commit -m "data: refresh Notion and OneNote status"
+          git push
