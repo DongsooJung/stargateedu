@@ -2,6 +2,11 @@ name: Update Seoul realtor map
 
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "scripts/update-seoul-realtors.mjs"
+      - ".github/workflows/update-seoul-realtors.yml"
   schedule:
     - cron: "20 18 * * 0" # Monday 03:20 KST
 
