@@ -1,6 +1,13 @@
 {
-  "updated_at": "2026-08-18T09:50:00+09:00",
-  "note": "공개 검색으로 확인 가능한 최근 위시켓 AI 프로젝트 벤치마크입니다. 지원 가능 여부는 위시켓 로그인 후 반드시 재확인합니다.",
+  "updated_at": "2026-08-29T08:18:00+09:00",
+  "source": "Current public Wishket verification + scheduled NAVER Search Web API pipeline",
+  "note": "2026-08-29 공개 페이지에서 모집 중으로 확인된 후보를 초기값으로 반영했습니다. 실제 지원 전 로그인 화면에서 상세 요구사항과 지원 가능 상태를 다시 확인합니다.",
+  "automation": {
+    "status": "awaiting_naver_search_keys",
+    "candidates_found": 5,
+    "apply_candidates": 5,
+    "top3_count": 3
+  },
   "scoring": {
     "problem_roi": 30,
     "ncp_fit": 25,
@@ -9,7 +16,128 @@
     "delivery": 10,
     "apply_threshold": 70
   },
+  "top3": [
+    {
+      "project_id": 157739,
+      "title": "AI 기반 문서 검색·분석 서비스 파일럿 개발 AI Engineer",
+      "registered": "2026-08-19",
+      "deadline": null,
+      "budget": "협의 후 결정",
+      "duration": "180일",
+      "fit_score": 95,
+      "recommended_offer": "AI Quick PoC → Business Automation Build",
+      "ncp_mapping": ["CLOVA Studio", "CLOVA OCR", "API Gateway / Cloud Functions"],
+      "status": "open_verified_public_listing",
+      "url": "https://www.wishket.com/project/157739/"
+    },
+    {
+      "project_id": 157881,
+      "title": "Python/LLM 기반 특허 자동화 B2B SaaS AI 엔지니어 개발",
+      "registered": "2026-08-24",
+      "deadline": null,
+      "budget": "500만원/월",
+      "duration": "90일",
+      "fit_score": 93,
+      "recommended_offer": "Business Automation Build",
+      "ncp_mapping": ["CLOVA Studio", "API Gateway / Cloud Functions"],
+      "status": "open_verified_public_listing",
+      "url": "https://www.wishket.com/project/157881/"
+    },
+    {
+      "project_id": 157775,
+      "title": "Python/GCP 기반 마케팅 자동화 플랫폼 AI Agent 개발",
+      "registered": "2026-08-21",
+      "deadline": "2026-09-01",
+      "budget": "750만원/월",
+      "duration": "90일",
+      "fit_score": 91,
+      "recommended_offer": "Business Automation Build",
+      "ncp_mapping": ["CLOVA Studio", "API Gateway / Cloud Functions"],
+      "status": "open_verified",
+      "url": "https://www.wishket.com/project/157775/"
+    }
+  ],
+  "candidates": [
+    {
+      "project_id": 157739,
+      "title": "AI 기반 문서 검색·분석 서비스 파일럿 개발 AI Engineer",
+      "registered": "2026-08-19",
+      "deadline": null,
+      "budget": "협의 후 결정",
+      "duration": "180일",
+      "fit_score": 95,
+      "recommended_offer": "AI Quick PoC → Business Automation Build",
+      "ncp_mapping": ["CLOVA Studio", "CLOVA OCR", "API Gateway / Cloud Functions"],
+      "status": "open_verified_public_listing",
+      "url": "https://www.wishket.com/project/157739/"
+    },
+    {
+      "project_id": 157881,
+      "title": "Python/LLM 기반 특허 자동화 B2B SaaS AI 엔지니어 개발",
+      "registered": "2026-08-24",
+      "deadline": null,
+      "budget": "500만원/월",
+      "duration": "90일",
+      "fit_score": 93,
+      "recommended_offer": "Business Automation Build",
+      "ncp_mapping": ["CLOVA Studio", "API Gateway / Cloud Functions"],
+      "status": "open_verified_public_listing",
+      "url": "https://www.wishket.com/project/157881/"
+    },
+    {
+      "project_id": 157775,
+      "title": "Python/GCP 기반 마케팅 자동화 플랫폼 AI Agent 개발",
+      "registered": "2026-08-21",
+      "deadline": "2026-09-01",
+      "budget": "750만원/월",
+      "duration": "90일",
+      "fit_score": 91,
+      "recommended_offer": "Business Automation Build",
+      "ncp_mapping": ["CLOVA Studio", "API Gateway / Cloud Functions"],
+      "status": "open_verified",
+      "url": "https://www.wishket.com/project/157775/"
+    },
+    {
+      "project_id": 157778,
+      "title": "Python/LLM 기반 생성형 AI 서비스 개발",
+      "registered": "2026-08-21",
+      "deadline": null,
+      "budget": "협의 후 결정",
+      "duration": "180일",
+      "fit_score": 88,
+      "recommended_offer": "Business Automation Build",
+      "ncp_mapping": ["CLOVA Studio", "API Gateway / Cloud Functions"],
+      "status": "open_verified_public_listing",
+      "url": "https://www.wishket.com/project/157778/"
+    },
+    {
+      "project_id": 157614,
+      "title": "AI Agent/LLM 기반 B2C·B2B 서비스 기획 및 PM",
+      "registered": "2026-08-12",
+      "deadline": "2026-09-02",
+      "budget": "550만원/월",
+      "duration": "90일",
+      "fit_score": 83,
+      "recommended_offer": "AI Solution PM / PoC Design",
+      "ncp_mapping": ["CLOVA Studio", "API Gateway / Cloud Functions"],
+      "status": "open_verified",
+      "url": "https://www.wishket.com/project/157614/"
+    }
+  ],
   "benchmarks": [
+    {
+      "project_id": 157839,
+      "title": "Python/Langgraph 기반 안전관리 Agent OCR 개발",
+      "registered": "2026-08-24",
+      "deadline": "2026-08-28",
+      "budget": "1,000만원/월",
+      "duration": "210일",
+      "stack": ["Python", "LangGraph", "AI Agent", "OCR"],
+      "ncp_mapping": ["CLOVA Studio", "CLOVA OCR", "API Gateway"],
+      "fit_score": 96,
+      "status": "closed_reference",
+      "url": "https://www.wishket.com/project/157839/"
+    },
     {
       "project_id": 157299,
       "title": "LLM 기반 AI Agent 개발 (Python / FastAPI)",
@@ -35,32 +163,6 @@
       "fit_score": 84,
       "status": "closed_reference",
       "url": "https://www.wishket.com/project/157289/"
-    },
-    {
-      "project_id": 157142,
-      "title": "FastAPI/NestJS 기반 AI 교육 플랫폼 백엔드 API 개발",
-      "registered": "2026-07-23",
-      "deadline": "2026-08-06",
-      "budget": "500만원/월",
-      "duration": "180일",
-      "stack": ["FastAPI", "RAG", "LLM", "교육"],
-      "ncp_mapping": ["CLOVA Studio", "API Gateway"],
-      "fit_score": 82,
-      "status": "closed_reference",
-      "url": "https://www.wishket.com/project/157142/"
-    },
-    {
-      "project_id": 157051,
-      "title": "Python 기반 CS AI Agent 개발",
-      "registered": "2026-07-21",
-      "deadline": "2026-08-03",
-      "budget": "600만원/월",
-      "duration": "120일",
-      "stack": ["Python", "AI Agent", "CS"],
-      "ncp_mapping": ["CLOVA Studio", "API Gateway"],
-      "fit_score": 79,
-      "status": "closed_reference",
-      "url": "https://www.wishket.com/project/157051/"
     },
     {
       "project_id": 155481,
