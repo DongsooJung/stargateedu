@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Wishket × NAVER Cloud Live Radar | STARGATE</title>
+<style>
+:root{--navy:#07142f;--blue:#173b70;--gold:#e0aa42;--bg:#f4f6fa;--card:#fff;--line:#dbe2ed;--text:#101b35;--muted:#67738a;--green:#08765b;--amber:#9d640c;--red:#b42318}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Pretendard,"Noto Sans KR",Arial,sans-serif}.wrap{width:min(1320px,calc(100% - 28px));margin:auto}header{padding:42px 0;background:linear-gradient(135deg,var(--navy),var(--blue));color:#fff}header a{color:#f4c979;text-decoration:none;font-weight:800}h1{margin:12px 0 8px;font-size:clamp(30px,5vw,50px)}header p{margin:0;color:#cbd5e8;max-width:850px;line-height:1.65}.meta{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}.pill{padding:7px 10px;border-radius:999px;background:rgba(255,255,255,.1);font-size:12px}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:18px}.kpi,.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px}.kpi span{display:block;color:var(--muted);font-size:11px}.kpi b{display:block;margin-top:5px;font-size:26px}.panel{margin:16px 0}.panel h2{margin:0 0 8px}.notice{padding:13px;border-radius:12px;background:#fff8e8;color:#72521b;font-size:12px;line-height:1.6}.table-wrap{overflow:auto;margin-top:12px}.tbl{width:100%;min-width:900px;border-collapse:collapse}.tbl th,.tbl td{padding:12px;border-bottom:1px solid #edf0f5;text-align:left;font-size:12px;vertical-align:top}.tbl th{background:#f6f8fc;color:var(--muted);font-size:11px}.score{font-weight:900;color:var(--green);font-size:16px}.title{font-weight:900}.sub{display:block;color:var(--muted);font-size:10px;margin-top:4px}.btn{display:inline-flex;padding:8px 10px;border-radius:9px;background:var(--navy);color:#fff;text-decoration:none;font-weight:800;font-size:11px}.btn.secondary{background:#edf4ff;color:#174881}.top3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.pick{border:1px solid var(--line);border-radius:14px;padding:16px;background:#fbfcfe}.pick h3{margin:7px 0;font-size:15px}.pick p{margin:0;color:var(--muted);font-size:11px}.pick .rank{color:var(--green);font-size:11px;font-weight:900}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}footer{padding:26px 0 44px;color:var(--muted);font-size:11px}@media(max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}.top3{grid-template-columns:1fr}}@media(max-width:520px){.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header><div class="wrap"><a href="../">← B2B 전략으로</a><h1>Wishket × NAVER Cloud Live Radar</h1><p>네이버 웹문서 검색 API로 위시켓의 공개 프로젝트 신호를 수집하고, NCP 적용성·ROI·예산·확장성·납기 기준으로 점수화합니다. 자동 생성 결과는 실제 지원 전 위시켓 로그인 화면에서 반드시 재검증합니다.</p><div class="meta"><span class="pill">Daily 09:10 KST</span><span class="pill">70점+ 지원 후보</span><span class="pill">TOP 3 제안서 초안</span></div></div></header>
+<main class="wrap">
+<section class="grid"><article class="kpi"><span>자동화 상태</span><b id="status">확인 중</b></article><article class="kpi"><span>수집 후보</span><b id="found">—</b></article><article class="kpi"><span>70점+ 후보</span><b id="apply">—</b></article><article class="kpi"><span>최종 갱신</span><b id="updated" style="font-size:16px">—</b></article></section>
+<section class="panel"><div class="notice" id="notice">데이터를 불러오는 중입니다.</div></section>
+<section class="panel"><h2>오늘의 TOP 3</h2><div class="top3" id="top3"></div><div class="actions"><a class="btn" href="../proposals/latest.md">제안서 초안 열기</a><a class="btn secondary" href="../market-radar.json">원본 JSON</a></div></section>
+<section class="panel"><h2>시장 레이더</h2><div class="table-wrap"><table class="tbl"><thead><tr><th>점수</th><th>프로젝트</th><th>추천 상품</th><th>NCP 매핑</th><th>상태</th><th>확인</th></tr></thead><tbody id="rows"></tbody></table></div></section>
+</main>
+<footer><div class="wrap">STARGATE · Wishket × NAVER Cloud Opportunity Pipeline</div></footer>
+<script>
+const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+async function load(){
+  try{
+    const r=await fetch('../market-radar.json',{cache:'no-store'}); if(!r.ok) throw new Error(`HTTP ${r.status}`); const d=await r.json();
+    const auto=d.automation||{}; document.getElementById('status').textContent=auto.status==='active'?'ACTIVE':'READY';
+    const candidates=d.candidates||d.benchmarks||[]; document.getElementById('found').textContent=auto.candidates_found??candidates.length;
+    document.getElementById('apply').textContent=auto.apply_candidates??candidates.filter(x=>(x.fit_score||0)>=70).length;
+    document.getElementById('updated').textContent=d.updated_at?new Date(d.updated_at).toLocaleString('ko-KR'):'—';
+    document.getElementById('notice').innerHTML=esc(d.note||'모집 상태는 실제 지원 전에 재확인하세요.');
+    const top=(d.top3&&d.top3.length?d.top3:candidates.filter(x=>(x.fit_score||0)>=70).slice(0,3));
+    document.getElementById('top3').innerHTML=top.length?top.map((x,i)=>`<article class="pick"><span class="rank">#${i+1} · ${esc(x.fit_score||'—')}/100</span><h3>${esc(x.title)}</h3><p>${esc(x.recommended_offer||'NCP 적용 검토')}</p><div class="actions"><a class="btn secondary" href="${esc(x.url)}" target="_blank" rel="noopener">Wishket 확인 ↗</a></div></article>`).join(''):'<p>70점 이상 후보가 없습니다.</p>';
+    document.getElementById('rows').innerHTML=candidates.slice(0,50).map(x=>`<tr><td class="score">${esc(x.fit_score||'—')}</td><td><span class="title">${esc(x.title)}</span><span class="sub">ID ${esc(x.project_id||'—')}</span></td><td>${esc(x.recommended_offer||'—')}</td><td>${esc((x.ncp_mapping||[]).join(' · ')||'—')}</td><td>${esc(x.status||'verify')}</td><td><a class="btn secondary" href="${esc(x.url)}" target="_blank" rel="noopener">열기</a></td></tr>`).join('');
+  }catch(e){document.getElementById('status').textContent='ERROR';document.getElementById('notice').textContent=`레이더 로드 실패: ${e.message}`}
+}
+load();
+</script>
+</body>
+</html>
