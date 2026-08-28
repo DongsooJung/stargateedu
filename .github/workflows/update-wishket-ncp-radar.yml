@@ -1,0 +1,46 @@
+name: Update Wishket NCP Radar
+
+on:
+  workflow_dispatch:
+  schedule:
+    # 09:10 KST every day (00:10 UTC)
+    - cron: '10 0 * * *'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: wishket-ncp-radar
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Refresh market radar and TOP 3 proposals
+        env:
+          NAVER_SEARCH_CLIENT_ID: ${{ secrets.NAVER_SEARCH_CLIENT_ID }}
+          NAVER_SEARCH_CLIENT_SECRET: ${{ secrets.NAVER_SEARCH_CLIENT_SECRET }}
+        run: node scripts/update-wishket-ncp-radar.mjs
+
+      - name: Commit changed radar data
+        shell: bash
+        run: |
+          if git diff --quiet -- strategy/naver-cloud-wishket/market-radar.json strategy/naver-cloud-wishket/proposals/latest.md; then
+            echo "No radar changes to commit."
+            exit 0
+          fi
+          git config user.name "stargate-radar-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add strategy/naver-cloud-wishket/market-radar.json strategy/naver-cloud-wishket/proposals/latest.md
+          git commit -m "chore: refresh Wishket NCP radar"
+          git push
