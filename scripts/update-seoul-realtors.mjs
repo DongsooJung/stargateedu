@@ -10,6 +10,14 @@ const GEOCODER = process.env.GEOCODER || (KAKAO_KEY ? "kakao" : "source-only");
 
 const sleep = (ms) => new Promise((done) => setTimeout(done, ms));
 
+function hasCoordinates(row) {
+  const latitude = row?.latitude;
+  const longitude = row?.longitude;
+  return latitude !== null && latitude !== undefined && latitude !== ""
+    && longitude !== null && longitude !== undefined && longitude !== ""
+    && Number.isFinite(Number(latitude)) && Number.isFinite(Number(longitude));
+}
+
 function districtFromAddress(address = "") {
   return TARGET_DISTRICTS.find((district) => address.includes(district)) || "";
 }
@@ -115,6 +123,25 @@ function selectBalanced(rows) {
   return selected.slice(0, TARGET_COUNT);
 }
 
+async function retainKnownCoordinates(rows) {
+  try {
+    const previous = JSON.parse(await readFile(OUTPUT_PATH, "utf8"));
+    const byId = new Map((previous.records || []).filter(hasCoordinates).map((row) => [row.id, row]));
+    const byAddress = new Map((previous.records || []).filter(hasCoordinates).map((row) => [row.address, row]));
+    for (const row of rows) {
+      if (hasCoordinates(row)) continue;
+      const known = byId.get(row.id) || byAddress.get(row.address);
+      if (known) {
+        row.latitude = Number(known.latitude);
+        row.longitude = Number(known.longitude);
+      }
+    }
+  } catch (error) {
+    console.warn(`기존 좌표 유지 생략: ${error.message}`);
+  }
+  return rows;
+}
+
 async function geocodeAddress(address) {
   const url = new URL("https://dapi.kakao.com/v2/local/search/address.json");
   url.searchParams.set("query", address);
@@ -190,7 +217,7 @@ async function geocodeMissing(rows) {
   if (GEOCODER === "overpass") {
     const index = await fetchOverpassAddressIndex();
     for (const row of rows) {
-      if (row.latitude && row.longitude) continue;
+      if (hasCoordinates(row)) continue;
       const point = index.get(addressJoinKey(row.address));
       if (point) Object.assign(row, point);
     }
@@ -201,7 +228,7 @@ async function geocodeMissing(rows) {
   let cache = {};
   try { cache = JSON.parse(await readFile(cachePath, "utf8")); } catch {}
 
-  const queue = rows.filter((row) => !row.latitude || !row.longitude);
+  const queue = rows.filter((row) => !hasCoordinates(row));
   let cursor = 0;
   let processed = 0;
   async function worker() {
@@ -239,9 +266,9 @@ const sourceUrl = SEOUL_KEY
   ? "https://data.seoul.go.kr/dataList/OA-15550/A/1/datasetView.do"
   : "https://www.data.go.kr/data/15107745/openapi.do";
 const rawRows = SEOUL_KEY ? await fetchSeoulRows() : await fetchStandardRows();
-const selected = await geocodeMissing(selectBalanced(rawRows));
+const selected = await geocodeMissing(await retainKnownCoordinates(selectBalanced(rawRows)));
 const records = selected.map(({ latitude, longitude, ...row }) => ({ ...row, latitude, longitude }));
-const mappedRecords = records.filter((row) => row.latitude && row.longitude).length;
+const mappedRecords = records.filter(hasCoordinates).length;
 const districtCounts = Object.fromEntries(TARGET_DISTRICTS.map((district) => [district, records.filter((row) => row.district === district).length]));
 const payload = {
   meta: {
@@ -255,7 +282,7 @@ const payload = {
     districtCounts,
     source,
     sourceUrl,
-    geocoder: GEOCODER === "kakao" ? "Kakao Local API" : GEOCODER === "nominatim" ? "OpenStreetMap Nominatim · 일회성 캐시" : GEOCODER === "overpass" ? "OpenStreetMap 주소점 · Overpass 일괄 결합" : "원천 좌표만 사용",
+    geocoder: GEOCODER === "kakao" ? "Kakao Local API" : GEOCODER === "nominatim" ? "OpenStreetMap Nominatim · 일회성 캐시" : GEOCODER === "overpass" ? "OpenStreetMap 주소점 · Overpass 일괄 결합" : "원천 좌표 · 기존 검증 좌표 유지",
     isPilot: true,
   },
   records,

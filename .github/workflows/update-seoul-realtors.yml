@@ -25,6 +25,7 @@ jobs:
         env:
           SEOUL_OPEN_DATA_KEY: ${{ secrets.SEOUL_OPEN_DATA_KEY }}
           KAKAO_REST_API_KEY: ${{ secrets.KAKAO_REST_API_KEY }}
+          GEOCODER: "overpass"
           REALTOR_TARGET_COUNT: "3000"
         run: node scripts/update-seoul-realtors.mjs
       - name: Commit changed data
