@@ -15,6 +15,7 @@ GitHub Pages로 호스팅되는 STARGATE EDU 공식 원페이지 랜딩 사이�
 - `strategy/job-opportunities/` — 채용·체험공고 일일 TOP 20 전략 대시보드(JSON·CSV·날짜별 보관)
 - `teacher-screening/` — 승인 데이터 기반 과외학생 스크리닝 운영 화면
 - `research/seoul-realtors/` — 강남·서초·송파 공인중개사사무소 3,000개 공간지도 시범판
+- `pmo/` — Notion · OneNote · GitHub 공식 API 기반 프로젝트 상태 대시보드
 - `scripts/fetch-exim-rates.mjs` — 최근 영업일 환율 수집·정규화 스크립트
 - `.github/workflows/update-exim-rates.yml` — 평일 11:30 KST 자동 갱신
 
@@ -55,6 +56,17 @@ GitHub Pages로 호스팅되는 STARGATE EDU 공식 원페이지 랜딩 사이�
 ### 서울 강남권 공인중개사 공간지도
 
 `scripts/update-seoul-realtors.mjs`는 강남·서초·송파 영업 중 중개사무소를 최대 3,000건으로 정규화합니다. `SEOUL_OPEN_DATA_KEY`가 있으면 서울 열린데이터광장 `landBizInfo`를 원장으로 사용하고, `KAKAO_REST_API_KEY`가 있으면 좌표가 없는 주소를 서버 측에서 지오코딩합니다. 두 키는 HTML·JSON에 포함하지 않습니다. 키가 없으면 공공데이터포털 전국 표준데이터의 공개 좌표만 사용하며, 좌표 미확인 레코드는 지도에서 제외됩니다.
+
+### Notion · OneNote · GitHub 프로젝트 상태
+
+`.github/workflows/update-workspace-status.yml`이 6시간마다 공식 API를 호출해 `pmo/data/latest.json`을 갱신합니다. 대시보드는 이 공개 스냅샷만 읽으므로 인증키가 브라우저에 전달되지 않습니다.
+
+- Notion: `NOTION_TOKEN` Actions secret과 `NOTION_DATA_SOURCE_IDS` Actions variable을 설정합니다. 현재 기본 데이터 소스는 `389627e7-cf3f-46ca-be31-2f83afd2dc6d`입니다.
+- OneNote: Microsoft Graph는 위임형 인증만 지원하므로 `MS_CLIENT_ID`, `MS_REFRESH_TOKEN`을 Actions secrets에, `MS_TENANT_ID`를 variable에 등록합니다. 권한 범위는 `offline_access Notes.Read User.Read`입니다.
+- OneNote 공개 범위: 제목이 `[PUBLIC]`으로 시작하거나 `ONENOTE_SECTION_IDS` variable에 등록된 섹션의 페이지만 출력합니다. 본문과 첨부파일은 수집하지 않습니다.
+- GitHub: Actions 기본 `GITHUB_TOKEN`으로 `DongsooJung` 계정의 STARGATE 관련 저장소 메타데이터만 읽습니다.
+
+로컬 점검은 `node scripts/update-workspace-status.mjs`로 실행할 수 있습니다. 인증 정보가 없거나 API 오류가 발생하면 마지막 정상 스냅샷을 유지하고 연결 상태를 `cached`, `setup`, `error`로 표시합니다.
 
 ## 핵심 링크
 
