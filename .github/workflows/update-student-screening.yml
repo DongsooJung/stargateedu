@@ -15,7 +15,7 @@ concurrency:
 jobs:
   update:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 8
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -24,6 +24,13 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "22"
+
+      - name: Ingest authorized CSV and allowed Firecrawl data
+        env:
+          FIRECRAWL_API_KEY: ${{ secrets.FIRECRAWL_API_KEY }}
+          FIRECRAWL_STUDENT_URL: ${{ secrets.FIRECRAWL_STUDENT_URL }}
+          STUDENT_CSV_PATH: ${{ vars.STUDENT_CSV_PATH }}
+        run: node scripts/ingest-student-data.mjs
 
       - name: Collect and screen authorized inquiries in 100-row pages
         env:
@@ -38,12 +45,12 @@ jobs:
 
       - name: Commit updated dashboard data
         run: |
-          if git diff --quiet -- teacher-screening/data/latest.json; then
+          if git diff --quiet -- teacher-screening/data/latest.json teacher-screening/data/authorized-input.json; then
             echo "No screening changes to commit."
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add teacher-screening/data/latest.json
+          git add teacher-screening/data/latest.json teacher-screening/data/authorized-input.json
           git commit -m "data: update weekly student screening"
           git push
