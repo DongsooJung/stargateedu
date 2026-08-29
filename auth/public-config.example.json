@@ -1,0 +1,5 @@
+{
+  "supabaseUrl": "https://inftexpcnfinglwlrvsj.supabase.co",
+  "supabaseAnonKey": "YOUR_SUPABASE_ANON_KEY",
+  "naverProvider": "custom:naver"
+}
