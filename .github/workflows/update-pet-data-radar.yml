@@ -1,0 +1,48 @@
+name: Update Pet Data Radar
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "scripts/update-pet-data-radar.mjs"
+      - ".github/workflows/update-pet-data-radar.yml"
+  schedule:
+    - cron: "10 20 * * *" # 05:10 KST daily
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-pet-data-radar
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Collect public pet-market data
+        env:
+          DATA_GO_KR_API_KEY: ${{ secrets.DATA_GO_KR_API_KEY }}
+        run: node scripts/update-pet-data-radar.mjs
+
+      - name: Commit refreshed radar data
+        run: |
+          if git diff --quiet -- strategy/pet-data-radar/data/latest.json; then
+            echo "No pet data changes to commit."
+            exit 0
+          fi
+          git config user.name "stargate-data-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add -- strategy/pet-data-radar/data/latest.json
+          git commit -m "data: refresh pet data radar"
+          git push
