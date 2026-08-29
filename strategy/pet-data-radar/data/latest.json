@@ -1,13 +1,32 @@
 {
-  "generatedAt": "2026-08-29T05:09:00.000Z",
+  "generatedAt": "2026-08-29T05:10:53.074Z",
   "mode": "config_required",
   "message": "DATA_GO_KR_API_KEY GitHub Actions secret가 필요합니다.",
   "sources": [
-    {"id":"hospital","label":"동물병원","status":"config_required","meta":"https://www.data.go.kr/data/15154952/openapi.do"},
-    {"id":"grooming","label":"동물미용","status":"config_required","meta":"https://www.data.go.kr/data/15154944/openapi.do"},
-    {"id":"funeral","label":"동물장묘","status":"config_required","meta":"https://www.data.go.kr/data/15155065/openapi.do"},
-    {"id":"pet-tour","label":"반려동물 동반여행","status":"config_required","meta":"https://www.data.go.kr/data/15101578/openapi.do"}
+    {
+      "id": "hospital",
+      "label": "동물병원",
+      "status": "config_required",
+      "meta": "https://www.data.go.kr/data/15154952/openapi.do"
+    },
+    {
+      "id": "grooming",
+      "label": "동물미용",
+      "status": "config_required",
+      "meta": "https://www.data.go.kr/data/15154944/openapi.do"
+    },
+    {
+      "id": "funeral",
+      "label": "동물장묘",
+      "status": "config_required",
+      "meta": "https://www.data.go.kr/data/15155065/openapi.do"
+    }
   ],
-  "summary": {"total":0,"active":0,"byCategory":[],"byRegion":[]},
+  "summary": {
+    "total": 0,
+    "active": 0,
+    "byCategory": [],
+    "byRegion": []
+  },
   "records": []
 }
