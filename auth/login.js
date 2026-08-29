@@ -46,7 +46,7 @@ async function signIn(provider) {
   const redirectTo = `${location.origin}/auth/`;
   setStatus(`${provider === 'kakao' ? '카카오' : '네이버'} 로그인 페이지로 이동합니다.`);
 
-  const providerName = provider === 'naver' ? (config.naverProvider || 'naver') : 'kakao';
+  const providerName = provider === 'naver' ? (config.naverProvider || 'custom:naver') : 'kakao';
   const { error } = await supabaseClient.auth.signInWithOAuth({
     provider: providerName,
     options: { redirectTo }
