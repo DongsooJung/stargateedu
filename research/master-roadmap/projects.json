@@ -1,0 +1,86 @@
+{
+  "updated_at": "2026-08-30",
+  "portfolio_score": 85,
+  "target_score": 90,
+  "principle": "기존 Stargate 자산을 하나의 Data + AI Platform으로 통합하면서 6개 기능을 순차 활성화한다.",
+  "projects": [
+    {
+      "id": "geo-intelligence",
+      "rank": 1,
+      "name": "STARGATE Geo Intelligence",
+      "score": 91,
+      "readiness": 85,
+      "phase": "A",
+      "status": "ready",
+      "owner_route": "/research/seoul-realtors/",
+      "goal": "공인중개사·실거래·상권·교통·Places·개발사업을 결합한 도시·부동산 공간분석 플랫폼",
+      "kpis": ["강남권 3,000개 좌표 품질", "실거래·상권 데이터 결합률", "입지점수 산출", "B2B 리포트 MVP"],
+      "next": ["Places 보강", "국토부 실거래 조인", "역세권·상권 지표 생성", "입지점수 V1"]
+    },
+    {
+      "id": "research-search",
+      "rank": 2,
+      "name": "Research Dashboard 통합검색",
+      "score": 88,
+      "readiness": 95,
+      "phase": "A",
+      "status": "ready",
+      "owner_route": "/research/",
+      "goal": "분산된 연구 프로젝트를 분야·데이터·업데이트·완성도·수익화 기준으로 통합 탐색",
+      "kpis": ["프로젝트 메타데이터 커버리지", "검색 성공률", "최근 업데이트 표시율", "관련 연구 추천"],
+      "next": ["프로젝트 인덱스 생성", "검색·필터 UI", "메타데이터 자동 갱신", "Gemini 관련 연구 추천"]
+    },
+    {
+      "id": "executive-pmo",
+      "rank": 3,
+      "name": "Executive PMO 2.0",
+      "score": 87,
+      "readiness": 90,
+      "phase": "A",
+      "status": "ready",
+      "owner_route": "/pmo/",
+      "goal": "GitHub·Notion·운영 데이터를 결합한 CEO용 실행 관제판",
+      "kpis": ["7일 커밋", "실패 Actions", "정체 프로젝트", "다음 행동 TOP 5"],
+      "next": ["GitHub Actions 상태 연결", "병목 자동 분류", "수익화 우선순위", "일일 AI 브리핑"]
+    },
+    {
+      "id": "bigquery-lake",
+      "rank": 4,
+      "name": "STARGATE BigQuery Data Lake",
+      "score": 86,
+      "readiness": 75,
+      "phase": "B",
+      "status": "blocked-gcp",
+      "owner_route": "/research/google-cloud/",
+      "goal": "CSV·JSON·Supabase·API 데이터를 공통 분석 레이어로 통합",
+      "kpis": ["통합 데이터셋 수", "자동 적재 파이프라인", "BigQuery 비용 상한", "공개 View 수"],
+      "next": ["GCP 프로젝트 부트스트랩", "데이터셋 스키마", "공개 View 구성", "기존 파이프라인 이전"]
+    },
+    {
+      "id": "daechi-stay",
+      "rank": 5,
+      "name": "대치동 Stay 예약 실서비스",
+      "score": 80,
+      "readiness": 80,
+      "phase": "C",
+      "status": "integration",
+      "owner_route": "/daechi-stay/",
+      "goal": "Calendar Free/Busy·Supabase·승인·결제를 연결한 실제 예약 운영",
+      "kpis": ["중복예약 0건", "예약 전환율", "승인 처리시간", "결제 완료율"],
+      "next": ["Calendar API", "Supabase 예약 테이블", "관리자 승인", "결제·알림"]
+    },
+    {
+      "id": "cloud-control",
+      "rank": 6,
+      "name": "Google Cloud Cost & API Control Center",
+      "score": 80,
+      "readiness": 85,
+      "phase": "D",
+      "status": "waiting-runtime",
+      "owner_route": "/research/google-cloud/",
+      "goal": "Cloud Run·Gemini·Places·BigQuery의 호출량·오류율·비용·Quota를 통합 관제",
+      "kpis": ["월 예상비용", "API 오류율", "p95 지연", "Quota 경고"],
+      "next": ["Cloud Run 실배포", "사용량 수집", "비용 임계치", "PMO 장애 경고"]
+    }
+  ]
+}
