@@ -1,0 +1,31 @@
+{
+  "last_updated": "2026-08-30",
+  "mode": "connection_pending",
+  "sources": {
+    "ga4": "pending",
+    "google_search_console": "pending",
+    "naver_search_advisor": "pending"
+  },
+  "kpis": {
+    "users_7d": null,
+    "organic_clicks_7d": null,
+    "search_impressions_7d": null,
+    "organic_ctr_7d": null,
+    "conversions_7d": null
+  },
+  "targets_90d": {
+    "organic_traffic_growth": ">= 100%",
+    "content_published": 36,
+    "priority_queries_top10": 10,
+    "conversion_rate": ">= 2.0%"
+  },
+  "top_pages": [],
+  "content_queue": [
+    {"priority":1,"cluster":"KOI·수학·AI 교육","title":"KOI 입문자가 먼저 공부해야 할 알고리즘 25개","status":"Ready","cta":"교재·코칭"},
+    {"priority":2,"cluster":"AI·데이터·자동화","title":"공공데이터 API로 대시보드 만드는 방법","status":"Ready","cta":"B2B 개발"},
+    {"priority":3,"cluster":"도시·부동산·공공데이터","title":"국토부 실거래가 API Python 분석","status":"Ready","cta":"연구·데이터 프로젝트"},
+    {"priority":4,"cluster":"KOI·수학·AI 교육","title":"정보올림피아드 초·중·고 준비 로드맵","status":"Backlog","cta":"강의·코칭"},
+    {"priority":5,"cluster":"AI·데이터·자동화","title":"서울 실시간 도시데이터 API 활용법","status":"Backlog","cta":"AI·데이터 컨설팅"},
+    {"priority":6,"cluster":"도시·부동산·공공데이터","title":"DID 분석 Python 실전 예제","status":"Backlog","cta":"연구·분석 프로젝트"}
+  ]
+}
