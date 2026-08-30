@@ -23,11 +23,7 @@ env:
 
 jobs:
   deploy:
-    if: >-
-      ${{ vars.GCP_PROJECT_ID != '' &&
-          vars.GCP_RUNTIME_SERVICE_ACCOUNT != '' &&
-          secrets.GCP_WORKLOAD_IDENTITY_PROVIDER != '' &&
-          secrets.GCP_DEPLOY_SERVICE_ACCOUNT != '' }}
+    if: ${{ vars.GCP_DEPLOY_READY == 'true' }}
     runs-on: ubuntu-latest
     environment: production
     steps:
