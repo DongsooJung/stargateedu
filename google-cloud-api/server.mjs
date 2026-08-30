@@ -1,3 +1,4 @@
+import crypto from 'node:crypto';
 import http from 'node:http';
 import {GoogleGenAI} from '@google/genai';
 import {BigQuery} from '@google-cloud/bigquery';
@@ -7,6 +8,7 @@ const PROJECT_ID = process.env.GOOGLE_CLOUD_PROJECT || '';
 const LOCATION = process.env.GOOGLE_CLOUD_LOCATION || 'global';
 const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
 const PLACES_API_KEY = process.env.GOOGLE_MAPS_API_KEY || '';
+const STARGATE_API_TOKEN = process.env.STARGATE_API_TOKEN || '';
 const BIGQUERY_PUBLIC_VIEWS = new Set(
   (process.env.BIGQUERY_PUBLIC_VIEWS || '')
     .split(',')
@@ -44,7 +46,7 @@ function applyCors(req, res) {
   if (!ALLOWED_ORIGINS.has(origin)) return false;
   res.setHeader('Access-Control-Allow-Origin', origin);
   res.setHeader('Vary', 'Origin');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type,X-Stargate-Api-Key');
   res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
   return true;
 }
@@ -72,6 +74,23 @@ function withinRateLimit(req) {
     }
   }
   return current.count <= RATE_LIMIT_PER_MINUTE;
+}
+
+function validApiToken(req) {
+  if (!STARGATE_API_TOKEN) return {ok: false, status: 503, error: 'api_token_not_configured'};
+  const supplied = req.headers['x-stargate-api-key'];
+  if (typeof supplied !== 'string' || !supplied) {
+    return {ok: false, status: 401, error: 'api_token_required'};
+  }
+  const actualBuffer = Buffer.from(STARGATE_API_TOKEN);
+  const suppliedBuffer = Buffer.from(supplied);
+  if (actualBuffer.length !== suppliedBuffer.length) {
+    return {ok: false, status: 401, error: 'invalid_api_token'};
+  }
+  if (!crypto.timingSafeEqual(actualBuffer, suppliedBuffer)) {
+    return {ok: false, status: 401, error: 'invalid_api_token'};
+  }
+  return {ok: true};
 }
 
 async function readJson(req, maxBytes = 200_000) {
@@ -106,6 +125,7 @@ function serviceStatus() {
     service: process.env.K_SERVICE || 'local',
     revision: process.env.K_REVISION || null,
     configured: {
+      apiToken: Boolean(STARGATE_API_TOKEN),
       vertexAi: Boolean(PROJECT_ID),
       places: Boolean(PLACES_API_KEY),
       bigQuery: Boolean(PROJECT_ID && BIGQUERY_PUBLIC_VIEWS.size),
@@ -113,6 +133,7 @@ function serviceStatus() {
     model: GEMINI_MODEL,
     location: LOCATION,
     publicBigQueryViews: BIGQUERY_PUBLIC_VIEWS.size,
+    billablePostEndpointsProtected: true,
   };
 }
 
@@ -241,6 +262,12 @@ const server = http.createServer(async (req, res) => {
     if (req.method === 'GET' && (url.pathname === '/health' || url.pathname === '/v1/status')) {
       return json(res, 200, serviceStatus());
     }
+
+    if (req.method === 'POST') {
+      const auth = validApiToken(req);
+      if (!auth.ok) return json(res, auth.status, {ok: false, error: auth.error});
+    }
+
     if (req.method === 'POST' && url.pathname === '/v1/ai/analyze') {
       return await handleAiAnalyze(req, res);
     }
