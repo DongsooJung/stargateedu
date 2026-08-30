@@ -157,6 +157,9 @@ function baseRoadAddress(address) {
 
 async function geocodeNominatim(address, district) {
   const query = baseRoadAddress(address);
+  const joinKey = addressJoinKey(address);
+  if (!joinKey) return null;
+  const [, requestedStreet, requestedNumber] = joinKey.split("|");
   const url = new URL("https://nominatim.openstreetmap.org/search");
   url.searchParams.set("format", "jsonv2");
   url.searchParams.set("limit", "3");
@@ -175,7 +178,12 @@ async function geocodeNominatim(address, district) {
     const longitude = Number(item.lon);
     const inSeoul = latitude >= 37.40 && latitude <= 37.72 && longitude >= 126.75 && longitude <= 127.25;
     const namedDistrict = TARGET_DISTRICTS.find((name) => String(item.display_name || "").includes(name));
-    return inSeoul && (!namedDistrict || namedDistrict === district);
+    const candidateNumber = String(item.address?.house_number || "").trim();
+    const candidateStreet = String(item.address?.road || item.address?.pedestrian || item.address?.residential || "")
+      .normalize("NFKC").replace(/\s+/g, "");
+    const exactAddress = candidateNumber === requestedNumber
+      && (!candidateStreet || candidateStreet === requestedStreet);
+    return inSeoul && exactAddress && (!namedDistrict || namedDistrict === district);
   });
   return result ? { latitude: Number(result.lat), longitude: Number(result.lon) } : null;
 }
@@ -282,7 +290,7 @@ const payload = {
     districtCounts,
     source,
     sourceUrl,
-    geocoder: GEOCODER === "kakao" ? "Kakao Local API" : GEOCODER === "nominatim" ? "OpenStreetMap Nominatim · 일회성 캐시" : GEOCODER === "overpass" ? "OpenStreetMap 주소점 · Overpass 일괄 결합" : "원천 좌표 · 기존 검증 좌표 유지",
+    geocoder: GEOCODER === "kakao" ? "Kakao Local API" : GEOCODER === "nominatim" ? "OpenStreetMap 주소점 · Nominatim 정밀 보완" : GEOCODER === "overpass" ? "OpenStreetMap 주소점 · Overpass 일괄 결합" : "원천 좌표 · 기존 검증 좌표 유지",
     isPilot: true,
   },
   records,
