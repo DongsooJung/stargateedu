@@ -94,11 +94,11 @@ gcloud run deploy stargate-google-cloud-api \
   --source . \
   --region asia-northeast3 \
   --allow-unauthenticated \
-  --set-env-vars GOOGLE_CLOUD_LOCATION=global,GEMINI_MODEL=gemini-2.5-flash,CORS_ORIGINS=https://www.stargateedu.co.kr\,https://stargateedu.co.kr,BIGQUERY_PUBLIC_VIEWS=YOUR_PROJECT.stargate_public.realtors_view \
+  --set-env-vars GOOGLE_CLOUD_PROJECT=YOUR_PROJECT,GOOGLE_CLOUD_LOCATION=global,GEMINI_MODEL=gemini-2.5-flash,CORS_ORIGINS=https://www.stargateedu.co.kr\,https://stargateedu.co.kr,BIGQUERY_PUBLIC_VIEWS=YOUR_PROJECT.stargate_public.realtors_view \
   --set-secrets GOOGLE_MAPS_API_KEY=google-maps-api-key:latest
 ```
 
-`GOOGLE_CLOUD_PROJECT`는 Cloud Run 런타임에서 프로젝트 설정에 맞게 지정합니다. 별도 실행 서비스 계정을 쓸 경우 `--service-account`로 지정하고 위 최소 IAM 역할을 부여합니다.
+별도 실행 서비스 계정을 쓸 경우 `--service-account`로 지정하고 위 최소 IAM 역할을 부여합니다.
 
 ## 요청 예시
 
