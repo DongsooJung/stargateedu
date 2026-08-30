@@ -6,6 +6,9 @@ const TARGET_COUNT = Number(process.env.REALTOR_TARGET_COUNT || 3000);
 const OUTPUT_PATH = resolve("research/seoul-realtors/data/latest.json");
 const SEOUL_KEY = process.env.SEOUL_OPEN_DATA_KEY || "";
 const KAKAO_KEY = process.env.KAKAO_REST_API_KEY || "";
+const JUSO_KEY = process.env.JUSO_API_KEY || "";
+const JUSO_SEARCH_KEY = process.env.JUSO_SEARCH_API_KEY || JUSO_KEY;
+const JUSO_COORD_KEY = process.env.JUSO_COORD_API_KEY || JUSO_KEY;
 const GEOCODER = process.env.GEOCODER || (KAKAO_KEY ? "kakao" : "source-only");
 
 const sleep = (ms) => new Promise((done) => setTimeout(done, ms));
@@ -195,6 +198,59 @@ function addressJoinKey(address) {
   return `${match[1]}|${match[2].normalize("NFKC").replace(/\s+/g, "")}|${match[3]}`;
 }
 
+function assertJusoResponse(payload, operation) {
+  const results = payload?.results;
+  const errorCode = String(results?.common?.errorCode ?? "");
+  if (errorCode !== "0") {
+    const message = results?.common?.errorMessage || "응답 형식 오류";
+    throw new Error(`JUSO API ${operation} 실패: ${errorCode || "unknown"} ${message}`);
+  }
+  return results.juso || [];
+}
+
+async function geocodeJuso(address, district) {
+  const joinKey = addressJoinKey(address);
+  if (!joinKey) return null;
+
+  const searchUrl = new URL("https://business.juso.go.kr/addrlink/addrLinkApi.do");
+  searchUrl.searchParams.set("confmKey", JUSO_SEARCH_KEY);
+  searchUrl.searchParams.set("currentPage", "1");
+  searchUrl.searchParams.set("countPerPage", "10");
+  searchUrl.searchParams.set("keyword", baseRoadAddress(address));
+  searchUrl.searchParams.set("resultType", "json");
+  searchUrl.searchParams.set("hstryYn", "N");
+  searchUrl.searchParams.set("firstSort", "road");
+  const searchPayload = await fetchJson(searchUrl, {}, 2);
+  const candidate = assertJusoResponse(searchPayload, "주소 검색").find((item) => {
+    const candidateAddress = item.roadAddr || item.roadAddrPart1 || "";
+    return item.siNm === "서울특별시"
+      && item.sggNm === district
+      && addressJoinKey(candidateAddress) === joinKey;
+  });
+  if (!candidate) return null;
+
+  const coordUrl = new URL("https://business.juso.go.kr/addrlink/addrCoordApi.do");
+  coordUrl.searchParams.set("confmKey", JUSO_COORD_KEY);
+  coordUrl.searchParams.set("admCd", candidate.admCd);
+  coordUrl.searchParams.set("rnMgtSn", candidate.rnMgtSn);
+  coordUrl.searchParams.set("udrtYn", candidate.udrtYn || "0");
+  coordUrl.searchParams.set("buldMnnm", candidate.buldMnnm);
+  coordUrl.searchParams.set("buldSlno", candidate.buldSlno || "0");
+  coordUrl.searchParams.set("resultType", "json");
+  const coordPayload = await fetchJson(coordUrl, {}, 2);
+  const coordinate = assertJusoResponse(coordPayload, "좌표 검색")[0];
+  if (!coordinate) return null;
+
+  const entX = Number(coordinate.entX);
+  const entY = Number(coordinate.entY);
+  if (!Number.isFinite(entX) || !Number.isFinite(entY)) return null;
+  const { default: proj4 } = await import("proj4");
+  const epsg5179 = "+proj=tmerc +lat_0=38 +lon_0=127.5 +k=0.9996 +x_0=1000000 +y_0=2000000 +ellps=GRS80 +units=m +no_defs";
+  const [longitude, latitude] = proj4(epsg5179, "EPSG:4326", [entX, entY]);
+  const inSeoul = latitude >= 37.40 && latitude <= 37.72 && longitude >= 126.75 && longitude <= 127.25;
+  return inSeoul ? { latitude, longitude } : null;
+}
+
 async function fetchOverpassAddressIndex() {
   const index = new Map();
   for (const district of TARGET_DISTRICTS) {
@@ -232,6 +288,9 @@ async function geocodeMissing(rows) {
     return rows;
   }
   if (GEOCODER === "kakao" && !KAKAO_KEY) throw new Error("KAKAO_REST_API_KEY가 필요합니다.");
+  if (GEOCODER === "juso" && (!JUSO_SEARCH_KEY || !JUSO_COORD_KEY)) {
+    throw new Error("JUSO_API_KEY 또는 JUSO_SEARCH_API_KEY/JUSO_COORD_API_KEY가 필요합니다.");
+  }
   const cachePath = resolve("research/seoul-realtors/data/geocode-cache.json");
   let cache = {};
   try { cache = JSON.parse(await readFile(cachePath, "utf8")); } catch {}
@@ -242,7 +301,11 @@ async function geocodeMissing(rows) {
   async function worker() {
     while (cursor < queue.length) {
       const row = queue[cursor++];
-      const cacheKey = GEOCODER === "nominatim" ? `nominatim:${baseRoadAddress(row.address)}` : `kakao:${row.address}`;
+      const cacheKey = GEOCODER === "nominatim"
+        ? `nominatim:${baseRoadAddress(row.address)}`
+        : GEOCODER === "juso"
+          ? `juso:${baseRoadAddress(row.address)}`
+          : `kakao:${row.address}`;
       const cached = Object.prototype.hasOwnProperty.call(cache, cacheKey) ? cache[cacheKey] : undefined;
       let requested = false;
       try {
@@ -250,10 +313,13 @@ async function geocodeMissing(rows) {
           ? cached
           : GEOCODER === "nominatim"
             ? (requested = true, await geocodeNominatim(row.address, row.district))
-            : (requested = true, await geocodeAddress(row.address));
+            : GEOCODER === "juso"
+              ? (requested = true, await geocodeJuso(row.address, row.district))
+              : (requested = true, await geocodeAddress(row.address));
         if (point) Object.assign(row, point);
         cache[cacheKey] = point;
       } catch (error) {
+        if (GEOCODER === "juso" && error.message.startsWith("JUSO API")) throw error;
         console.warn(`지오코딩 실패: ${row.address} (${error.message})`);
       }
       processed += 1;
@@ -261,10 +327,11 @@ async function geocodeMissing(rows) {
         await writeFile(cachePath, `${JSON.stringify(cache, null, 2)}\n`, "utf8");
         console.log(`지오코딩 진행: ${processed}/${queue.length}`);
       }
-      if (requested) await sleep(GEOCODER === "nominatim" ? 1100 : 120);
+      if (requested) await sleep(GEOCODER === "nominatim" ? 1100 : GEOCODER === "juso" ? 180 : 120);
     }
   }
-  await Promise.all(Array.from({ length: GEOCODER === "nominatim" ? 1 : 4 }, worker));
+  const workerCount = GEOCODER === "nominatim" ? 1 : GEOCODER === "juso" ? 2 : 4;
+  await Promise.all(Array.from({ length: workerCount }, worker));
   await writeFile(cachePath, `${JSON.stringify(cache, null, 2)}\n`, "utf8");
   return rows;
 }
@@ -290,7 +357,7 @@ const payload = {
     districtCounts,
     source,
     sourceUrl,
-    geocoder: GEOCODER === "kakao" ? "Kakao Local API" : GEOCODER === "nominatim" ? "OpenStreetMap 주소점 · Nominatim 정밀 보완" : GEOCODER === "overpass" ? "OpenStreetMap 주소점 · Overpass 일괄 결합" : "원천 좌표 · 기존 검증 좌표 유지",
+    geocoder: GEOCODER === "kakao" ? "Kakao Local API" : GEOCODER === "juso" ? "행정안전부 도로명주소 좌표 API · 정확주소 보완" : GEOCODER === "nominatim" ? "OpenStreetMap 주소점 · Nominatim 정밀 보완" : GEOCODER === "overpass" ? "OpenStreetMap 주소점 · Overpass 일괄 결합" : "원천 좌표 · 기존 검증 좌표 유지",
     isPilot: true,
   },
   records,
