@@ -1,13 +1,16 @@
 #!/usr/bin/env python3
-"""Refresh drive-blog/data.json from the public STARGATE Google Drive folder.
+"""Refresh and enrich drive-blog/data.json from the public STARGATE Google Drive folder.
 
-Preferred source: Google Drive API when credentials are available.
-Fallback source: the public Google Drive folder HTML bootstrap data. This lets the
-public archive keep syncing without repository secrets, while still exposing only
-items already visible to anyone with the folder link.
+P1: discover public Drive files and keep a deterministic JSON index.
+P2: fetch public document text when possible, create a compact smart summary,
+key points, audience and related STARGATE projects. If an OpenAI-compatible
+endpoint is configured, AI enrichment is used; otherwise deterministic heuristics
+keep the archive functional without secrets.
 """
 from __future__ import annotations
 
+import hashlib
+import io
 import json
 import os
 import re
@@ -21,11 +24,20 @@ from google.oauth2 import service_account
 from googleapiclient.discovery import build
 import requests
 from bs4 import BeautifulSoup
+from pypdf import PdfReader
 
 FOLDER_ID = os.getenv("DRIVE_BLOG_FOLDER_ID", "18wK4G_-jzJHsLsvM3Ka5oWjrQChoK9Y4")
 OUTPUT = Path(os.getenv("DRIVE_BLOG_OUTPUT", "drive-blog/data.json"))
 SCOPES = ["https://www.googleapis.com/auth/drive.metadata.readonly"]
 PUBLIC_FOLDER_URL = f"https://drive.google.com/drive/folders/{FOLDER_ID}"
+SITE_BASE = "https://stargateedu.co.kr"
+ENRICHMENT_VERSION = 1
+MAX_TEXT_CHARS = int(os.getenv("DRIVE_BLOG_MAX_TEXT_CHARS", "16000"))
+
+AI_API_BASE = os.getenv("AI_API_BASE", "").strip().rstrip("/")
+AI_API_KEY = os.getenv("AI_API_KEY", "").strip()
+AI_MODEL = os.getenv("AI_MODEL", "").strip()
+AI_TIMEOUT = int(os.getenv("AI_TIMEOUT", "45"))
 
 CURATED: dict[str, dict[str, Any]] = {
     "18VgljsswrJXGJ_gL63z1QvsIWIoZvdWQuFTncueB1-A": {
@@ -53,8 +65,8 @@ CATEGORY_RULES: dict[str, list[str]] = {
     "ai": ["ai", "chatgpt", "ollama", "llm", "gemini", "agent", "mcp", "인공지능"],
     "education": ["교육", "강사", "koi", "알고리즘", "algorithm", "수학", "학습", "강의"],
     "urban": ["도시", "gis", "공간", "스마트시티", "did", "헤도닉", "교통", "부동산"],
-    "strategy": ["전략", "사업", "시장", "수익", "기업", "비즈니스", "기획"],
-    "automation": ["자동화", "api", "workflow", "워크플로", "agent", "mcp", "ollama"],
+    "strategy": ["전략", "사업", "시장", "수익", "기업", "비즈니스", "기획", "정책"],
+    "automation": ["자동화", "api", "workflow", "워크플로", "agent", "mcp", "ollama", "cloud"],
     "publication": ["전자책", "보고서", "가이드", "report", "guide", "백서", "pdf"],
 }
 
@@ -75,6 +87,73 @@ GENERIC_SUMMARIES = {
     "automation": "STARGATE 공개 Drive에 등록된 자동화·API 관련 자료입니다. 세부 내용과 원문은 Drive에서 확인할 수 있습니다.",
     "publication": "STARGATE 공개 Drive에 등록된 보고서·출판 자료입니다. 세부 내용과 원문은 Drive에서 확인할 수 있습니다.",
 }
+
+PROJECTS: list[dict[str, Any]] = [
+    {
+        "id": "debate-analyzer",
+        "title": "AI 정치토론 분석기",
+        "url": f"{SITE_BASE}/research/debate-analyzer/",
+        "categories": ["ai", "strategy"],
+        "keywords": ["토론", "정치", "분석", "llm", "ai", "평가"],
+        "description": "토론 내용을 AI 기준으로 요약·평가하는 연구 프로젝트",
+    },
+    {
+        "id": "google-cloud",
+        "title": "Google Cloud API 연구",
+        "url": f"{SITE_BASE}/research/google-cloud/",
+        "categories": ["ai", "automation"],
+        "keywords": ["google", "cloud", "api", "gemini", "자동화", "서버"],
+        "description": "Google Cloud API와 서비스 연동을 정리한 연구 대시보드",
+    },
+    {
+        "id": "koi-coach",
+        "title": "KOI Coach",
+        "url": f"{SITE_BASE}/koi-coach/",
+        "categories": ["education", "ai"],
+        "keywords": ["koi", "알고리즘", "수학", "교육", "강의", "학습"],
+        "description": "알고리즘·KOI 교육 및 코칭 프로젝트",
+    },
+    {
+        "id": "seoul-realtors",
+        "title": "서울 공인중개사 GIS",
+        "url": f"{SITE_BASE}/research/seoul-realtors/",
+        "categories": ["urban", "strategy"],
+        "keywords": ["gis", "공간", "부동산", "서울", "중개사", "지도"],
+        "description": "서울 공인중개사 위치를 공간 데이터로 분석하는 GIS 프로젝트",
+    },
+    {
+        "id": "immigration-policy",
+        "title": "이민정책 대시보드",
+        "url": f"{SITE_BASE}/research/immigration-policy/",
+        "categories": ["strategy", "urban"],
+        "keywords": ["정책", "비자", "외국인", "이민", "행정", "인구"],
+        "description": "외국인·비자·이민정책 데이터를 분석하는 연구 프로젝트",
+    },
+    {
+        "id": "pmo",
+        "title": "PMO 운영 대시보드",
+        "url": f"{SITE_BASE}/pmo/",
+        "categories": ["strategy", "automation"],
+        "keywords": ["pmo", "프로젝트", "운영", "관리", "자동화", "실행"],
+        "description": "프로젝트 실행·관리와 운영 체계를 정리한 PMO 허브",
+    },
+    {
+        "id": "trade",
+        "title": "무역 데이터 대시보드",
+        "url": f"{SITE_BASE}/trade/",
+        "categories": ["strategy"],
+        "keywords": ["무역", "수출", "수입", "경제", "시장", "데이터"],
+        "description": "수출입 및 무역 데이터를 분석하는 공개 대시보드",
+    },
+    {
+        "id": "strategy",
+        "title": "STARGATE 전략 대시보드",
+        "url": f"{SITE_BASE}/strategy/",
+        "categories": ["strategy", "automation"],
+        "keywords": ["전략", "사업", "시장", "수익", "기업", "기획"],
+        "description": "사업·수익화·운영 과제를 관리하는 전략 허브",
+    },
+]
 
 
 def optional_credentials():
@@ -99,6 +178,12 @@ def normalize_title(name: str) -> str:
     return re.sub(r"\s+", " ", title)
 
 
+def clean_text(value: str) -> str:
+    value = value.replace("\x00", " ")
+    value = re.sub(r"\s+", " ", value)
+    return value.strip()
+
+
 def infer_categories(name: str, mime_type: str) -> list[str]:
     hay = f"{name} {mime_type}".lower()
     found = [category for category, words in CATEGORY_RULES.items() if any(word.lower() in hay for word in words)]
@@ -118,7 +203,7 @@ def infer_tags(title: str, categories: list[str]) -> list[str]:
         ("chatgpt", "ChatGPT"), ("ollama", "Ollama"), ("gemini", "Gemini"),
         ("llm", "LLM"), ("mcp", "MCP"), ("api", "API"), ("koi", "KOI"),
         ("gis", "GIS"), ("python", "Python"), ("알고리즘", "알고리즘"),
-        ("강사", "강사"), ("스마트시티", "스마트시티"),
+        ("강사", "강사"), ("스마트시티", "스마트시티"), ("정책", "정책"),
     ]
     for needle, label in keyword_tags:
         if needle in hay and label not in tags:
@@ -155,7 +240,11 @@ def build_document(item: dict[str, Any]) -> dict[str, Any]:
     mime_type = item.get("mimeType", "")
     categories = curated.get("categories") or infer_categories(raw_title, mime_type)
     tags = curated.get("tags") or infer_tags(title, categories)
-    summary = (item.get("description") or "").strip() or curated.get("summary") or GENERIC_SUMMARIES.get(categories[0], GENERIC_SUMMARIES["strategy"])
+    summary = (
+        (item.get("description") or "").strip()
+        or curated.get("summary")
+        or GENERIC_SUMMARIES.get(categories[0], GENERIC_SUMMARIES["strategy"])
+    )
     return {
         "id": file_id,
         "title": title,
@@ -208,12 +297,7 @@ def decode_drive_bootstrap(encoded: str) -> str:
 
 
 def list_from_public_folder() -> tuple[dict[str, Any], list[dict[str, Any]]]:
-    """Parse Google's public folder bootstrap data; no API key or OAuth required.
-
-    Public folder HTML currently exposes an encoded `_DRIVE_ivd` array. Each child
-    entry contains its Drive id, display name and MIME type. If Google changes that
-    page structure this function fails closed and leaves the previous data.json intact.
-    """
+    """Parse Google's public folder bootstrap data; no API key or OAuth required."""
     headers = {
         "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/124 Safari/537.36",
         "Accept-Language": "en-US,en;q=0.8",
@@ -224,8 +308,8 @@ def list_from_public_folder() -> tuple[dict[str, Any], list[dict[str, Any]]]:
 
     encoded = None
     pattern = re.compile(r"window\['_DRIVE_ivd'\]\s*=\s*'(.*?)';", re.S)
-    for script in soup.find_all("script"):
-        text = script.string or script.get_text() or ""
+    for tag in soup.find_all("script"):
+        text = tag.string or tag.get_text() or ""
         if "_DRIVE_ivd" not in text:
             continue
         match = pattern.search(text)
@@ -273,6 +357,257 @@ def list_from_public_folder() -> tuple[dict[str, Any], list[dict[str, Any]]]:
     return folder, files
 
 
+def fetch_public_text(item: dict[str, Any]) -> tuple[str, str]:
+    """Return normalized public text and a content hash. Failure is non-fatal."""
+    file_id = item["id"]
+    mime_type = item.get("mimeType", "")
+    text = ""
+    headers = {"User-Agent": "Mozilla/5.0 STARGATE-Knowledge-Archive/2.0"}
+
+    try:
+        if mime_type == "application/vnd.google-apps.document":
+            url = f"https://docs.google.com/document/d/{file_id}/export?format=txt"
+            response = requests.get(url, headers=headers, timeout=30)
+            response.raise_for_status()
+            text = response.content.decode("utf-8", errors="replace")
+        elif mime_type == "application/pdf":
+            urls = [
+                f"https://drive.google.com/uc?export=download&id={file_id}",
+                f"https://drive.usercontent.google.com/download?id={file_id}&export=download&confirm=t",
+            ]
+            pdf_bytes = None
+            for url in urls:
+                response = requests.get(url, headers=headers, timeout=45, allow_redirects=True)
+                if response.ok and (
+                    "application/pdf" in response.headers.get("content-type", "").lower()
+                    or response.content.startswith(b"%PDF")
+                ):
+                    pdf_bytes = response.content
+                    break
+            if pdf_bytes:
+                reader = PdfReader(io.BytesIO(pdf_bytes))
+                parts = []
+                for page in reader.pages[:20]:
+                    parts.append(page.extract_text() or "")
+                    if sum(len(part) for part in parts) >= MAX_TEXT_CHARS:
+                        break
+                text = "\n".join(parts)
+    except Exception as exc:
+        print(f"Text extraction skipped for {file_id}: {type(exc).__name__}")
+
+    text = clean_text(text)[:MAX_TEXT_CHARS]
+    fingerprint_source = text or f"{item.get('name','')}|{item.get('size','')}|{mime_type}"
+    content_hash = hashlib.sha256(fingerprint_source.encode("utf-8", errors="ignore")).hexdigest()
+    return text, content_hash
+
+
+def heuristic_key_points(text: str, title: str, summary: str, categories: list[str]) -> list[str]:
+    source = clean_text(text) if text else clean_text(f"{summary} {title}")
+    chunks = re.split(r"(?<=[.!?。])\s+|(?<=다\.)\s+", source)
+    points: list[str] = []
+    for chunk in chunks:
+        chunk = clean_text(chunk)
+        if len(chunk) < 18:
+            continue
+        if len(chunk) > 180:
+            chunk = chunk[:177].rstrip() + "…"
+        if chunk not in points:
+            points.append(chunk)
+        if len(points) == 3:
+            break
+    while len(points) < 3:
+        label = CATEGORY_LABELS.get(categories[len(points) % len(categories)] if categories else "strategy", "자료")
+        fallback = f"{title}의 {label} 관점에서 핵심 내용을 원문과 함께 확인할 수 있습니다."
+        if fallback not in points:
+            points.append(fallback)
+    return points[:3]
+
+
+def heuristic_summary(text: str, title: str, fallback: str) -> str:
+    if not text:
+        return fallback
+    points = heuristic_key_points(text, title, fallback, ["strategy"])
+    summary = " ".join(points[:2])
+    if len(summary) > 320:
+        summary = summary[:317].rstrip() + "…"
+    return summary
+
+
+def infer_audience(categories: list[str]) -> str:
+    labels = {
+        "ai": "AI 도구를 업무·교육에 적용하려는 실무자",
+        "education": "수학·알고리즘·AI 교육자와 학습자",
+        "urban": "도시·GIS·공간데이터 연구자와 실무자",
+        "strategy": "사업기획·정책·전략 의사결정자",
+        "automation": "API·자동화·AI 운영 담당자",
+        "publication": "주제 입문자와 실무 참고자료가 필요한 독자",
+    }
+    audience = [labels[c] for c in categories if c in labels]
+    return " · ".join(audience[:2]) if audience else "STARGATE 공개 연구자료를 활용하려는 실무자"
+
+
+def recommend_projects(doc: dict[str, Any], text: str) -> list[dict[str, str]]:
+    hay = clean_text(" ".join([
+        doc.get("title", ""),
+        doc.get("summary", ""),
+        " ".join(doc.get("tags", [])),
+        text[:5000],
+    ])).lower()
+    categories = set(doc.get("categories", []))
+    ranked: list[tuple[int, dict[str, Any], list[str]]] = []
+    for project in PROJECTS:
+        overlap = categories.intersection(project["categories"])
+        keyword_hits = [kw for kw in project["keywords"] if kw.lower() in hay]
+        score = len(overlap) * 4 + min(len(keyword_hits), 4)
+        if score <= 0:
+            continue
+        ranked.append((score, project, keyword_hits))
+    ranked.sort(key=lambda row: (-row[0], row[1]["title"]))
+
+    results = []
+    for _, project, hits in ranked[:3]:
+        reason_bits = []
+        common = categories.intersection(project["categories"])
+        if common:
+            reason_bits.append("·".join(CATEGORY_LABELS.get(c, c) for c in sorted(common)))
+        if hits:
+            reason_bits.append(", ".join(hits[:2]))
+        reason = f"{' / '.join(reason_bits)} 주제가 연결됩니다." if reason_bits else project["description"]
+        results.append({
+            "id": project["id"],
+            "title": project["title"],
+            "url": project["url"],
+            "reason": reason,
+        })
+    if not results:
+        project = PROJECTS[-1]
+        results.append({
+            "id": project["id"],
+            "title": project["title"],
+            "url": project["url"],
+            "reason": "사업·연구 활용 관점에서 전략 대시보드와 함께 검토할 수 있습니다.",
+        })
+    return results
+
+
+def ai_endpoint() -> str | None:
+    if not (AI_API_BASE and AI_API_KEY and AI_MODEL):
+        return None
+    if AI_API_BASE.endswith("/chat/completions"):
+        return AI_API_BASE
+    return f"{AI_API_BASE}/chat/completions"
+
+
+def parse_json_object(value: str) -> dict[str, Any]:
+    value = value.strip()
+    value = re.sub(r"^```(?:json)?\s*", "", value, flags=re.I)
+    value = re.sub(r"\s*```$", "", value)
+    start, end = value.find("{"), value.rfind("}")
+    if start < 0 or end <= start:
+        raise ValueError("AI response did not contain a JSON object")
+    return json.loads(value[start:end + 1])
+
+
+def ai_enrich(doc: dict[str, Any], text: str) -> dict[str, Any] | None:
+    endpoint = ai_endpoint()
+    if not endpoint or not text:
+        return None
+
+    allowed_categories = list(CATEGORY_LABELS)
+    prompt = {
+        "title": doc["title"],
+        "existing_summary": doc["summary"],
+        "existing_categories": doc["categories"],
+        "existing_tags": doc["tags"],
+        "document_text": text[:10000],
+    }
+    instructions = (
+        "한국어 공개 지식 아카이브 메타데이터를 만든다. 과장하거나 문서에 없는 사실을 만들지 말 것. "
+        "반드시 JSON 객체만 반환한다. 필드: smartSummary(2~3문장, 320자 이내), "
+        "keyPoints(정확히 3개 문자열), audience(한 문장), tags(최대 6개 문자열), "
+        f"categories(다음 값만 사용: {allowed_categories})."
+    )
+    payload = {
+        "model": AI_MODEL,
+        "temperature": 0.15,
+        "messages": [
+            {"role": "system", "content": instructions},
+            {"role": "user", "content": json.dumps(prompt, ensure_ascii=False)},
+        ],
+    }
+    try:
+        response = requests.post(
+            endpoint,
+            headers={
+                "Authorization": f"Bearer {AI_API_KEY}",
+                "Content-Type": "application/json",
+            },
+            json=payload,
+            timeout=AI_TIMEOUT,
+        )
+        response.raise_for_status()
+        body = response.json()
+        content = body["choices"][0]["message"]["content"]
+        parsed = parse_json_object(content)
+        smart_summary = clean_text(str(parsed.get("smartSummary", "")))[:340]
+        key_points = [clean_text(str(v))[:190] for v in parsed.get("keyPoints", []) if clean_text(str(v))][:3]
+        audience = clean_text(str(parsed.get("audience", "")))[:220]
+        tags = [clean_text(str(v))[:40] for v in parsed.get("tags", []) if clean_text(str(v))][:6]
+        categories = [v for v in parsed.get("categories", []) if v in CATEGORY_LABELS][:4]
+        if not smart_summary or len(key_points) < 3:
+            raise ValueError("AI enrichment missing required fields")
+        return {
+            "smartSummary": smart_summary,
+            "keyPoints": key_points,
+            "audience": audience or infer_audience(doc["categories"]),
+            "tags": tags or doc["tags"],
+            "categories": categories or doc["categories"],
+            "enrichmentMode": "ai",
+        }
+    except Exception as exc:
+        print(f"AI enrichment failed for {doc['id']}; using heuristic: {type(exc).__name__}")
+        return None
+
+
+def enrich_document(doc: dict[str, Any], item: dict[str, Any], previous: dict[str, Any] | None) -> dict[str, Any]:
+    text, content_hash = fetch_public_text(item)
+    reusable_fields = [
+        "smartSummary", "keyPoints", "audience", "relatedProjects",
+        "enrichmentMode", "contentHash", "enrichmentVersion",
+    ]
+    if (
+        previous
+        and previous.get("contentHash") == content_hash
+        and previous.get("enrichmentVersion") == ENRICHMENT_VERSION
+        and all(field in previous for field in reusable_fields)
+    ):
+        for field in reusable_fields:
+            doc[field] = previous[field]
+        if previous.get("enrichmentMode") == "ai":
+            doc["tags"] = previous.get("tags", doc["tags"])
+            doc["categories"] = previous.get("categories", doc["categories"])
+        return doc
+
+    ai_result = ai_enrich(doc, text)
+    if ai_result:
+        doc["smartSummary"] = ai_result["smartSummary"]
+        doc["keyPoints"] = ai_result["keyPoints"]
+        doc["audience"] = ai_result["audience"]
+        doc["tags"] = ai_result["tags"]
+        doc["categories"] = ai_result["categories"]
+        doc["enrichmentMode"] = "ai"
+    else:
+        doc["smartSummary"] = heuristic_summary(text, doc["title"], doc["summary"])
+        doc["keyPoints"] = heuristic_key_points(text, doc["title"], doc["summary"], doc["categories"])
+        doc["audience"] = infer_audience(doc["categories"])
+        doc["enrichmentMode"] = "heuristic"
+
+    doc["relatedProjects"] = recommend_projects(doc, text)
+    doc["contentHash"] = content_hash
+    doc["enrichmentVersion"] = ENRICHMENT_VERSION
+    return doc
+
+
 def same_content(previous: dict[str, Any], current: dict[str, Any]) -> bool:
     """Ignore generation timestamps so an unchanged Drive does not create a commit."""
     def stable(payload: dict[str, Any]) -> dict[str, Any]:
@@ -283,10 +618,15 @@ def same_content(previous: dict[str, Any], current: dict[str, Any]) -> bool:
 
 
 def main() -> None:
-    folder: dict[str, Any]
-    files: list[dict[str, Any]]
-    creds = optional_credentials()
+    previous_payload: dict[str, Any] = {}
+    if OUTPUT.exists():
+        try:
+            previous_payload = json.loads(OUTPUT.read_text(encoding="utf-8"))
+        except (json.JSONDecodeError, OSError):
+            previous_payload = {}
+    previous_docs = {d.get("id"): d for d in previous_payload.get("documents", []) if d.get("id")}
 
+    creds = optional_credentials()
     if creds is not None:
         try:
             folder, files = list_with_drive_api(creds)
@@ -298,11 +638,20 @@ def main() -> None:
         print("Drive credentials unavailable; using public folder HTML fallback")
         folder, files = list_from_public_folder()
 
-    documents = [build_document(item) for item in files if item.get("mimeType") != "application/vnd.google-apps.folder"]
+    documents = []
+    for item in files:
+        if item.get("mimeType") == "application/vnd.google-apps.folder":
+            continue
+        doc = build_document(item)
+        doc = enrich_document(doc, item, previous_docs.get(doc["id"]))
+        documents.append(doc)
+
     documents.sort(key=lambda d: ((d.get("modifiedTime") or ""), (d.get("title") or "")), reverse=True)
 
+    ai_count = sum(1 for d in documents if d.get("enrichmentMode") == "ai")
+    heuristic_count = sum(1 for d in documents if d.get("enrichmentMode") == "heuristic")
     payload = {
-        "version": 2,
+        "version": 3,
         "generatedAt": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
         "source": {
             "type": "google-drive",
@@ -311,6 +660,13 @@ def main() -> None:
             "folderName": folder.get("name", "스타게이트_공개블로그"),
             "folderUrl": folder.get("webViewLink") or PUBLIC_FOLDER_URL,
             "folderModifiedTime": folder.get("modifiedTime"),
+        },
+        "enrichment": {
+            "version": ENRICHMENT_VERSION,
+            "aiConfigured": bool(ai_endpoint()),
+            "aiDocuments": ai_count,
+            "heuristicDocuments": heuristic_count,
+            "model": AI_MODEL if ai_endpoint() else None,
         },
         "counts": {
             "documents": len(documents),
@@ -321,19 +677,17 @@ def main() -> None:
     }
 
     OUTPUT.parent.mkdir(parents=True, exist_ok=True)
-    if OUTPUT.exists():
-        try:
-            previous = json.loads(OUTPUT.read_text(encoding="utf-8"))
-            if same_content(previous, payload):
-                print(f"No Drive metadata changes; keeping {OUTPUT} unchanged")
-                return
-        except (json.JSONDecodeError, OSError):
-            pass
+    if previous_payload and same_content(previous_payload, payload):
+        print(f"No Drive or enrichment changes; keeping {OUTPUT} unchanged")
+        return
 
     temp = OUTPUT.with_suffix(".json.tmp")
     temp.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     temp.replace(OUTPUT)
-    print(f"Updated {OUTPUT} with {len(documents)} Drive documents via {folder.get('syncMethod', 'unknown')}")
+    print(
+        f"Updated {OUTPUT}: {len(documents)} docs, AI={ai_count}, "
+        f"heuristic={heuristic_count}, source={folder.get('syncMethod', 'unknown')}"
+    )
 
 
 if __name__ == "__main__":
