@@ -26,6 +26,9 @@ env:
   WIF_PROVIDER: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
   WIF_SERVICE_ACCOUNT: ${{ secrets.GCP_DEPLOY_SERVICE_ACCOUNT }}
   GCP_PROJECT_ID: ${{ vars.GCP_PROJECT_ID }}
+  AI_API_BASE: ${{ vars.AI_API_BASE }}
+  AI_API_KEY: ${{ secrets.AI_API_KEY }}
+  AI_MODEL: ${{ vars.AI_MODEL }}
 
 jobs:
   sync:
@@ -52,9 +55,9 @@ jobs:
       - name: Install Drive sync dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install google-api-python-client google-auth requests beautifulsoup4
+          pip install google-api-python-client google-auth requests beautifulsoup4 pypdf
 
-      - name: Refresh Drive archive index
+      - name: Refresh and enrich Drive archive index
         run: python scripts/update-drive-blog.py
 
       - name: Validate generated index
@@ -66,9 +69,16 @@ jobs:
           data = json.loads(p.read_text(encoding='utf-8'))
           docs = data.get('documents', [])
           assert data.get('source', {}).get('folderId') == '18wK4G_-jzJHsLsvM3Ka5oWjrQChoK9Y4'
+          assert data.get('version', 0) >= 3
           assert len(docs) >= 1, 'Drive archive index unexpectedly empty'
           assert all(d.get('id') and d.get('title') and d.get('url') for d in docs)
-          print(f"Validated {len(docs)} public Drive documents via {data.get('source', {}).get('syncMethod', 'unknown')}")
+          assert all(d.get('smartSummary') and len(d.get('keyPoints', [])) == 3 for d in docs)
+          assert all(d.get('audience') and d.get('relatedProjects') for d in docs)
+          enrichment = data.get('enrichment', {})
+          print(
+              f"Validated {len(docs)} Drive documents via {data.get('source', {}).get('syncMethod', 'unknown')} | "
+              f"AI={enrichment.get('aiDocuments', 0)} heuristic={enrichment.get('heuristicDocuments', 0)}"
+          )
           PY
 
       - name: Commit archive snapshot when changed
@@ -76,13 +86,13 @@ jobs:
         run: |
           git add drive-blog/data.json
           if git diff --cached --quiet; then
-            echo 'No Drive metadata changes to commit.'
+            echo 'No Drive/enrichment changes to commit.'
             echo 'changed=false' >> "$GITHUB_OUTPUT"
             exit 0
           fi
           git config user.name 'stargate-drive-bot'
           git config user.email 'actions@users.noreply.github.com'
-          git commit -m 'chore: refresh Drive knowledge archive'
+          git commit -m 'chore: refresh enriched Drive knowledge archive'
           git pull --rebase origin main
           git push origin HEAD:main
           echo 'changed=true' >> "$GITHUB_OUTPUT"
@@ -97,7 +107,7 @@ jobs:
         if: always()
         run: |
           {
-            echo '## Drive Knowledge Archive'
+            echo '## Drive Knowledge Archive P2'
             echo
             echo '- Folder: `스타게이트_공개블로그`'
             echo '- Index: `drive-blog/data.json`'
@@ -107,8 +117,12 @@ jobs:
               python - <<'PY'
           import json
           data = json.load(open('drive-blog/data.json', encoding='utf-8'))
+          enrichment = data.get('enrichment', {})
           print(f"- Documents: {len(data.get('documents', []))}")
           print(f"- Sync method: {data.get('source', {}).get('syncMethod', 'unknown')}")
+          print(f"- AI configured: {enrichment.get('aiConfigured', False)}")
+          print(f"- AI enriched: {enrichment.get('aiDocuments', 0)}")
+          print(f"- Heuristic enriched: {enrichment.get('heuristicDocuments', 0)}")
           print(f"- Generated: {data.get('generatedAt', 'unknown')}")
           PY
             fi
