@@ -21,23 +21,21 @@ concurrency:
 
 env:
   DRIVE_BLOG_FOLDER_ID: 18wK4G_-jzJHsLsvM3Ka5oWjrQChoK9Y4
+  GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+  WIF_PROVIDER: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+  WIF_SERVICE_ACCOUNT: ${{ secrets.GCP_DEPLOY_SERVICE_ACCOUNT }}
+  GCP_PROJECT_ID: ${{ vars.GCP_PROJECT_ID }}
 
 jobs:
   sync:
     runs-on: ubuntu-latest
-    environment: production
-    env:
-      GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
-      WIF_PROVIDER: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
-      WIF_SERVICE_ACCOUNT: ${{ secrets.GCP_DEPLOY_SERVICE_ACCOUNT }}
-      GCP_PROJECT_ID: ${{ vars.GCP_PROJECT_ID }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Authenticate with existing Google Cloud identity
+      - name: Authenticate when Google Cloud identity exists
         if: ${{ env.WIF_PROVIDER != '' && env.WIF_SERVICE_ACCOUNT != '' }}
         uses: google-github-actions/auth@v3
         with:
@@ -50,10 +48,10 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Install Drive API client
+      - name: Install Drive sync dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install google-api-python-client google-auth
+          pip install google-api-python-client google-auth requests beautifulsoup4
 
       - name: Refresh Drive archive index
         run: python scripts/update-drive-blog.py
@@ -69,7 +67,7 @@ jobs:
           assert data.get('source', {}).get('folderId') == '18wK4G_-jzJHsLsvM3Ka5oWjrQChoK9Y4'
           assert len(docs) >= 1, 'Drive archive index unexpectedly empty'
           assert all(d.get('id') and d.get('title') and d.get('url') for d in docs)
-          print(f'Validated {len(docs)} public Drive documents')
+          print(f"Validated {len(docs)} public Drive documents via {data.get('source', {}).get('syncMethod', 'unknown')}")
           PY
 
       - name: Commit archive snapshot when changed
@@ -99,6 +97,7 @@ jobs:
           import json
           data = json.load(open('drive-blog/data.json', encoding='utf-8'))
           print(f"- Documents: {len(data.get('documents', []))}")
+          print(f"- Sync method: {data.get('source', {}).get('syncMethod', 'unknown')}")
           print(f"- Generated: {data.get('generatedAt', 'unknown')}")
           PY
             fi
