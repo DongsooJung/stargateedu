@@ -27,7 +27,7 @@ jobs:
 
       - name: Build GA4 runtime config
         env:
-          GA4_MEASUREMENT_ID: ${{ secrets.GA4_MEASUREMENT_ID }}
+          GA4_MEASUREMENT_ID: ${{ vars.GA4_MEASUREMENT_ID || secrets.GA4_MEASUREMENT_ID }}
         run: |
           python - <<'PY'
           import json, os
