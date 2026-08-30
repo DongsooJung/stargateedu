@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 """Refresh drive-blog/data.json from the public STARGATE Google Drive folder.
 
-Authentication priority:
-1. Application Default Credentials created by google-github-actions/auth (WIF)
-2. GOOGLE_SERVICE_ACCOUNT_JSON legacy secret
-
-The script only reads Drive metadata and writes a deterministic public index.
+Preferred source: Google Drive API when credentials are available.
+Fallback source: the public Google Drive folder HTML bootstrap data. This lets the
+public archive keep syncing without repository secrets, while still exposing only
+items already visible to anyone with the folder link.
 """
 from __future__ import annotations
 
@@ -16,13 +15,17 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-from google.oauth2 import service_account
 import google.auth
+from google.auth.exceptions import DefaultCredentialsError
+from google.oauth2 import service_account
 from googleapiclient.discovery import build
+import requests
+from bs4 import BeautifulSoup
 
 FOLDER_ID = os.getenv("DRIVE_BLOG_FOLDER_ID", "18wK4G_-jzJHsLsvM3Ka5oWjrQChoK9Y4")
 OUTPUT = Path(os.getenv("DRIVE_BLOG_OUTPUT", "drive-blog/data.json"))
 SCOPES = ["https://www.googleapis.com/auth/drive.metadata.readonly"]
+PUBLIC_FOLDER_URL = f"https://drive.google.com/drive/folders/{FOLDER_ID}"
 
 CURATED: dict[str, dict[str, Any]] = {
     "18VgljsswrJXGJ_gL63z1QvsIWIoZvdWQuFTncueB1-A": {
@@ -34,7 +37,7 @@ CURATED: dict[str, dict[str, Any]] = {
     "1Zq9NLgzUqg_HF9iI05JBYaW1HDhgdi_P": {
         "title": "ChatGPT와 Ollama 이해하기",
         "summary": "ChatGPT와 로컬 LLM 도구 Ollama의 개념과 차이를 빠르게 파악하기 위한 입문 자료입니다. 클라우드형 AI와 로컬 실행형 AI의 활용 방향을 비교할 때 참고할 수 있습니다.",
-        "categories": ["ai", "automation"],
+        "categories": ["ai", "automation", "publication"],
         "tags": ["ChatGPT", "Ollama", "LLM", "로컬AI"],
     },
     "1fI_OuNQigTekDDpEm-OXCUGQ3uu6AI7y": {
@@ -73,13 +76,20 @@ GENERIC_SUMMARIES = {
 }
 
 
-def credentials():
+def optional_credentials():
     raw = os.getenv("GOOGLE_SERVICE_ACCOUNT_JSON", "").strip()
     if raw:
-        info = json.loads(raw)
-        return service_account.Credentials.from_service_account_info(info, scopes=SCOPES)
-    creds, _ = google.auth.default(scopes=SCOPES)
-    return creds
+        try:
+            info = json.loads(raw)
+            return service_account.Credentials.from_service_account_info(info, scopes=SCOPES)
+        except Exception as exc:
+            print(f"Drive credential secret is unusable; using public-folder fallback: {type(exc).__name__}")
+            return None
+    try:
+        creds, _ = google.auth.default(scopes=SCOPES)
+        return creds
+    except DefaultCredentialsError:
+        return None
 
 
 def normalize_title(name: str) -> str:
@@ -136,6 +146,15 @@ def fallback_url(file_id: str, mime_type: str) -> str:
     return f"https://drive.google.com/file/d/{file_id}/view"
 
 
+def millis_to_iso(value: Any) -> str | None:
+    if not isinstance(value, (int, float)) or value <= 0:
+        return None
+    try:
+        return datetime.fromtimestamp(value / 1000, tz=timezone.utc).isoformat().replace("+00:00", "Z")
+    except (OverflowError, OSError, ValueError):
+        return None
+
+
 def build_document(item: dict[str, Any]) -> dict[str, Any]:
     file_id = item["id"]
     curated = CURATED.get(file_id, {})
@@ -162,9 +181,8 @@ def build_document(item: dict[str, Any]) -> dict[str, Any]:
     }
 
 
-def main() -> None:
-    service = build("drive", "v3", credentials=credentials(), cache_discovery=False)
-
+def list_with_drive_api(creds) -> tuple[dict[str, Any], list[dict[str, Any]]]:
+    service = build("drive", "v3", credentials=creds, cache_discovery=False)
     folder = service.files().get(
         fileId=FOLDER_ID,
         fields="id,name,webViewLink,modifiedTime",
@@ -188,18 +206,113 @@ def main() -> None:
         page_token = response.get("nextPageToken")
         if not page_token:
             break
+    folder["syncMethod"] = "drive-api"
+    return folder, files
+
+
+def list_from_public_folder() -> tuple[dict[str, Any], list[dict[str, Any]]]:
+    """Parse Google's public folder bootstrap data; no API key or OAuth required.
+
+    Public folder HTML currently exposes an encoded `_DRIVE_ivd` array. Each child
+    entry contains its Drive id, display name and MIME type. If Google changes that
+    page structure this function fails closed and leaves the previous data.json intact.
+    """
+    headers = {
+        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/124 Safari/537.36",
+        "Accept-Language": "en-US,en;q=0.8",
+    }
+    response = requests.get(f"{PUBLIC_FOLDER_URL}?hl=en", headers=headers, timeout=30)
+    response.raise_for_status()
+    soup = BeautifulSoup(response.text, "html.parser")
+
+    encoded = None
+    pattern = re.compile(r"window\['_DRIVE_ivd'\]\s*=\s*'(.*?)';", re.S)
+    for script in soup.find_all("script"):
+        text = script.string or script.get_text() or ""
+        if "_DRIVE_ivd" not in text:
+            continue
+        match = pattern.search(text)
+        if match:
+            encoded = match.group(1)
+            break
+    if not encoded:
+        raise RuntimeError("Public Drive bootstrap data (_DRIVE_ivd) not found")
+
+    decoded = encoded.encode("utf-8").decode("unicode_escape")
+    folder_arr = json.loads(decoded)
+    entries = [] if not folder_arr or folder_arr[0] is None else folder_arr[0]
+
+    files: list[dict[str, Any]] = []
+    for entry in entries:
+        if not isinstance(entry, list) or len(entry) < 4:
+            continue
+        file_id, name, mime_type = entry[0], entry[2], entry[3]
+        if not file_id or not name or not mime_type:
+            continue
+        item: dict[str, Any] = {
+            "id": file_id,
+            "name": name,
+            "mimeType": mime_type,
+            "webViewLink": fallback_url(file_id, mime_type),
+            "modifiedTime": millis_to_iso(entry[9]) if len(entry) > 9 else None,
+            "createdTime": millis_to_iso(entry[10]) if len(entry) > 10 else None,
+        }
+        if len(entry) > 13 and isinstance(entry[13], (int, float)) and entry[13] >= 0:
+            item["size"] = int(entry[13])
+        files.append(item)
+
+    if not files:
+        raise RuntimeError("Public Drive folder returned no parsable files")
+
+    title = soup.title.get_text(strip=True) if soup.title else "스타게이트_공개블로그"
+    folder_name = title.rsplit(" - ", 1)[0].strip() if " - " in title else title
+    folder = {
+        "id": FOLDER_ID,
+        "name": folder_name or "스타게이트_공개블로그",
+        "webViewLink": PUBLIC_FOLDER_URL,
+        "modifiedTime": None,
+        "syncMethod": "public-folder-html",
+    }
+    return folder, files
+
+
+def same_content(previous: dict[str, Any], current: dict[str, Any]) -> bool:
+    """Ignore generation timestamps so an unchanged Drive does not create a commit."""
+    def stable(payload: dict[str, Any]) -> dict[str, Any]:
+        clone = json.loads(json.dumps(payload, ensure_ascii=False))
+        clone.pop("generatedAt", None)
+        return clone
+    return stable(previous) == stable(current)
+
+
+def main() -> None:
+    folder: dict[str, Any]
+    files: list[dict[str, Any]]
+    creds = optional_credentials()
+
+    if creds is not None:
+        try:
+            folder, files = list_with_drive_api(creds)
+            print("Drive sync source: authenticated Drive API")
+        except Exception as exc:
+            print(f"Drive API failed; falling back to public folder HTML: {type(exc).__name__}: {exc}")
+            folder, files = list_from_public_folder()
+    else:
+        print("Drive credentials unavailable; using public folder HTML fallback")
+        folder, files = list_from_public_folder()
 
     documents = [build_document(item) for item in files if item.get("mimeType") != "application/vnd.google-apps.folder"]
-    documents.sort(key=lambda d: d.get("modifiedTime") or "", reverse=True)
+    documents.sort(key=lambda d: (d.get("modifiedTime") or "", d.get("title") or ""), reverse=True)
 
     payload = {
-        "version": 1,
+        "version": 2,
         "generatedAt": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
         "source": {
             "type": "google-drive",
+            "syncMethod": folder.get("syncMethod", "unknown"),
             "folderId": FOLDER_ID,
-            "folderName": folder.get("name", "STARGATE 공개 지식 아카이브"),
-            "folderUrl": folder.get("webViewLink") or f"https://drive.google.com/drive/folders/{FOLDER_ID}",
+            "folderName": folder.get("name", "스타게이트_공개블로그"),
+            "folderUrl": folder.get("webViewLink") or PUBLIC_FOLDER_URL,
             "folderModifiedTime": folder.get("modifiedTime"),
         },
         "counts": {
@@ -211,10 +324,19 @@ def main() -> None:
     }
 
     OUTPUT.parent.mkdir(parents=True, exist_ok=True)
+    if OUTPUT.exists():
+        try:
+            previous = json.loads(OUTPUT.read_text(encoding="utf-8"))
+            if same_content(previous, payload):
+                print(f"No Drive metadata changes; keeping {OUTPUT} unchanged")
+                return
+        except (json.JSONDecodeError, OSError):
+            pass
+
     temp = OUTPUT.with_suffix(".json.tmp")
     temp.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     temp.replace(OUTPUT)
-    print(f"Updated {OUTPUT} with {len(documents)} Drive documents from {folder.get('name', FOLDER_ID)}")
+    print(f"Updated {OUTPUT} with {len(documents)} Drive documents via {folder.get('syncMethod', 'unknown')}")
 
 
 if __name__ == "__main__":
