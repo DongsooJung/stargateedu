@@ -1,0 +1,49 @@
+name: Update Growth Metrics
+
+on:
+  workflow_dispatch:
+  schedule:
+    # 07:20 KST every day
+    - cron: '20 22 * * *'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: growth-metrics
+  cancel-in-progress: true
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    env:
+      GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+      GA4_PROPERTY_ID: ${{ secrets.GA4_PROPERTY_ID }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Google API clients
+        run: |
+          python -m pip install --upgrade pip
+          pip install google-analytics-data google-api-python-client google-auth
+
+      - name: Update growth metrics
+        run: python scripts/update-growth-metrics.py
+
+      - name: Commit metric snapshot
+        run: |
+          if git diff --quiet -- strategy/growth-control/data.json; then
+            echo 'No metric changes to commit.'
+            exit 0
+          fi
+          git config user.name 'stargate-growth-bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add strategy/growth-control/data.json
+          git commit -m 'chore: refresh growth metrics'
+          git push
