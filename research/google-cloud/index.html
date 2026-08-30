@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="STARGATE EDU Google Cloud API 통합 상태와 구현 우선순위를 관리하는 연구 대시보드" />
+  <title>Google Cloud Integration v1 | STARGATE Research</title>
+  <style>
+    :root{--navy:#0b1738;--navy2:#142150;--gold:#d9a441;--paper:#f5f7fb;--line:#dfe4ee;--text:#1c2438;--muted:#6d7892;--ok:#0f8a5f;--warn:#a66b00;--bad:#b53b49}
+    *{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,"Noto Sans KR","Malgun Gothic",sans-serif;color:var(--text);background:var(--paper);line-height:1.6}a{color:inherit;text-decoration:none}
+    .wrap{width:min(1160px,calc(100% - 32px));margin:auto}.top{background:var(--navy);color:#fff;border-bottom:1px solid rgba(217,164,65,.35)}.top .wrap{min-height:62px;display:flex;align-items:center;justify-content:space-between;gap:18px}.brand{font-weight:900;letter-spacing:.4px}.brand span{color:#f1c77a}.back{font-size:13px;color:#cdd4e5}.back:hover{color:#f1c77a}
+    .hero{background:radial-gradient(800px 400px at 20% 0,rgba(217,164,65,.22),transparent 60%),linear-gradient(160deg,var(--navy),var(--navy2));color:#fff;padding:70px 0 62px}.badge{display:inline-flex;padding:6px 11px;border-radius:999px;border:1px solid rgba(241,199,122,.4);background:rgba(217,164,65,.12);color:#f1c77a;font-size:12px;font-weight:800;letter-spacing:.6px}.hero h1{font-size:clamp(34px,5vw,56px);line-height:1.12;margin:16px 0 12px}.hero p{max-width:800px;color:#c9d1e5;margin:0}.summary{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}.pill{padding:8px 12px;border:1px solid rgba(255,255,255,.14);border-radius:12px;background:rgba(255,255,255,.05);font-size:12px;color:#e6eaf4}.pill b{color:#f1c77a}
+    main{padding:42px 0 80px}.section{margin-top:34px}.section:first-child{margin-top:0}.section h2{margin:0 0 8px;color:var(--navy);font-size:27px}.section>p{margin:0;color:var(--muted)}
+    .controls{margin-top:18px;display:grid;grid-template-columns:1fr auto;gap:10px;background:#fff;border:1px solid var(--line);padding:16px;border-radius:16px}.controls input{min-width:0;border:1px solid #cfd6e3;border-radius:11px;padding:12px 13px;font:inherit}.controls button,.btn{border:0;border-radius:11px;padding:12px 16px;background:var(--navy);color:#fff;font-weight:800;cursor:pointer}.controls button:hover,.btn:hover{background:var(--navy2)}.hint{grid-column:1/-1;color:#8892a8;font-size:12px}
+    .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:18px}.card{background:#fff;border:1px solid var(--line);border-radius:17px;padding:20px;box-shadow:0 10px 26px rgba(11,23,56,.045)}.card .head{display:flex;align-items:center;justify-content:space-between;gap:10px}.card h3{margin:0;color:var(--navy);font-size:17px}.status{font-size:11px;font-weight:900;padding:5px 8px;border-radius:999px;background:#eef1f6;color:#68728b}.status.ok{background:#e6f5ef;color:var(--ok)}.status.warn{background:#fff4dc;color:var(--warn)}.status.bad{background:#fdecef;color:var(--bad)}.card p{color:var(--muted);font-size:13px;margin:12px 0 0}.metric{font:800 25px/1.2 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--navy);margin-top:18px}.small{font-size:11px;color:#9099ad;margin-top:6px}
+    .architecture{margin-top:18px;background:#0f1d42;color:#dfe5f3;border-radius:18px;padding:24px;overflow:auto}.architecture pre{margin:0;min-width:700px;font:600 13px/1.75 ui-monospace,SFMono-Regular,Menlo,monospace;color:#dfe5f3}.architecture .gold{color:#f1c77a}
+    table{width:100%;border-collapse:collapse;margin-top:18px;background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden}th,td{text-align:left;padding:13px 15px;border-bottom:1px solid #e8ebf2;font-size:13px;vertical-align:top}th{background:#f0f3f8;color:var(--navy);font-weight:900}tr:last-child td{border-bottom:0}.rank{font-weight:900;color:var(--navy)}code{background:#eef1f6;border-radius:6px;padding:2px 5px;font-size:12px}
+    .endpoint-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:18px}.endpoint{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px}.endpoint b{display:block;color:var(--navy);font-family:ui-monospace,SFMono-Regular,Menlo,monospace}.endpoint span{display:block;color:var(--muted);font-size:12px;margin-top:5px}
+    .notice{margin-top:18px;padding:17px 18px;border:1px solid #ecd5a3;background:#fff8e9;border-radius:14px;color:#674b15;font-size:13px}.notice b{color:#49320a}.footer{padding:30px 0;color:#818ba4;font-size:12px;text-align:center}
+    @media(max-width:920px){.grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:620px){.grid,.endpoint-grid{grid-template-columns:1fr}.controls{grid-template-columns:1fr}.controls button{width:100%}.hero{padding:52px 0}.top .back{font-size:0}.top .back:after{content:"연구 허브";font-size:13px}}
+  </style>
+</head>
+<body>
+  <nav class="top"><div class="wrap"><a class="brand" href="/">STARGATE <span>RESEARCH</span></a><a class="back" href="/research/">← 연구 대시보드로 돌아가기</a></div></nav>
+  <header class="hero">
+    <div class="wrap">
+      <span class="badge">GOOGLE CLOUD · INTEGRATION V1</span>
+      <h1>Stargate Cloud Intelligence</h1>
+      <p>GitHub Pages 프런트엔드와 Google Cloud 서버 계층을 분리해 Gemini, Places, BigQuery를 기존 연구 프로젝트에 공통 API로 공급하는 1차 통합안입니다.</p>
+      <div class="summary"><span class="pill"><b>Frontend</b> GitHub Pages</span><span class="pill"><b>Backend</b> Cloud Run</span><span class="pill"><b>AI</b> Gemini on Vertex AI</span><span class="pill"><b>Geo</b> Places API (New)</span><span class="pill"><b>Data</b> BigQuery</span></div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="section">
+      <h2>연결 상태</h2>
+      <p>Cloud Run 배포 후 서비스 URL을 입력하면 비밀키를 노출하지 않고 `/v1/status`만 점검합니다.</p>
+      <div class="controls">
+        <input id="api-base" type="url" placeholder="https://stargate-google-cloud-api-xxxxx.a.run.app" aria-label="Cloud Run API URL" />
+        <button id="check" type="button">상태 확인</button>
+        <div class="hint">API URL은 이 브라우저의 localStorage에만 저장됩니다. Google API 키나 서비스계정 키를 입력하지 마세요.</div>
+      </div>
+      <div class="grid">
+        <article class="card"><div class="head"><h3>Cloud Run</h3><span id="run-status" class="status warn">SETUP</span></div><div id="run-metric" class="metric">—</div><p>공통 서버 API 계층. 브라우저에 비밀키를 전달하지 않습니다.</p><div id="run-note" class="small">배포 전</div></article>
+        <article class="card"><div class="head"><h3>Gemini</h3><span id="ai-status" class="status warn">SETUP</span></div><div id="ai-metric" class="metric">2.5 Flash</div><p>연구자료 요약·비교·해석·보고서 초안 생성.</p><div class="small">Google Gen AI SDK · Vertex AI</div></article>
+        <article class="card"><div class="head"><h3>Places</h3><span id="places-status" class="status warn">SETUP</span></div><div class="metric">Text Search</div><p>공인중개사·숙박·학교·상권 등 공간 프로젝트의 장소 보강.</p><div class="small">FieldMask로 반환 필드/비용 제한</div></article>
+        <article class="card"><div class="head"><h3>BigQuery</h3><span id="bq-status" class="status warn">SETUP</span></div><div id="bq-metric" class="metric">0 views</div><p>연구 데이터웨어하우스. 외부에는 allowlist 공개 View만 제공.</p><div class="small">요청별 처리 바이트 상한 적용</div></article>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>v1 아키텍처</h2>
+      <p>기존 Supabase와 GitHub Actions는 유지하고, Google Cloud는 공통 분석·공간·대용량 조회 계층으로 추가합니다.</p>
+      <div class="architecture"><pre>www.stargateedu.co.kr  (GitHub Pages)
+          │
+          │ HTTPS / CORS allowlist
+          ▼
+<span class="gold">Cloud Run · STARGATE Google Cloud API</span>
+          │
+          ├── /v1/ai/analyze ─────► Gemini / Vertex AI
+          ├── /v1/places/search ──► Places API (New)
+          ├── /v1/data/view ──────► BigQuery public views
+          └── /v1/status ─────────► Integration health
+
+Existing layer
+GitHub Actions ──► JSON snapshots ──► Research dashboards
+Supabase       ──► operational/history data
+Google Cloud   ──► AI + geo enrichment + analytical warehouse</pre></div>
+    </section>
+
+    <section class="section">
+      <h2>프로젝트 적용 우선순위</h2>
+      <table>
+        <thead><tr><th>우선</th><th>대상 프로젝트</th><th>Google Cloud 적용</th><th>기대효과</th></tr></thead>
+        <tbody>
+          <tr><td class="rank">S</td><td>서울 공인중개사 공간지도</td><td>Places + BigQuery</td><td>주소/좌표 보강, 장소 ID 기반 중복 제거, 공간 데이터 중앙화</td></tr>
+          <tr><td class="rank">S</td><td>숙박 데이터 대시보드</td><td>Places + BigQuery + Gemini</td><td>시설 검색·집계·지역별 변화 자동 해석</td></tr>
+          <tr><td class="rank">S</td><td>연구/전략 보고서</td><td>Gemini</td><td>JSON/CSV 결과에서 핵심 변화와 실행안 자동 생성</td></tr>
+          <tr><td class="rank">A</td><td>PMO / 프로젝트 상태</td><td>BigQuery</td><td>프로젝트별 시계열 KPI와 API 상태 장기 보관</td></tr>
+          <tr><td class="rank">A</td><td>대치동 Stay</td><td>Calendar API · Phase 2</td><td>현재 Calendar 링크형 예약을 실제 availability/이벤트 생성 방식으로 고도화</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="section">
+      <h2>구현된 API</h2>
+      <div class="endpoint-grid">
+        <div class="endpoint"><b>GET /v1/status</b><span>Cloud Run 및 각 서비스의 구성 여부. secret 값은 반환하지 않음.</span></div>
+        <div class="endpoint"><b>POST /v1/ai/analyze</b><span>Gemini 기반 연구자료 분석. 기본 temperature 0.2.</span></div>
+        <div class="endpoint"><b>POST /v1/places/search</b><span>Places API (New) Text Search. 한국어/한국 지역 기본값.</span></div>
+        <div class="endpoint"><b>POST /v1/data/view</b><span>운영자가 allowlist에 지정한 BigQuery 공개 View만 조회.</span></div>
+      </div>
+      <div class="notice"><b>비용 통제:</b> Places는 필요한 필드만 요청하고, BigQuery는 공개 View allowlist + 요청별 최대 처리 바이트를 사용합니다. Gemini 모델은 환경변수로 교체할 수 있습니다.</div>
+    </section>
+
+    <section class="section">
+      <h2>배포 체크포인트</h2>
+      <table>
+        <tbody>
+          <tr><th style="width:28%">1. Google Cloud Project</th><td>결제 연결, Cloud Run / Vertex AI / BigQuery / Places / Secret Manager API 활성화</td></tr>
+          <tr><th>2. IAM</th><td>Cloud Run 실행 서비스 계정에 Vertex AI User, BigQuery Job User, 공개 데이터셋 Data Viewer 최소 권한</td></tr>
+          <tr><th>3. Secret</th><td>Places 서버 키는 Secret Manager로 주입. GitHub Pages나 저장소에는 저장하지 않음</td></tr>
+          <tr><th>4. Data</th><td><code>stargate_public</code> 데이터셋에 외부 제공 전용 View 생성</td></tr>
+          <tr><th>5. Deploy</th><td><code>google-cloud-api/</code>를 Cloud Run 서울 리전에 배포하고 `/health` 검증</td></tr>
+          <tr><th>6. Domain</th><td>안정화 후 <code>api.stargateedu.co.kr</code>로 연결</td></tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+  <footer class="footer"><div class="wrap">STARGATE EDU · Google Cloud Integration v1 · 2026</div></footer>
+
+  <script>
+    const input = document.getElementById('api-base');
+    const button = document.getElementById('check');
+    const saved = localStorage.getItem('stargateGcpApiBase') || '';
+    input.value = saved;
+
+    function setStatus(id, state, text) {
+      const el = document.getElementById(id);
+      el.className = 'status ' + state;
+      el.textContent = text;
+    }
+
+    async function checkStatus() {
+      const base = input.value.trim().replace(/\/$/, '');
+      if (!base) {
+        setStatus('run-status', 'warn', 'SETUP');
+        document.getElementById('run-note').textContent = 'Cloud Run URL 필요';
+        return;
+      }
+      localStorage.setItem('stargateGcpApiBase', base);
+      button.disabled = true;
+      button.textContent = '확인 중…';
+      try {
+        const response = await fetch(base + '/v1/status', {headers: {'Accept':'application/json'}});
+        if (!response.ok) throw new Error('HTTP ' + response.status);
+        const data = await response.json();
+        setStatus('run-status', 'ok', 'LIVE');
+        document.getElementById('run-metric').textContent = data.service || 'Cloud Run';
+        document.getElementById('run-note').textContent = data.revision || 'revision connected';
+        setStatus('ai-status', data.configured?.vertexAi ? 'ok' : 'warn', data.configured?.vertexAi ? 'READY' : 'SETUP');
+        setStatus('places-status', data.configured?.places ? 'ok' : 'warn', data.configured?.places ? 'READY' : 'SETUP');
+        setStatus('bq-status', data.configured?.bigQuery ? 'ok' : 'warn', data.configured?.bigQuery ? 'READY' : 'SETUP');
+        document.getElementById('ai-metric').textContent = data.model || 'Gemini';
+        document.getElementById('bq-metric').textContent = (data.publicBigQueryViews || 0) + ' views';
+      } catch (error) {
+        setStatus('run-status', 'bad', 'OFFLINE');
+        setStatus('ai-status', 'warn', 'UNKNOWN');
+        setStatus('places-status', 'warn', 'UNKNOWN');
+        setStatus('bq-status', 'warn', 'UNKNOWN');
+        document.getElementById('run-metric').textContent = '—';
+        document.getElementById('run-note').textContent = error.message;
+      } finally {
+        button.disabled = false;
+        button.textContent = '상태 확인';
+      }
+    }
+    button.addEventListener('click', checkStatus);
+  </script>
+</body>
+</html>
