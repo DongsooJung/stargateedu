@@ -25,6 +25,26 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Build GA4 runtime config
+        env:
+          GA4_MEASUREMENT_ID: ${{ secrets.GA4_MEASUREMENT_ID }}
+        run: |
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          measurement_id = os.getenv('GA4_MEASUREMENT_ID', '').strip()
+          Path('assets').mkdir(exist_ok=True)
+          payload = {'measurement_id': measurement_id}
+          Path('assets/analytics-config.js').write_text(
+              'window.STARGATE_ANALYTICS = ' + json.dumps(payload) + ';\n',
+              encoding='utf-8'
+          )
+          print('GA4 runtime config:', 'configured' if measurement_id else 'credential pending')
+          PY
+
+      - name: Inject analytics loader into HTML
+        run: python scripts/inject-analytics.py
+
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
 
