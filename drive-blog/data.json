@@ -1,0 +1,62 @@
+{
+  "version": 1,
+  "generatedAt": "2026-08-30T04:10:00Z",
+  "source": {
+    "type": "google-drive",
+    "folderId": "18wK4G_-jzJHsLsvM3Ka5oWjrQChoK9Y4",
+    "folderName": "스타게이트_공개블로그",
+    "folderUrl": "https://drive.google.com/drive/folders/18wK4G_-jzJHsLsvM3Ka5oWjrQChoK9Y4"
+  },
+  "counts": {
+    "documents": 3,
+    "pdf": 2,
+    "googleDocs": 1
+  },
+  "documents": [
+    {
+      "id": "18VgljsswrJXGJ_gL63z1QvsIWIoZvdWQuFTncueB1-A",
+      "title": "STARGATE 공개 지식 아카이브 — AI·교육·데이터 전략",
+      "sourceTitle": "STARGATE 공개 지식 아카이브 — AI·교육·데이터 전략",
+      "summary": "수학적 사고, 알고리즘, AI, 공간 데이터 분석을 교육과 실제 비즈니스 문제에 연결하는 STARGATE의 공개 지식 운영 원칙을 정리한 문서입니다.",
+      "url": "https://docs.google.com/document/d/18VgljsswrJXGJ_gL63z1QvsIWIoZvdWQuFTncueB1-A/edit?usp=drivesdk",
+      "mimeType": "application/vnd.google-apps.document",
+      "kind": "Google Docs",
+      "categories": ["ai", "education", "strategy"],
+      "tags": ["AI", "교육", "데이터", "전략", "STARGATE"],
+      "featured": true,
+      "createdTime": null,
+      "modifiedTime": null,
+      "size": null
+    },
+    {
+      "id": "1Zq9NLgzUqg_HF9iI05JBYaW1HDhgdi_P",
+      "title": "ChatGPT와 Ollama 이해하기",
+      "sourceTitle": "CHATGPT_OLLAMA가 뭔지 알려줘.pdf",
+      "summary": "ChatGPT와 로컬 LLM 도구 Ollama의 개념과 차이를 빠르게 파악하기 위한 입문 자료입니다. 클라우드형 AI와 로컬 실행형 AI의 활용 방향을 비교할 때 참고할 수 있습니다.",
+      "url": "https://drive.google.com/file/d/1Zq9NLgzUqg_HF9iI05JBYaW1HDhgdi_P/view?usp=drivesdk",
+      "mimeType": "application/pdf",
+      "kind": "PDF",
+      "categories": ["ai", "automation", "publication"],
+      "tags": ["ChatGPT", "Ollama", "LLM", "로컬AI"],
+      "featured": false,
+      "createdTime": null,
+      "modifiedTime": null,
+      "size": null
+    },
+    {
+      "id": "1fI_OuNQigTekDDpEm-OXCUGQ3uu6AI7y",
+      "title": "2026 AI 강사 되는 법 가이드",
+      "sourceTitle": "2026 AI 강사 되는 법 가이드 - 전자책.pdf",
+      "summary": "AI 강사 활동을 준비할 때 필요한 역량, 콘텐츠 구성, 교육시장 접근 방향을 정리한 전자책형 가이드입니다.",
+      "url": "https://drive.google.com/file/d/1fI_OuNQigTekDDpEm-OXCUGQ3uu6AI7y/view?usp=drivesdk",
+      "mimeType": "application/pdf",
+      "kind": "PDF",
+      "categories": ["education", "ai", "publication"],
+      "tags": ["AI강사", "AI교육", "전자책", "교육사업"],
+      "featured": false,
+      "createdTime": null,
+      "modifiedTime": null,
+      "size": null
+    }
+  ]
+}
