@@ -21,14 +21,16 @@ concurrency:
 
 env:
   DRIVE_BLOG_FOLDER_ID: 18wK4G_-jzJHsLsvM3Ka5oWjrQChoK9Y4
-  GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
-  WIF_PROVIDER: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
-  WIF_SERVICE_ACCOUNT: ${{ secrets.GCP_DEPLOY_SERVICE_ACCOUNT }}
-  GCP_PROJECT_ID: ${{ vars.GCP_PROJECT_ID }}
 
 jobs:
   sync:
     runs-on: ubuntu-latest
+    environment: production
+    env:
+      GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+      WIF_PROVIDER: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+      WIF_SERVICE_ACCOUNT: ${{ secrets.GCP_DEPLOY_SERVICE_ACCOUNT }}
+      GCP_PROJECT_ID: ${{ vars.GCP_PROJECT_ID }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
