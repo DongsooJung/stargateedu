@@ -2,6 +2,15 @@ name: Update Seoul realtor map
 
 on:
   workflow_dispatch:
+    inputs:
+      geocoder:
+        description: "One-time geocoder"
+        required: true
+        default: "overpass"
+        type: choice
+        options:
+          - overpass
+          - juso
   push:
     branches: [main]
     paths:
@@ -26,11 +35,17 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
+      - name: Install Juso coordinate converter
+        if: inputs.geocoder == 'juso' || contains(github.event.head_commit.message, 'juso-exact')
+        run: npm install --no-save --package-lock=false proj4@2.11.0
       - name: Collect and geocode pilot data
         env:
           SEOUL_OPEN_DATA_KEY: ${{ secrets.SEOUL_OPEN_DATA_KEY }}
           KAKAO_REST_API_KEY: ${{ secrets.KAKAO_REST_API_KEY }}
-          GEOCODER: ${{ contains(github.event.head_commit.message, 'nominatim-exact') && 'nominatim' || 'overpass' }}
+          JUSO_API_KEY: ${{ secrets.JUSO_API_KEY }}
+          JUSO_SEARCH_API_KEY: ${{ secrets.JUSO_SEARCH_API_KEY }}
+          JUSO_COORD_API_KEY: ${{ secrets.JUSO_COORD_API_KEY }}
+          GEOCODER: ${{ inputs.geocoder == 'juso' && 'juso' || contains(github.event.head_commit.message, 'juso-exact') && 'juso' || contains(github.event.head_commit.message, 'nominatim-exact') && 'nominatim' || 'overpass' }}
           REALTOR_TARGET_COUNT: "3000"
         run: node scripts/update-seoul-realtors.mjs
       - name: Commit changed data
