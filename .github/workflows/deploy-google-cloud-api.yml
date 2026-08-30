@@ -1,0 +1,88 @@
+name: Deploy Google Cloud API
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'google-cloud-api/**'
+      - '.github/workflows/deploy-google-cloud-api.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: stargate-google-cloud-api-production
+  cancel-in-progress: false
+
+env:
+  SERVICE: stargate-google-cloud-api
+  PROJECT_ID: ${{ vars.GCP_PROJECT_ID }}
+  REGION: ${{ vars.GCP_REGION || 'asia-northeast3' }}
+
+jobs:
+  deploy:
+    if: ${{ vars.GCP_DEPLOY_READY == 'true' }}
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v3
+        with:
+          project_id: ${{ env.PROJECT_ID }}
+          workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.GCP_DEPLOY_SERVICE_ACCOUNT }}
+
+      - name: Deploy Cloud Run service
+        id: deploy
+        uses: google-github-actions/deploy-cloudrun@v3
+        with:
+          project_id: ${{ env.PROJECT_ID }}
+          service: ${{ env.SERVICE }}
+          region: ${{ env.REGION }}
+          source: ./google-cloud-api
+          env_vars: |-
+            GOOGLE_CLOUD_PROJECT=${{ env.PROJECT_ID }}
+            GOOGLE_CLOUD_LOCATION=${{ vars.GOOGLE_CLOUD_LOCATION || 'global' }}
+            GEMINI_MODEL=${{ vars.GEMINI_MODEL || 'gemini-2.5-flash' }}
+            CORS_ORIGINS=${{ vars.GOOGLE_CLOUD_CORS_ORIGINS || 'https://www.stargateedu.co.kr,https://stargateedu.co.kr' }}
+            RATE_LIMIT_PER_MINUTE=${{ vars.GOOGLE_CLOUD_RATE_LIMIT || '30' }}
+            BIGQUERY_PUBLIC_VIEWS=${{ vars.BIGQUERY_PUBLIC_VIEWS }}
+            BIGQUERY_MAX_BYTES_BILLED=${{ vars.BIGQUERY_MAX_BYTES_BILLED || '100000000' }}
+          secrets: |-
+            GOOGLE_MAPS_API_KEY=google-maps-api-key:latest
+            STARGATE_API_TOKEN=stargate-api-token:latest
+          flags: >-
+            --service-account=${{ vars.GCP_RUNTIME_SERVICE_ACCOUNT }}
+            --allow-unauthenticated
+            --min-instances=0
+            --max-instances=3
+            --cpu=1
+            --memory=512Mi
+            --timeout=60s
+
+      - name: Verify health endpoint
+        env:
+          SERVICE_URL: ${{ steps.deploy.outputs.url }}
+        run: |
+          set -euo pipefail
+          curl --fail --silent --show-error --retry 5 --retry-delay 3 \
+            "${SERVICE_URL}/health" | tee /tmp/health.json
+          grep -q '"ok":true' /tmp/health.json
+
+      - name: Publish deployment summary
+        env:
+          SERVICE_URL: ${{ steps.deploy.outputs.url }}
+        run: |
+          {
+            echo '## STARGATE Google Cloud API'
+            echo
+            echo "- Region: \`${REGION}\`"
+            echo "- Service: \`${SERVICE}\`"
+            echo "- URL: ${SERVICE_URL}"
+            echo "- Commit: \`${GITHUB_SHA}\`"
+          } >> "$GITHUB_STEP_SUMMARY"
