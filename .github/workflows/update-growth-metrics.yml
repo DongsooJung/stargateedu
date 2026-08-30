@@ -2,6 +2,11 @@ name: Update Growth Metrics
 
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/update-growth-metrics.py'
+      - '.github/workflows/update-growth-metrics.yml'
   schedule:
     # 07:20 KST every day
     - cron: '20 22 * * *'
