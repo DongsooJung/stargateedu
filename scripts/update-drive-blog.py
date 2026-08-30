@@ -29,6 +29,7 @@ PUBLIC_FOLDER_URL = f"https://drive.google.com/drive/folders/{FOLDER_ID}"
 
 CURATED: dict[str, dict[str, Any]] = {
     "18VgljsswrJXGJ_gL63z1QvsIWIoZvdWQuFTncueB1-A": {
+        "title": "STARGATE 공개 지식 아카이브 — AI·교육·데이터 전략",
         "summary": "수학적 사고, 알고리즘, AI, 공간 데이터 분석을 교육과 실제 비즈니스 문제에 연결하는 STARGATE의 공개 지식 운영 원칙을 정리한 문서입니다.",
         "categories": ["ai", "education", "strategy"],
         "tags": ["AI", "교육", "데이터", "전략", "STARGATE"],
@@ -146,15 +147,6 @@ def fallback_url(file_id: str, mime_type: str) -> str:
     return f"https://drive.google.com/file/d/{file_id}/view"
 
 
-def millis_to_iso(value: Any) -> str | None:
-    if not isinstance(value, (int, float)) or value <= 0:
-        return None
-    try:
-        return datetime.fromtimestamp(value / 1000, tz=timezone.utc).isoformat().replace("+00:00", "Z")
-    except (OverflowError, OSError, ValueError):
-        return None
-
-
 def build_document(item: dict[str, Any]) -> dict[str, Any]:
     file_id = item["id"]
     curated = CURATED.get(file_id, {})
@@ -210,6 +202,11 @@ def list_with_drive_api(creds) -> tuple[dict[str, Any], list[dict[str, Any]]]:
     return folder, files
 
 
+def decode_drive_bootstrap(encoded: str) -> str:
+    """Decode Drive's JavaScript \xNN escapes without corrupting existing UTF-8."""
+    return re.sub(r"\\x([0-9A-Fa-f]{2})", lambda m: chr(int(m.group(1), 16)), encoded)
+
+
 def list_from_public_folder() -> tuple[dict[str, Any], list[dict[str, Any]]]:
     """Parse Google's public folder bootstrap data; no API key or OAuth required.
 
@@ -238,7 +235,7 @@ def list_from_public_folder() -> tuple[dict[str, Any], list[dict[str, Any]]]:
     if not encoded:
         raise RuntimeError("Public Drive bootstrap data (_DRIVE_ivd) not found")
 
-    decoded = encoded.encode("utf-8").decode("unicode_escape")
+    decoded = decode_drive_bootstrap(encoded)
     folder_arr = json.loads(decoded)
     entries = [] if not folder_arr or folder_arr[0] is None else folder_arr[0]
 
@@ -254,8 +251,10 @@ def list_from_public_folder() -> tuple[dict[str, Any], list[dict[str, Any]]]:
             "name": name,
             "mimeType": mime_type,
             "webViewLink": fallback_url(file_id, mime_type),
-            "modifiedTime": millis_to_iso(entry[9]) if len(entry) > 9 else None,
-            "createdTime": millis_to_iso(entry[10]) if len(entry) > 10 else None,
+            # Public bootstrap timestamp slots are undocumented and can change.
+            # Do not publish guessed dates; authenticated Drive API dates are used when available.
+            "modifiedTime": None,
+            "createdTime": None,
         }
         if len(entry) > 13 and isinstance(entry[13], (int, float)) and entry[13] >= 0:
             item["size"] = int(entry[13])
@@ -302,7 +301,7 @@ def main() -> None:
         folder, files = list_from_public_folder()
 
     documents = [build_document(item) for item in files if item.get("mimeType") != "application/vnd.google-apps.folder"]
-    documents.sort(key=lambda d: (d.get("modifiedTime") or "", d.get("title") or ""), reverse=True)
+    documents.sort(key=lambda d: ((d.get("modifiedTime") or ""), (d.get("title") or "")), reverse=True)
 
     payload = {
         "version": 2,
