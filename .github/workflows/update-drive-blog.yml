@@ -26,9 +26,11 @@ env:
   WIF_PROVIDER: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
   WIF_SERVICE_ACCOUNT: ${{ secrets.GCP_DEPLOY_SERVICE_ACCOUNT }}
   GCP_PROJECT_ID: ${{ vars.GCP_PROJECT_ID }}
-  AI_API_BASE: ${{ vars.AI_API_BASE }}
-  AI_API_KEY: ${{ secrets.AI_API_KEY }}
-  AI_MODEL: ${{ vars.AI_MODEL }}
+  # OpenAI-compatible AI layer. Prefer generic names, but transparently reuse
+  # an existing DeepSeek secret when the generic AI_API_KEY is not configured.
+  AI_API_BASE: ${{ vars.AI_API_BASE || 'https://api.deepseek.com' }}
+  AI_API_KEY: ${{ secrets.AI_API_KEY || secrets.DEEPSEEK_API_KEY }}
+  AI_MODEL: ${{ vars.AI_MODEL || 'deepseek-chat' }}
 
 jobs:
   sync:
@@ -56,6 +58,18 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install google-api-python-client google-auth requests beautifulsoup4 pypdf
+
+      - name: Report AI provider readiness
+        run: |
+          python - <<'PY'
+          import os
+          key = bool(os.getenv('AI_API_KEY', '').strip())
+          base = os.getenv('AI_API_BASE', '').strip()
+          model = os.getenv('AI_MODEL', '').strip()
+          print('AI provider:', 'configured' if key else 'credential missing')
+          print('AI base:', base or 'unset')
+          print('AI model:', model or 'unset')
+          PY
 
       - name: Refresh and enrich Drive archive index
         run: python scripts/update-drive-blog.py
@@ -123,6 +137,7 @@ jobs:
           print(f"- AI configured: {enrichment.get('aiConfigured', False)}")
           print(f"- AI enriched: {enrichment.get('aiDocuments', 0)}")
           print(f"- Heuristic enriched: {enrichment.get('heuristicDocuments', 0)}")
+          print(f"- Model: {enrichment.get('model') or 'none'}")
           print(f"- Generated: {data.get('generatedAt', 'unknown')}")
           PY
             fi
