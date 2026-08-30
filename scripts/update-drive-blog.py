@@ -203,7 +203,7 @@ def list_with_drive_api(creds) -> tuple[dict[str, Any], list[dict[str, Any]]]:
 
 
 def decode_drive_bootstrap(encoded: str) -> str:
-    """Decode Drive's JavaScript \xNN escapes without corrupting existing UTF-8."""
+    """Decode Drive JavaScript hex escapes while preserving existing UTF-8."""
     return re.sub(r"\\x([0-9A-Fa-f]{2})", lambda m: chr(int(m.group(1), 16)), encoded)
 
 
@@ -251,8 +251,6 @@ def list_from_public_folder() -> tuple[dict[str, Any], list[dict[str, Any]]]:
             "name": name,
             "mimeType": mime_type,
             "webViewLink": fallback_url(file_id, mime_type),
-            # Public bootstrap timestamp slots are undocumented and can change.
-            # Do not publish guessed dates; authenticated Drive API dates are used when available.
             "modifiedTime": None,
             "createdTime": None,
         }
