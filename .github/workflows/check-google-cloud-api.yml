@@ -5,6 +5,7 @@ on:
     paths:
       - 'google-cloud-api/**'
       - '.github/workflows/check-google-cloud-api.yml'
+      - '.github/workflows/deploy-google-cloud-api.yml'
   workflow_dispatch:
 
 permissions:
@@ -25,5 +26,7 @@ jobs:
           node-version: '22'
       - name: Install dependencies
         run: npm install --ignore-scripts --no-audit --no-fund
-      - name: Syntax check
+      - name: Node syntax check
         run: npm run check
+      - name: Bootstrap shell syntax check
+        run: bash -n bootstrap-gcp.sh
