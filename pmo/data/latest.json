@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-08-31T05:44:16.579Z",
+  "generatedAt": "2026-08-31T14:01:29.978Z",
   "timezone": "Asia/Seoul",
   "summary": {
     "notionProjects": 4,
@@ -13,20 +13,20 @@
     "notion": {
       "status": "cached",
       "message": "Notion API 인증 정보 대기 · 마지막 정상 데이터를 표시합니다.",
-      "checkedAt": "2026-08-31T05:44:16.579Z",
+      "checkedAt": "2026-08-31T14:01:29.978Z",
       "lastSuccessfulSync": "2026-08-28T00:00:00.000Z"
     },
     "onenote": {
       "status": "setup",
       "message": "Microsoft Graph 위임형 OAuth 연결이 필요합니다.",
-      "checkedAt": "2026-08-31T05:44:16.579Z",
+      "checkedAt": "2026-08-31T14:01:29.978Z",
       "lastSuccessfulSync": null
     },
     "github": {
       "status": "live",
       "message": "GitHub 프로젝트 14건 동기화",
-      "checkedAt": "2026-08-31T05:44:16.579Z",
-      "lastSuccessfulSync": "2026-08-31T05:44:16.579Z"
+      "checkedAt": "2026-08-31T14:01:29.978Z",
+      "lastSuccessfulSync": "2026-08-31T14:01:29.978Z"
     }
   },
   "projects": [
@@ -82,7 +82,7 @@
       "source": "github",
       "title": "stargateedu",
       "description": "STARGATE EDU - 대치동 수학·KOI 전문 교육 랜딩페이지",
-      "updatedAt": "2026-08-31T05:32:40Z",
+      "updatedAt": "2026-08-31T13:05:20Z",
       "url": "https://github.com/DongsooJung/stargateedu",
       "visibility": "public"
     },
@@ -118,7 +118,7 @@
       "source": "github",
       "title": "-stargate",
       "description": "STARGATE HOMEPAGE",
-      "updatedAt": "2026-08-31T05:41:31Z",
+      "updatedAt": "2026-08-31T09:33:19Z",
       "url": "https://github.com/DongsooJung/-stargate",
       "visibility": "public"
     },
