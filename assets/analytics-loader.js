@@ -1,7 +1,10 @@
 (function () {
   'use strict';
 
-  var CONFIG_URL = 'https://stargateedu.co.kr/assets/analytics-config.js';
+  var loaderUrl = document.currentScript && document.currentScript.src
+    ? document.currentScript.src
+    : location.href;
+  var CONFIG_URL = new URL('analytics-config.js', loaderUrl).href;
   var MAIN_HOST = 'stargateedu.co.kr';
   var BLOG_HOST = 'blog.stargateedu.co.kr';
 
