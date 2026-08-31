@@ -5,7 +5,7 @@ import process from "node:process";
 const ROOT = path.resolve(import.meta.dirname, "..");
 const OUTPUT = path.join(ROOT, "pmo", "data", "latest.json");
 const NOTION_VERSION = "2025-09-03";
-const DEFAULT_NOTION_SOURCE = "389627e7-cf3f-46ca-be31-2f83afd2dc6d";
+const DEFAULT_NOTION_SOURCE = "5e1e339e-3a7f-40b9-9690-93a8b1f6a16f";
 const now = new Date().toISOString();
 
 async function readPrevious() {
@@ -53,15 +53,17 @@ function findProperty(properties, names, type) {
 
 function normalizeNotionPage(page, sourceId) {
   const properties = page.properties || {};
-  const titleProperty = findProperty(properties, ["프로젝트", "Name", "이름"], "title");
+  const titleProperty = findProperty(properties, ["프로젝트명", "프로젝트", "Name", "이름"], "title");
   const statusProperty = findProperty(properties, ["상태", "Status"]);
   const nextProperty = findProperty(properties, ["다음 1액션", "다음 행동", "Next action"]);
   const checklistNames = ["(1) 목표 확정", "(2) 템플릿", "(3) 루틴 연결", "(4) 첫 산출물"];
   const availableChecks = checklistNames.filter((name) => properties[name]?.type === "checkbox");
   const completedChecks = availableChecks.filter((name) => properties[name].checkbox).length;
   const formulaProgress = properties["진행률(%)"]?.formula?.number;
-  const progress = Number.isFinite(formulaProgress)
-    ? Math.round(formulaProgress <= 1 ? formulaProgress * 100 : formulaProgress)
+  const numberProgress = properties["진행률"]?.number;
+  const rawProgress = Number.isFinite(formulaProgress) ? formulaProgress : numberProgress;
+  const progress = Number.isFinite(rawProgress)
+    ? Math.round(rawProgress <= 1 ? rawProgress * 100 : rawProgress)
     : availableChecks.length
       ? Math.round((completedChecks / availableChecks.length) * 100)
       : null;

@@ -61,12 +61,14 @@ GitHub Pages로 호스팅되는 STARGATE EDU 공식 원페이지 랜딩 사이�
 
 `.github/workflows/update-workspace-status.yml`이 6시간마다 공식 API를 호출해 `pmo/data/latest.json`을 갱신합니다. 대시보드는 이 공개 스냅샷만 읽으므로 인증키가 브라우저에 전달되지 않습니다.
 
-- Notion: `NOTION_TOKEN` Actions secret과 `NOTION_DATA_SOURCE_IDS` Actions variable을 설정합니다. 현재 기본 데이터 소스는 `389627e7-cf3f-46ca-be31-2f83afd2dc6d`입니다.
+- Notion: `NOTION_TOKEN` Actions secret과 `NOTION_DATA_SOURCE_IDS` Actions variable을 설정합니다. 현재 기본 데이터 소스는 프로젝트 트래커 `5e1e339e-3a7f-40b9-9690-93a8b1f6a16f`입니다.
 - OneNote: Microsoft Graph는 위임형 인증만 지원하므로 `MS_CLIENT_ID`, `MS_REFRESH_TOKEN`을 Actions secrets에, `MS_TENANT_ID`를 variable에 등록합니다. 권한 범위는 `offline_access Notes.Read User.Read`입니다.
 - OneNote 공개 범위: 제목이 `[PUBLIC]`으로 시작하거나 `ONENOTE_SECTION_IDS` variable에 등록된 섹션의 페이지만 출력합니다. 본문과 첨부파일은 수집하지 않습니다.
 - GitHub: Actions 기본 `GITHUB_TOKEN`으로 `DongsooJung` 계정의 STARGATE 관련 저장소 메타데이터만 읽습니다.
 
 로컬 점검은 `node scripts/update-workspace-status.mjs`로 실행할 수 있습니다. 인증 정보가 없거나 API 오류가 발생하면 마지막 정상 스냅샷을 유지하고 연결 상태를 `cached`, `setup`, `error`로 표시합니다.
+
+PMO의 `↻ 새로고침` 버튼은 공개 스냅샷을 캐시 없이 다시 조회하며, 60초마다 자동으로 새 스냅샷을 확인합니다. 원본 API 동기화가 필요하면 옆의 `API 동기화 실행` 링크에서 GitHub Actions 워크플로를 실행합니다. Notion이 `cached`로 표시되면 새로고침 버튼 문제가 아니라 `NOTION_TOKEN` 설정이 없거나 인증에 실패한 상태입니다.
 
 ## 핵심 링크
 
