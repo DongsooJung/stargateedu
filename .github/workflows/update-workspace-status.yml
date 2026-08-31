@@ -7,6 +7,7 @@ on:
 
 permissions:
   contents: write
+  actions: write
 
 concurrency:
   group: update-workspace-status
@@ -39,9 +40,11 @@ jobs:
         run: node scripts/update-workspace-status.mjs
 
       - name: Commit refreshed snapshot
+        id: snapshot
         run: |
           if git diff --quiet -- pmo/data/latest.json; then
             echo "No workspace status changes"
+            echo "changed=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
           git config user.name "stargate-status-bot"
@@ -49,3 +52,10 @@ jobs:
           git add -- pmo/data/latest.json
           git commit -m "data: refresh Notion and OneNote status"
           git push
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+
+      - name: Publish refreshed snapshot
+        if: steps.snapshot.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh workflow run pages.yml --ref main
