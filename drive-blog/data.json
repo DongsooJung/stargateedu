@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "generatedAt": "2026-08-30T05:34:18.859046Z",
+  "generatedAt": "2026-09-01T07:22:00.559721Z",
   "source": {
     "type": "google-drive",
     "syncMethod": "public-folder-html",
@@ -11,10 +11,10 @@
   },
   "enrichment": {
     "version": 1,
-    "aiConfigured": false,
+    "aiConfigured": true,
     "aiDocuments": 0,
     "heuristicDocuments": 3,
-    "model": null
+    "model": "deepseek-chat"
   },
   "counts": {
     "documents": 3,
@@ -53,7 +53,6 @@
         "데이터 기반 AI 교육 정답을 빠르게 찾는 기술보다 문제를 구조화하는 힘을 핵심 역량으로 봅니다."
       ],
       "audience": "AI 도구를 업무·교육에 적용하려는 실무자 · 수학·알고리즘·AI 교육자와 학습자",
-      "enrichmentMode": "heuristic",
       "relatedProjects": [
         {
           "id": "koi-coach",
@@ -74,6 +73,7 @@
           "reason": "전략 / 전략, 사업 주제가 연결됩니다."
         }
       ],
+      "enrichmentMode": "heuristic",
       "contentHash": "cd1e9ef23e4b669d19e23dc0d981c83231ce437ad14d7ab17fe3a0b93a760da7",
       "enrichmentVersion": 1
     },
@@ -107,7 +107,6 @@
         "인터넷 없이도 모델을 돌릴 수 있고, 설치·실행이 매우 단순한 게 강점입니다."
       ],
       "audience": "AI 도구를 업무·교육에 적용하려는 실무자 · API·자동화·AI 운영 담당자",
-      "enrichmentMode": "heuristic",
       "relatedProjects": [
         {
           "id": "google-cloud",
@@ -128,6 +127,7 @@
           "reason": "자동화 / 관리, 자동화 주제가 연결됩니다."
         }
       ],
+      "enrichmentMode": "heuristic",
       "contentHash": "a27bb3092831de92b4690648196bcdd9267a5d7de3378b396a43fed8ae45b03b",
       "enrichmentVersion": 1
     },
@@ -161,7 +161,6 @@
         "개발자나 데이터 사이언 티스트처럼 기술을 다루는 사람들만이 AI를 이해하고 활용할 수 있다고 생각되었고, 일반 직무나 교육 현장에서는 다소 먼 이야기처럼 느껴졌다."
       ],
       "audience": "수학·알고리즘·AI 교육자와 학습자 · AI 도구를 업무·교육에 적용하려는 실무자",
-      "enrichmentMode": "heuristic",
       "relatedProjects": [
         {
           "id": "koi-coach",
@@ -182,6 +181,7 @@
           "reason": "AI / 자동화 주제가 연결됩니다."
         }
       ],
+      "enrichmentMode": "heuristic",
       "contentHash": "4050523cfd934c7d518e6e280119214636ac0b953e4a9277212160f62cf7af21",
       "enrichmentVersion": 1
     }
