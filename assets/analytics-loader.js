@@ -8,6 +8,25 @@
   var MAIN_HOST = 'stargateedu.co.kr';
   var BLOG_HOST = 'blog.stargateedu.co.kr';
 
+  function injectSupportShortcut() {
+    if (document.getElementById('stargate-support-shortcut')) return;
+    var style = document.createElement('style');
+    style.textContent = '#stargate-support-shortcut{position:fixed;right:18px;bottom:18px;z-index:9998;display:inline-flex;align-items:center;gap:8px;padding:12px 16px;border-radius:999px;background:#0b1738;color:#fff!important;border:1px solid rgba(217,164,65,.75);box-shadow:0 12px 30px rgba(0,0,0,.24);font:700 13px/1.2 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;text-decoration:none!important}#stargate-support-shortcut:hover{background:#d9a441;color:#0b1738!important}@media(max-width:720px){#stargate-support-shortcut{right:12px;bottom:12px;padding:11px 14px;font-size:12px}}@media print{#stargate-support-shortcut{display:none!important}}';
+    document.head.appendChild(style);
+    var link = document.createElement('a');
+    link.id = 'stargate-support-shortcut';
+    link.href = 'https://stargateedu.co.kr/support/';
+    link.setAttribute('aria-label', '고객센터 및 불편사항 접수');
+    link.textContent = '💬 고객센터';
+    document.body.appendChild(link);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', injectSupportShortcut, { once: true });
+  } else {
+    injectSupportShortcut();
+  }
+
   function init() {
     var cfg = window.STARGATE_ANALYTICS || {};
     var id = String(cfg.measurement_id || '').trim();
@@ -47,7 +66,7 @@
         window.gtag('event', 'main_to_blog', { link_url: url.href, link_text: text });
       }
 
-      var leadPattern = /(문의|상담|견적|신청|구매|결제|contact|consult|inquiry|shop|wishket)/i;
+      var leadPattern = /(문의|상담|고객센터|불편|컴플레인|견적|신청|구매|결제|contact|consult|support|complaint|inquiry|shop|wishket)/i;
       if (url.protocol === 'mailto:' || url.protocol === 'tel:' || leadPattern.test(text) || leadPattern.test(url.pathname)) {
         window.gtag('event', 'lead_click', { link_url: url.href, link_text: text });
       }
