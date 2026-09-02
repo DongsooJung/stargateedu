@@ -12,7 +12,7 @@
     .brand{display:flex;align-items:center;gap:10px;font-weight:900;color:var(--navy);letter-spacing:.3px}.dot{width:10px;height:10px;border-radius:50%;background:var(--gold);box-shadow:0 0 12px var(--gold)}
     h1{margin:26px 0 8px;font-size:28px;color:var(--navy)}p{margin:0 0 24px;color:var(--muted);line-height:1.6}
     .btn{width:100%;border:0;border-radius:14px;padding:15px 18px;font-size:15px;font-weight:800;cursor:pointer;margin-top:12px;display:flex;align-items:center;justify-content:center;gap:10px}
-    .kakao{background:#FEE500;color:#191919}.naver{background:#03C75A;color:#fff}.btn:disabled{opacity:.45;cursor:not-allowed}
+    .google{background:#fff;color:#202124;border:1px solid #dadce0}.kakao{background:#FEE500;color:#191919}.naver{background:#03C75A;color:#fff}.btn:disabled{opacity:.45;cursor:not-allowed}
     .status{margin-top:18px;padding:12px 14px;border-radius:12px;background:#f3f5fa;color:#5e6782;font-size:13px;line-height:1.5}.home{display:block;text-align:center;margin-top:20px;color:var(--navy);font-size:13px;text-decoration:none}
   </style>
 </head>
@@ -20,7 +20,8 @@
   <main class="card">
     <div class="brand"><span class="dot"></span>STARGATE EDU</div>
     <h1>로그인</h1>
-    <p>네이버 또는 카카오 계정으로 간편하게 로그인하세요.</p>
+    <p>Google, 네이버 또는 카카오 계정으로 간편하게 로그인하세요.</p>
+    <button id="google-login" class="btn google" type="button">G&nbsp;&nbsp;Google로 로그인</button>
     <button id="kakao-login" class="btn kakao" type="button">카카오로 로그인</button>
     <button id="naver-login" class="btn naver" type="button">네이버로 로그인</button>
     <div id="auth-status" class="status" aria-live="polite">인증 설정을 확인하는 중입니다.</div>
