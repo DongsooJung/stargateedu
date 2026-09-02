@@ -27,7 +27,7 @@ jobs:
 
       - name: Fetch official APIs
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
           GITHUB_OWNER: DongsooJung
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
           NOTION_DATA_SOURCE_IDS: ${{ vars.NOTION_DATA_SOURCE_IDS }}
@@ -57,5 +57,5 @@ jobs:
       - name: Publish refreshed snapshot
         if: steps.snapshot.outputs.changed == 'true'
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ github.token }}
         run: gh workflow run pages.yml --ref main
