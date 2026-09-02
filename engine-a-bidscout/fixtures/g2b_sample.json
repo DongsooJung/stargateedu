@@ -1,0 +1,114 @@
+{
+  "_warning": "이 파일은 파이프라인 배선 검증용 FIXTURE 입니다. 실제 나라장터 공고가 아닙니다. 모든 공고명에 [FIXTURE] 접두어가 붙어 있고 source=fixture 로 표시됩니다. 실데이터와 절대 섞어 쓰지 마십시오.",
+  "_generated_for": "BidScout OFFLINE mode",
+  "items": [
+    {
+      "bid_no": "F0000000001", "bid_ord": "00",
+      "title": "[FIXTURE] 도시데이터 통합 대시보드 구축 용역",
+      "agency": "예시광역시청", "demand_agency": "예시광역시 정보통신담당관",
+      "budget": 180000000, "method": "일반경쟁",
+      "posted_at": "202609010900", "deadline": "202609151800",
+      "url": "https://example.invalid/fixture/1",
+      "region": "서울", "industry": "소프트웨어개발", "category": "용역", "source": "fixture"
+    },
+    {
+      "bid_no": "F0000000002", "bid_ord": "00",
+      "title": "[FIXTURE] 청사 시설관리 및 청소 용역",
+      "agency": "예시군청", "demand_agency": "예시군청 총무과",
+      "budget": 420000000, "method": "제한경쟁",
+      "posted_at": "202609010930", "deadline": "202609121800",
+      "url": "https://example.invalid/fixture/2",
+      "region": "전남", "industry": "건물관리", "category": "용역", "source": "fixture"
+    },
+    {
+      "bid_no": "F0000000003", "bid_ord": "00",
+      "title": "[FIXTURE] 부동산 실거래 빅데이터 분석 및 시각화 연구용역",
+      "agency": "예시연구원", "demand_agency": "예시연구원 도시연구실",
+      "budget": 68000000, "method": "협상에의한계약",
+      "posted_at": "202609011010", "deadline": "202609181800",
+      "url": "https://example.invalid/fixture/3",
+      "region": "전국", "industry": "연구개발", "category": "용역", "source": "fixture"
+    },
+    {
+      "bid_no": "F0000000004", "bid_ord": "00",
+      "title": "[FIXTURE] 차세대 통합정보시스템 재구축 사업",
+      "agency": "예시공단", "demand_agency": "예시공단 정보화본부",
+      "budget": 8400000000, "method": "일반경쟁",
+      "posted_at": "202609011100", "deadline": "202610021800",
+      "url": "https://example.invalid/fixture/4",
+      "region": "전국", "industry": "소프트웨어개발", "category": "용역", "source": "fixture"
+    },
+    {
+      "bid_no": "F0000000005", "bid_ord": "00",
+      "title": "[FIXTURE] 학교 정보교육 콘텐츠 개발 및 교원연수 운영",
+      "agency": "예시교육청", "demand_agency": "예시교육청 미래교육과",
+      "budget": 95000000, "method": "협상에의한계약",
+      "posted_at": "202609011130", "deadline": "202609221800",
+      "url": "https://example.invalid/fixture/5",
+      "region": "서울", "industry": "교육서비스", "category": "용역", "source": "fixture"
+    },
+    {
+      "bid_no": "F0000000006", "bid_ord": "00",
+      "title": "[FIXTURE] 관내 도로 포장공사",
+      "agency": "예시시청", "demand_agency": "예시시청 건설과",
+      "budget": 1250000000, "method": "일반경쟁",
+      "posted_at": "202609011200", "deadline": "202609161800",
+      "url": "https://example.invalid/fixture/6",
+      "region": "경기", "industry": "토목", "category": "공사", "source": "fixture"
+    },
+    {
+      "bid_no": "F0000000007", "bid_ord": "00",
+      "title": "[FIXTURE] 홈페이지 개편 및 반응형 웹 고도화",
+      "agency": "예시진흥원", "demand_agency": "예시진흥원 대외협력팀",
+      "budget": 42000000, "method": "제한경쟁",
+      "posted_at": "202609011240", "deadline": "202609111800",
+      "url": "https://example.invalid/fixture/7",
+      "region": "전국", "industry": "소프트웨어개발", "category": "용역", "source": "fixture"
+    },
+    {
+      "bid_no": "F0000000008", "bid_ord": "00",
+      "title": "[FIXTURE] 생활인구 기반 상권분석 AI 모델 개발",
+      "agency": "예시테크노파크", "demand_agency": "예시테크노파크 데이터사업단",
+      "budget": 240000000, "method": "협상에의한계약",
+      "posted_at": "202609011330", "deadline": "202609251800",
+      "url": "https://example.invalid/fixture/8",
+      "region": "전국", "industry": "소프트웨어개발", "category": "용역", "source": "fixture"
+    },
+    {
+      "bid_no": "F0000000009", "bid_ord": "00",
+      "title": "[FIXTURE] 구내식당 급식 위탁운영",
+      "agency": "예시청", "demand_agency": "예시청 운영지원과",
+      "budget": 310000000, "method": "일반경쟁",
+      "posted_at": "202609011400", "deadline": "202609131800",
+      "url": "https://example.invalid/fixture/9",
+      "region": "세종", "industry": "급식", "category": "용역", "source": "fixture"
+    },
+    {
+      "bid_no": "F0000000010", "bid_ord": "00",
+      "title": "[FIXTURE] 공공데이터 개방 품질진단 및 정비 지원",
+      "agency": "예시원", "demand_agency": "예시원 데이터기반행정과",
+      "budget": 130000000, "method": "협상에의한계약",
+      "posted_at": "202609011430", "deadline": "202609231800",
+      "url": "https://example.invalid/fixture/10",
+      "region": "전국", "industry": "정보서비스", "category": "용역", "source": "fixture"
+    },
+    {
+      "bid_no": "F0000000011", "bid_ord": "00",
+      "title": "[FIXTURE] 정보보호 관제센터 운영 위탁",
+      "agency": "예시공사", "demand_agency": "예시공사 보안팀",
+      "budget": 1900000000, "method": "일반경쟁",
+      "posted_at": "202609011500", "deadline": "202609301800",
+      "url": "https://example.invalid/fixture/11",
+      "region": "전국", "industry": "정보보호", "category": "용역", "source": "fixture"
+    },
+    {
+      "bid_no": "F0000000012", "bid_ord": "00",
+      "title": "[FIXTURE] 지역 관광 통계 시각화 포털 유지관리",
+      "agency": "예시관광재단", "demand_agency": "예시관광재단 정책실",
+      "budget": 27000000, "method": "제한경쟁",
+      "posted_at": "202609011530", "deadline": "202609101800",
+      "url": "https://example.invalid/fixture/12",
+      "region": "부산", "industry": "소프트웨어개발", "category": "용역", "source": "fixture"
+    }
+  ]
+}

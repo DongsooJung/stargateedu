@@ -1,0 +1,9 @@
+# 2026-09-01 기준 실존 확인 완료
+fastapi==0.141.1
+uvicorn[standard]==0.52.4
+python-multipart==0.0.32
+httpx==0.28.1
+pydantic==2.13.5
+google-genai==2.21.0
+google-cloud-firestore==2.29.0
+google-cloud-storage==3.13.1

@@ -1,0 +1,112 @@
+name: Deploy Monetization Engines
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'engine-a-bidscout/**'
+      - 'engine-b-mathgrader/**'
+      - 'math-grader/**'
+      - 'strategy/bidscout/**'
+      - '.github/workflows/deploy-monetization-engines.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: stargate-monetization-engines-production
+  cancel-in-progress: false
+
+env:
+  PROJECT_ID: ${{ vars.GCP_PROJECT_ID }}
+  REGION: ${{ vars.GCP_REGION || 'asia-northeast3' }}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v3
+        with:
+          project_id: ${{ env.PROJECT_ID }}
+          workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.GCP_DEPLOY_SERVICE_ACCOUNT }}
+
+      - name: Set up Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v3
+
+      - name: Deploy BidScout demo
+        id: bid
+        uses: google-github-actions/deploy-cloudrun@v3
+        with:
+          project_id: ${{ env.PROJECT_ID }}
+          service: bidscout
+          region: ${{ env.REGION }}
+          source: ./engine-a-bidscout
+          env_vars: |-
+            OFFLINE=1
+            ALLOW_ORIGINS=https://www.stargateedu.co.kr,https://stargateedu.co.kr
+          flags: >-
+            --allow-unauthenticated
+            --min-instances=0
+            --max-instances=2
+            --cpu=1
+            --memory=512Mi
+            --timeout=300s
+
+      - name: Deploy MathGrader demo
+        id: math
+        uses: google-github-actions/deploy-cloudrun@v3
+        with:
+          project_id: ${{ env.PROJECT_ID }}
+          service: mathgrader
+          region: ${{ env.REGION }}
+          source: ./engine-b-mathgrader
+          env_vars: |-
+            OFFLINE=1
+            ALLOW_ORIGINS=https://www.stargateedu.co.kr,https://stargateedu.co.kr
+          flags: >-
+            --allow-unauthenticated
+            --min-instances=0
+            --max-instances=3
+            --cpu=1
+            --memory=512Mi
+            --timeout=120s
+
+      - name: Resolve service URLs and smoke test
+        id: services
+        env:
+          BID_URL: ${{ steps.bid.outputs.url }}
+          MATH_URL: ${{ steps.math.outputs.url }}
+        run: |
+          set -euo pipefail
+          curl --fail --silent --show-error --retry 8 --retry-delay 5 "${BID_URL}/healthz" >/tmp/bid-health.json
+          curl --fail --silent --show-error --retry 8 --retry-delay 5 "${MATH_URL}/healthz" >/tmp/math-health.json
+          grep -q '"ok":true' /tmp/bid-health.json
+          grep -q '"ok":true' /tmp/math-health.json
+          curl --fail --silent --show-error -X POST "${BID_URL}/run" \
+            -H 'Content-Type: application/json' \
+            -d '{"days_back":1,"categories":["용역"],"dry_run":true,"notify":false}' >/tmp/bid-run.json
+          echo "bid_url=${BID_URL}" >> "$GITHUB_OUTPUT"
+          echo "math_url=${MATH_URL}" >> "$GITHUB_OUTPUT"
+
+      - name: Summary
+        env:
+          BID_URL: ${{ steps.services.outputs.bid_url }}
+          MATH_URL: ${{ steps.services.outputs.math_url }}
+        run: |
+          {
+            echo '## STARGATE monetization engines'
+            echo
+            echo "- BidScout: ${BID_URL}"
+            echo "- MathGrader: ${MATH_URL}"
+            echo '- Homepage: https://www.stargateedu.co.kr/'
+          } >> "$GITHUB_STEP_SUMMARY"

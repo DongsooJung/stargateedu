@@ -1,0 +1,9 @@
+# 2026-09-01 기준 실존 확인 완료 (pip download --no-deps 로 검증)
+# google-genai 는 2.x 메이저입니다. 1.x 로 내리면 Client 시그니처가 달라집니다.
+fastapi==0.141.1
+uvicorn[standard]==0.52.4
+httpx==0.28.1
+pydantic==2.13.5
+google-genai==2.21.0
+google-cloud-firestore==2.29.0
+supabase==2.31.0
