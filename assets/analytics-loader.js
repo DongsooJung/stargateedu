@@ -16,8 +16,8 @@
     var link = document.createElement('a');
     link.id = 'stargate-support-shortcut';
     link.href = 'https://stargateedu.co.kr/support/';
-    link.setAttribute('aria-label', '고객센터 및 불편사항 접수');
-    link.textContent = '💬 고객센터';
+    link.setAttribute('aria-label', '대표와 직접 대화하기');
+    link.textContent = '💬 대표와 직접 대화';
     document.body.appendChild(link);
   }
 
@@ -66,7 +66,7 @@
         window.gtag('event', 'main_to_blog', { link_url: url.href, link_text: text });
       }
 
-      var leadPattern = /(문의|상담|고객센터|불편|컴플레인|견적|신청|구매|결제|contact|consult|support|complaint|inquiry|shop|wishket)/i;
+      var leadPattern = /(문의|상담|고객센터|대표|직접 대화|불편|컴플레인|견적|신청|구매|결제|contact|consult|support|complaint|inquiry|shop|wishket)/i;
       if (url.protocol === 'mailto:' || url.protocol === 'tel:' || leadPattern.test(text) || leadPattern.test(url.pathname)) {
         window.gtag('event', 'lead_click', { link_url: url.href, link_text: text });
       }
