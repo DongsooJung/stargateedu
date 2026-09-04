@@ -1,17 +1,53 @@
+import json
 import os
+import secrets
+import threading
 import time
+import uuid
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Literal, Optional
 
 import pyautogui
-from fastapi import FastAPI, HTTPException
+from fastapi import Depends, FastAPI, Header, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from pywinauto import Desktop
 from pywinauto.application import Application
 
-app = FastAPI(title="Stargate Windows RPA Agent", version="0.1.0")
+app = FastAPI(title="Stargate Windows RPA Agent", version="0.2.0")
+
 SCREENSHOT_DIR = Path(os.getenv("STARGATE_SCREENSHOT_DIR", "screenshots"))
+LOG_DIR = Path(os.getenv("STARGATE_LOG_DIR", "logs"))
 SCREENSHOT_DIR.mkdir(parents=True, exist_ok=True)
+LOG_DIR.mkdir(parents=True, exist_ok=True)
+
+API_TOKEN = os.getenv("STARGATE_AGENT_TOKEN", "")
+ALLOWED_EXECUTABLES = {
+    x.strip().lower()
+    for x in os.getenv("STARGATE_ALLOWED_EXECUTABLES", "notepad.exe,calc.exe").split(",")
+    if x.strip()
+}
+ALLOWED_ORIGINS = [
+    x.strip()
+    for x in os.getenv(
+        "STARGATE_ALLOWED_ORIGINS",
+        "https://www.stargateedu.co.kr,https://stargateedu.co.kr,http://localhost:3000",
+    ).split(",")
+    if x.strip()
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=ALLOWED_ORIGINS,
+    allow_credentials=False,
+    allow_methods=["GET", "POST"],
+    allow_headers=["Authorization", "Content-Type"],
+)
+
+RUN_LOCK = threading.Lock()
+RUN_HISTORY: list[dict] = []
+MAX_HISTORY = 100
 
 
 class Action(BaseModel):
@@ -31,12 +67,37 @@ class Action(BaseModel):
     control_type: Optional[str] = None
     text: Optional[str] = None
     keys: list[str] = Field(default_factory=list)
-    seconds: float = 1.0
+    seconds: float = Field(default=1.0, ge=0, le=60)
     screenshot_name: Optional[str] = None
 
 
 class RunRequest(BaseModel):
-    actions: list[Action]
+    name: str = Field(default="manual-task", max_length=120)
+    actions: list[Action] = Field(min_length=1, max_length=100)
+
+
+def require_token(authorization: Optional[str] = Header(default=None)):
+    if not API_TOKEN:
+        raise HTTPException(
+            status_code=503,
+            detail="STARGATE_AGENT_TOKEN is not configured on this PC",
+        )
+    expected = f"Bearer {API_TOKEN}"
+    if not authorization or not secrets.compare_digest(authorization, expected):
+        raise HTTPException(status_code=401, detail="Invalid agent token")
+
+
+def utc_now():
+    return datetime.now(timezone.utc).isoformat()
+
+
+def append_log(record: dict):
+    RUN_HISTORY.insert(0, record)
+    del RUN_HISTORY[MAX_HISTORY:]
+    day = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    path = LOG_DIR / f"runs-{day}.jsonl"
+    with path.open("a", encoding="utf-8") as fp:
+        fp.write(json.dumps(record, ensure_ascii=False) + "\n")
 
 
 def find_window(title_re: str):
@@ -45,12 +106,23 @@ def find_window(title_re: str):
     return window
 
 
-def run_action(action: Action):
+def safe_screenshot_name(name: Optional[str], run_id: str):
+    raw = name or f"shot-{run_id}-{int(time.time())}.png"
+    safe = "".join(c for c in raw if c.isalnum() or c in ("-", "_", "."))
+    if not safe.lower().endswith(".png"):
+        safe += ".png"
+    return safe
+
+
+def run_action(action: Action, run_id: str):
     if action.type == "launch":
         if not action.executable:
             raise ValueError("executable is required")
+        executable = Path(action.executable).name.lower()
+        if executable not in ALLOWED_EXECUTABLES:
+            raise ValueError(f"executable is not allowlisted: {executable}")
         Application(backend="uia").start(action.executable)
-        return {"ok": True, "action": "launch"}
+        return {"ok": True, "action": "launch", "executable": executable}
 
     if action.type == "list_windows":
         titles = []
@@ -61,17 +133,17 @@ def run_action(action: Action):
                     titles.append(title)
             except Exception:
                 pass
-        return {"ok": True, "windows": titles}
+        return {"ok": True, "action": "list_windows", "windows": titles[:200]}
 
     if action.type == "wait":
-        time.sleep(max(action.seconds, 0))
+        time.sleep(action.seconds)
         return {"ok": True, "action": "wait", "seconds": action.seconds}
 
     if action.type == "screenshot":
-        filename = action.screenshot_name or f"shot-{int(time.time())}.png"
+        filename = safe_screenshot_name(action.screenshot_name, run_id)
         path = SCREENSHOT_DIR / filename
         pyautogui.screenshot(str(path))
-        return {"ok": True, "path": str(path)}
+        return {"ok": True, "action": "screenshot", "path": str(path)}
 
     if not action.window_title_re:
         raise ValueError("window_title_re is required")
@@ -116,18 +188,53 @@ def run_action(action: Action):
 
 @app.get("/health")
 def health():
-    return {"ok": True, "service": "stargate-windows-agent"}
+    return {
+        "ok": True,
+        "service": "stargate-windows-agent",
+        "version": "0.2.0",
+        "token_configured": bool(API_TOKEN),
+        "allowed_executables": sorted(ALLOWED_EXECUTABLES),
+        "busy": RUN_LOCK.locked(),
+    }
 
 
-@app.post("/run")
+@app.get("/runs", dependencies=[Depends(require_token)])
+def runs():
+    return {"ok": True, "runs": RUN_HISTORY}
+
+
+@app.post("/run", dependencies=[Depends(require_token)])
 def run(request: RunRequest):
-    results = []
-    for index, action in enumerate(request.actions):
-        try:
-            results.append(run_action(action))
-        except Exception as exc:
-            raise HTTPException(
-                status_code=400,
-                detail={"index": index, "action": action.type, "error": str(exc)},
-            ) from exc
-    return {"ok": True, "results": results}
+    if not RUN_LOCK.acquire(blocking=False):
+        raise HTTPException(status_code=409, detail="Agent is already running another task")
+
+    run_id = str(uuid.uuid4())
+    record = {
+        "id": run_id,
+        "name": request.name,
+        "started_at": utc_now(),
+        "finished_at": None,
+        "status": "running",
+        "results": [],
+        "error": None,
+    }
+
+    try:
+        for index, action in enumerate(request.actions):
+            try:
+                result = run_action(action, run_id)
+                record["results"].append({"index": index, **result})
+            except Exception as exc:
+                record["status"] = "failed"
+                record["error"] = {
+                    "index": index,
+                    "action": action.type,
+                    "message": str(exc),
+                }
+                raise HTTPException(status_code=400, detail=record["error"]) from exc
+        record["status"] = "success"
+        return {"ok": True, "run_id": run_id, "results": record["results"]}
+    finally:
+        record["finished_at"] = utc_now()
+        append_log(record)
+        RUN_LOCK.release()
