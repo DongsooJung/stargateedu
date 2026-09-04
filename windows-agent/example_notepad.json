@@ -1,0 +1,9 @@
+{
+  "actions": [
+    {"type": "launch", "executable": "notepad.exe"},
+    {"type": "wait", "seconds": 1.5},
+    {"type": "type", "window_title_re": ".*(Notepad|메모장).*", "control_type": "Document", "text": "Stargate Windows RPA test"},
+    {"type": "hotkey", "window_title_re": ".*(Notepad|메모장).*", "keys": ["ctrl", "s"]},
+    {"type": "screenshot", "screenshot_name": "notepad-test.png"}
+  ]
+}
