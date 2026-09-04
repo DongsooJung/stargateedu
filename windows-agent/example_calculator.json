@@ -1,0 +1,12 @@
+{
+  "actions": [
+    {"type": "launch", "executable": "calc.exe"},
+    {"type": "wait", "seconds": 1.5},
+    {"type": "focus", "window_title_re": ".*(Calculator|계산기).*"},
+    {"type": "hotkey", "window_title_re": ".*(Calculator|계산기).*", "keys": ["2"]},
+    {"type": "hotkey", "window_title_re": ".*(Calculator|계산기).*", "keys": ["+"]},
+    {"type": "hotkey", "window_title_re": ".*(Calculator|계산기).*", "keys": ["3"]},
+    {"type": "hotkey", "window_title_re": ".*(Calculator|계산기).*", "keys": ["enter"]},
+    {"type": "screenshot", "screenshot_name": "calculator-test.png"}
+  ]
+}
