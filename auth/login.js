@@ -3,7 +3,7 @@ const googleBtn = document.getElementById('google-login');
 const kakaoBtn = document.getElementById('kakao-login');
 const naverBtn = document.getElementById('naver-login');
 
-const AUTH_ORIGIN = 'https://2026-plan-git-main-stargate2.vercel.app';
+const AUTH_ORIGIN = 'https://2026-plan.vercel.app';
 
 function setStatus(message) {
   statusEl.textContent = message;
