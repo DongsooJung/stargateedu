@@ -1,0 +1,20 @@
+{
+  "generatedAt": null,
+  "mode": "config_required",
+  "message": "공공데이터 인증 연결을 준비하고 있습니다.",
+  "source": {
+    "name": "인천국제공항공사_화물편 운항현황",
+    "url": "https://www.data.go.kr/data/15095068/openapi.do",
+    "intervalMinutes": 10
+  },
+  "summary": {
+    "total": 0,
+    "arrived": 0,
+    "delayed": 0,
+    "cancelled": 0,
+    "airlines": 0,
+    "origins": 0,
+    "averageDelayMinutes": 0
+  },
+  "flights": []
+}

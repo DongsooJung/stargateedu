@@ -1,0 +1,51 @@
+name: Update Air Cargo Live
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "scripts/update-air-cargo-live.mjs"
+      - ".github/workflows/update-air-cargo-live.yml"
+  schedule:
+    - cron: "*/10 * * * *"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-air-cargo-live
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Collect Incheon cargo-flight data
+        env:
+          DATA_GO_KR_API_KEY: ${{ secrets.DATA_GO_KR_API_KEY }}
+        run: node scripts/update-air-cargo-live.mjs
+
+      - name: Commit changed flight data
+        run: |
+          if git diff --quiet -- strategy/air-cargo-live/data/latest.json; then
+            echo "No air-cargo data changes to commit."
+            exit 0
+          fi
+          git config user.name "stargate-data-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add -- strategy/air-cargo-live/data/latest.json
+          git commit -m "data: refresh air cargo live"
+          git pull --rebase origin main
+          git push origin main
