@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-09-07T04:50:54.780Z",
+  "generatedAt": "2026-09-07T12:43:15.133Z",
   "timezone": "Asia/Seoul",
   "summary": {
     "notionProjects": 4,
@@ -13,20 +13,20 @@
     "notion": {
       "status": "cached",
       "message": "Notion API 인증 정보 대기 · 마지막 정상 데이터를 표시합니다.",
-      "checkedAt": "2026-09-07T04:50:54.780Z",
+      "checkedAt": "2026-09-07T12:43:15.133Z",
       "lastSuccessfulSync": "2026-08-28T00:00:00.000Z"
     },
     "onenote": {
       "status": "setup",
       "message": "Microsoft Graph 위임형 OAuth 연결이 필요합니다.",
-      "checkedAt": "2026-09-07T04:50:54.780Z",
+      "checkedAt": "2026-09-07T12:43:15.133Z",
       "lastSuccessfulSync": null
     },
     "github": {
       "status": "live",
       "message": "GitHub 프로젝트 14건 동기화",
-      "checkedAt": "2026-09-07T04:50:54.780Z",
-      "lastSuccessfulSync": "2026-09-07T04:50:54.780Z"
+      "checkedAt": "2026-09-07T12:43:15.133Z",
+      "lastSuccessfulSync": "2026-09-07T12:43:15.133Z"
     }
   },
   "projects": [
@@ -78,21 +78,21 @@
   "notes": [],
   "repositories": [
     {
-      "id": "1197905740",
-      "source": "github",
-      "title": "stargateedu",
-      "description": "STARGATE EDU - 대치동 수학·KOI 전문 교육 랜딩페이지",
-      "updatedAt": "2026-09-07T04:39:14Z",
-      "url": "https://github.com/DongsooJung/stargateedu",
-      "visibility": "public"
-    },
-    {
       "id": "1216883271",
       "source": "github",
       "title": "stargate-blog-hub",
       "description": "blog.stargate11.com 5-channel hub landing",
-      "updatedAt": "2026-09-06T20:04:50Z",
+      "updatedAt": "2026-09-07T05:59:06Z",
       "url": "https://github.com/DongsooJung/stargate-blog-hub",
+      "visibility": "public"
+    },
+    {
+      "id": "1197905740",
+      "source": "github",
+      "title": "stargateedu",
+      "description": "STARGATE EDU - 대치동 수학·KOI 전문 교육 랜딩페이지",
+      "updatedAt": "2026-09-07T04:59:45Z",
+      "url": "https://github.com/DongsooJung/stargateedu",
       "visibility": "public"
     },
     {
