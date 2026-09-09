@@ -30,7 +30,7 @@ env:
   # an existing DeepSeek secret when the generic AI_API_KEY is not configured.
   AI_API_BASE: ${{ vars.AI_API_BASE || 'https://api.deepseek.com' }}
   AI_API_KEY: ${{ secrets.AI_API_KEY || secrets.DEEPSEEK_API_KEY }}
-  AI_MODEL: ${{ vars.AI_MODEL || 'deepseek-chat' }}
+  AI_MODEL: ${{ vars.AI_MODEL || 'deepseek-v4-flash' }}
 
 jobs:
   sync:
@@ -59,6 +59,20 @@ jobs:
           python -m pip install --upgrade pip
           pip install google-api-python-client google-auth requests beautifulsoup4 pypdf
 
+      - name: Resolve current DeepSeek model
+        run: |
+          python - <<'PY'
+          import os
+          model = os.getenv('AI_MODEL', '').strip()
+          if model in {'deepseek-chat', 'deepseek-coder'}:
+              model = 'deepseek-v4-flash'
+              with open(os.environ['GITHUB_ENV'], 'a', encoding='utf-8') as f:
+                  f.write(f'AI_MODEL={model}\n')
+              print('Migrated legacy DeepSeek model alias to:', model)
+          else:
+              print('AI model:', model or 'unset')
+          PY
+
       - name: Report AI provider readiness
         run: |
           python - <<'PY'
@@ -69,6 +83,32 @@ jobs:
           print('AI provider:', 'configured' if key else 'credential missing')
           print('AI base:', base or 'unset')
           print('AI model:', model or 'unset')
+          PY
+
+      - name: Invalidate legacy heuristic cache for AI migration
+        if: ${{ env.AI_API_KEY != '' }}
+        run: |
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          p = Path('drive-blog/data.json')
+          if not p.exists():
+              raise SystemExit(0)
+          data = json.loads(p.read_text(encoding='utf-8'))
+          target_model = os.getenv('AI_MODEL', '').strip()
+          current_model = str(data.get('enrichment', {}).get('model') or '')
+          docs = data.get('documents', [])
+          changed = False
+          if current_model != target_model:
+              for doc in docs:
+                  if doc.get('enrichmentMode') != 'ai':
+                      doc['enrichmentVersion'] = 0
+                      changed = True
+          if changed:
+              p.write_text(json.dumps(data, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+              print(f'Invalidated heuristic cache: {current_model or "none"} -> {target_model}')
+          else:
+              print('No AI cache migration needed')
           PY
 
       - name: Refresh and enrich Drive archive index
@@ -89,9 +129,15 @@ jobs:
           assert all(d.get('smartSummary') and len(d.get('keyPoints', [])) == 3 for d in docs)
           assert all(d.get('audience') and d.get('relatedProjects') for d in docs)
           enrichment = data.get('enrichment', {})
+          if enrichment.get('aiConfigured'):
+              assert enrichment.get('aiDocuments', 0) == len(docs), (
+                  f"AI configured but only {enrichment.get('aiDocuments', 0)}/{len(docs)} documents were AI-enriched"
+              )
+              assert enrichment.get('heuristicDocuments', 0) == 0, 'Heuristic fallback remains while AI is configured'
           print(
               f"Validated {len(docs)} Drive documents via {data.get('source', {}).get('syncMethod', 'unknown')} | "
-              f"AI={enrichment.get('aiDocuments', 0)} heuristic={enrichment.get('heuristicDocuments', 0)}"
+              f"AI={enrichment.get('aiDocuments', 0)} heuristic={enrichment.get('heuristicDocuments', 0)} | "
+              f"model={enrichment.get('model') or 'none'}"
           )
           PY
 
