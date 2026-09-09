@@ -94,19 +94,23 @@ jobs:
           if-no-files-found: error
           retention-days: 3
 
-      - name: Require DeepSeek API readiness
-        if: ${{ env.AI_API_KEY != '' }}
+      - name: Set DeepSeek readiness gate
         run: |
           python - <<'PY'
-          import json
+          import json, os
           health = json.load(open('/tmp/deepseek-health.json', encoding='utf-8'))
           status = health.get('status')
+          has_key = bool(os.getenv('AI_API_KEY', '').strip())
+          ready = (not has_key) or status == 'ok'
+          with open(os.environ['GITHUB_ENV'], 'a', encoding='utf-8') as f:
+              f.write(f"AI_HEALTH_OK={'true' if ready else 'false'}\n")
           print('DeepSeek readiness:', status)
-          assert status == 'ok', f"DeepSeek API is not ready: {status}"
+          if has_key and not ready:
+              print(f"::warning::DeepSeek enrichment paused safely because API health is {status}. Existing archive remains unchanged and the next scheduled run will re-check automatically.")
           PY
 
       - name: Invalidate legacy heuristic cache for AI migration
-        if: ${{ env.AI_API_KEY != '' }}
+        if: ${{ env.AI_API_KEY != '' && env.AI_HEALTH_OK == 'true' }}
         run: |
           python - <<'PY'
           import json, os
@@ -132,6 +136,7 @@ jobs:
           PY
 
       - name: Refresh and enrich Drive archive index
+        if: ${{ env.AI_API_KEY == '' || env.AI_HEALTH_OK == 'true' }}
         run: python scripts/update-drive-blog-deepseek.py
 
       - name: Upload DeepSeek enrichment diagnostics
@@ -144,6 +149,7 @@ jobs:
           retention-days: 3
 
       - name: Validate generated index
+        if: ${{ env.AI_API_KEY == '' || env.AI_HEALTH_OK == 'true' }}
         run: |
           python - <<'PY'
           import json
@@ -171,6 +177,7 @@ jobs:
           PY
 
       - name: Commit archive snapshot when changed
+        if: ${{ env.AI_API_KEY == '' || env.AI_HEALTH_OK == 'true' }}
         id: commit_archive
         run: |
           git add drive-blog/data.json
@@ -201,7 +208,7 @@ jobs:
             echo '- Folder: `스타게이트_공개블로그`'
             echo '- Index: `drive-blog/data.json`'
             echo '- Schedule: every 6 hours'
-            echo '- Changed: `${{ steps.commit_archive.outputs.changed || 'unknown' }}`'
+            echo '- Changed: `${{ steps.commit_archive.outputs.changed || 'false' }}`'
             if [ -f /tmp/deepseek-health.json ]; then
               python - <<'PY'
           import json
