@@ -5,9 +5,8 @@
   "summary": {
     "notionProjects": 4,
     "activeProjects": 4,
-    "averageProgress": 0,
-    "oneNotePages": 0,
-    "githubProjects": 14
+    "completedProjects": 0,
+    "averageProgress": 0
   },
   "sources": {
     "notion": {
@@ -15,18 +14,6 @@
       "message": "Notion API 인증 정보 대기 · 마지막 정상 데이터를 표시합니다.",
       "checkedAt": "2026-09-09T20:59:11.727Z",
       "lastSuccessfulSync": "2026-08-28T00:00:00.000Z"
-    },
-    "onenote": {
-      "status": "setup",
-      "message": "Microsoft Graph 위임형 OAuth 연결이 필요합니다.",
-      "checkedAt": "2026-09-09T20:59:11.727Z",
-      "lastSuccessfulSync": null
-    },
-    "github": {
-      "status": "live",
-      "message": "GitHub 프로젝트 14건 동기화",
-      "checkedAt": "2026-09-09T20:59:11.727Z",
-      "lastSuccessfulSync": "2026-09-09T20:59:11.727Z"
     }
   },
   "projects": [
@@ -73,135 +60,6 @@
       "nextAction": "오늘 날짜 기준 ‘오늘 할당’ 3개 확정",
       "updatedAt": null,
       "url": "https://app.notion.com/df23c1181c88439f94a3eaf811ae9072"
-    }
-  ],
-  "notes": [],
-  "repositories": [
-    {
-      "id": "1216883271",
-      "source": "github",
-      "title": "stargate-blog-hub",
-      "description": "blog.stargate11.com 5-channel hub landing",
-      "updatedAt": "2026-09-09T20:33:49Z",
-      "url": "https://github.com/DongsooJung/stargate-blog-hub",
-      "visibility": "public"
-    },
-    {
-      "id": "1197905740",
-      "source": "github",
-      "title": "stargateedu",
-      "description": "STARGATE EDU - 대치동 수학·KOI 전문 교육 랜딩페이지",
-      "updatedAt": "2026-09-09T16:43:53Z",
-      "url": "https://github.com/DongsooJung/stargateedu",
-      "visibility": "public"
-    },
-    {
-      "id": "1174184635",
-      "source": "github",
-      "title": "-stargate",
-      "description": "STARGATE HOMEPAGE",
-      "updatedAt": "2026-09-05T10:58:31Z",
-      "url": "https://github.com/DongsooJung/-stargate",
-      "visibility": "public"
-    },
-    {
-      "id": "1216882528",
-      "source": "github",
-      "title": "stargate-shop-redirect",
-      "description": "shop.stargate11.com -> stargateedu.co.kr 301 redirect",
-      "updatedAt": "2026-09-03T23:12:21Z",
-      "url": "https://github.com/DongsooJung/stargate-shop-redirect",
-      "visibility": "public"
-    },
-    {
-      "id": "1296108587",
-      "source": "github",
-      "title": "stargateedu-shop",
-      "description": "",
-      "updatedAt": "2026-09-07T00:16:47Z",
-      "url": "https://github.com/DongsooJung/stargateedu-shop",
-      "visibility": "public"
-    },
-    {
-      "id": "1218702339",
-      "source": "github",
-      "title": "stargate-main",
-      "description": "STARGATE 본사 - www.stargate11.com",
-      "updatedAt": "2026-09-07T00:16:49Z",
-      "url": "https://github.com/DongsooJung/stargate-main",
-      "visibility": "public"
-    },
-    {
-      "id": "1296614654",
-      "source": "github",
-      "title": "stargate-visual",
-      "description": "",
-      "updatedAt": "2026-08-05T21:19:46Z",
-      "url": "https://github.com/DongsooJung/stargate-visual",
-      "visibility": "public"
-    },
-    {
-      "id": "1218702459",
-      "source": "github",
-      "title": "stargate-blog",
-      "description": "STARGATE 블로그 - blog.stargateshop.co.kr",
-      "updatedAt": "2026-08-05T18:49:20Z",
-      "url": "https://github.com/DongsooJung/stargate-blog",
-      "visibility": "public"
-    },
-    {
-      "id": "1218702586",
-      "source": "github",
-      "title": "stargate-shop",
-      "description": "STARGATE 쇼핑몰 - stargateshop.co.kr",
-      "updatedAt": "2026-08-05T18:49:22Z",
-      "url": "https://github.com/DongsooJung/stargate-shop",
-      "visibility": "public"
-    },
-    {
-      "id": "1010560833",
-      "source": "github",
-      "title": "stargate.github.io",
-      "description": "",
-      "updatedAt": "2026-08-05T18:49:21Z",
-      "url": "https://github.com/DongsooJung/stargate.github.io",
-      "visibility": "public"
-    },
-    {
-      "id": "1215891910",
-      "source": "github",
-      "title": "stargate-ai-gallery",
-      "description": "Stargate AI-generated HTML gallery (51 curated files, 19 categories). Static site on GitHub Pages.",
-      "updatedAt": "2026-07-22T14:01:12Z",
-      "url": "https://github.com/DongsooJung/stargate-ai-gallery",
-      "visibility": "public"
-    },
-    {
-      "id": "1215998528",
-      "source": "github",
-      "title": "stargate-lp",
-      "description": "Stargate 쇼핑몰 랜딩페이지(lp.stargateedu.co.kr) - KOI 수학정보올림피아드 교육 브랜드",
-      "updatedAt": "2026-07-18T06:28:41Z",
-      "url": "https://github.com/DongsooJung/stargate-lp",
-      "visibility": "public"
-    },
-    {
-      "id": "1288151234",
-      "source": "github",
-      "title": "stargateedu-mobile",
-      "description": "Stargate EDU Mobile Web App - mobile.stargateedu.co.kr",
-      "updatedAt": "2026-09-04T06:37:05Z",
-      "url": "https://github.com/DongsooJung/stargateedu-mobile",
-      "visibility": "public"
-    },
-    {
-      "id": "1214946549",
-      "source": "github",
-      "title": "digital-asset-atlas",
-      "description": "Observatory v3 · 디지털 자산 지형도 대시보드 (Stargate Corp)",
-      "updatedAt": "2026-07-07T07:54:08Z",
-      "url": "https://github.com/DongsooJung/digital-asset-atlas",
-      "visibility": "public"
     }
   ]
 }

@@ -1,4 +1,4 @@
-name: Update Notion OneNote workspace status
+name: Update Notion project status
 
 on:
   schedule:
@@ -25,18 +25,10 @@ jobs:
         with:
           node-version: "20"
 
-      - name: Fetch official APIs
+      - name: Fetch Notion API
         env:
-          GITHUB_TOKEN: ${{ github.token }}
-          GITHUB_OWNER: DongsooJung
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
           NOTION_DATA_SOURCE_IDS: ${{ vars.NOTION_DATA_SOURCE_IDS }}
-          MS_CLIENT_ID: ${{ secrets.MS_CLIENT_ID }}
-          MS_CLIENT_SECRET: ${{ secrets.MS_CLIENT_SECRET }}
-          MS_TENANT_ID: ${{ vars.MS_TENANT_ID }}
-          MS_REFRESH_TOKEN: ${{ secrets.MS_REFRESH_TOKEN }}
-          ONENOTE_SECTION_IDS: ${{ vars.ONENOTE_SECTION_IDS }}
-          ONENOTE_PUBLIC_PREFIX: "[PUBLIC]"
         run: node scripts/update-workspace-status.mjs
 
       - name: Commit refreshed snapshot
@@ -50,7 +42,7 @@ jobs:
           git config user.name "stargate-status-bot"
           git config user.email "actions@users.noreply.github.com"
           git add -- pmo/data/latest.json
-          git commit -m "data: refresh Notion and OneNote status"
+          git commit -m "data: refresh Notion project status"
           git push
           echo "changed=true" >> "$GITHUB_OUTPUT"
 

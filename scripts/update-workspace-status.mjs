@@ -12,7 +12,7 @@ async function readPrevious() {
   try {
     return JSON.parse(await readFile(OUTPUT, "utf8"));
   } catch {
-    return { projects: [], notes: [], repositories: [], sources: {} };
+    return { projects: [], sources: {} };
   }
 }
 
@@ -123,110 +123,23 @@ async function fetchNotion(previous) {
   };
 }
 
-async function getGraphAccessToken() {
-  const clientId = process.env.MS_CLIENT_ID?.trim();
-  const refreshToken = process.env.MS_REFRESH_TOKEN?.trim();
-  if (!clientId || !refreshToken) return null;
-  const tenant = process.env.MS_TENANT_ID?.trim() || "common";
-  const form = new URLSearchParams({
-    client_id: clientId,
-    refresh_token: refreshToken,
-    grant_type: "refresh_token",
-    scope: "offline_access Notes.Read User.Read",
-  });
-  if (process.env.MS_CLIENT_SECRET?.trim()) form.set("client_secret", process.env.MS_CLIENT_SECRET.trim());
-  return requestJson(`https://login.microsoftonline.com/${tenant}/oauth2/v2.0/token`, {
-    method: "POST",
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body: form,
-  });
-}
-
-async function fetchOneNote(previous) {
-  const tokenPayload = await getGraphAccessToken();
-  if (!tokenPayload?.access_token) {
-    return {
-      notes: previous.notes || [],
-      state: sourceState(
-        "setup",
-        "Microsoft Graph 위임형 OAuth 연결이 필요합니다.",
-        previous.sources?.onenote?.lastSuccessfulSync || null,
-      ),
-    };
-  }
-
-  const sectionAllowlist = new Set(
-    (process.env.ONENOTE_SECTION_IDS || "").split(",").map((value) => value.trim()).filter(Boolean),
-  );
-  const publishAll = process.env.ONENOTE_PUBLISH_ALL === "true";
-  const publicPrefix = process.env.ONENOTE_PUBLIC_PREFIX || "[PUBLIC]";
-  const payload = await requestJson(
-    "https://graph.microsoft.com/v1.0/me/onenote/pages?$select=id,title,createdDateTime,lastModifiedDateTime,links,parentSection&$orderby=lastModifiedDateTime%20desc&$top=100",
-    { headers: { Authorization: `Bearer ${tokenPayload.access_token}` } },
-  );
-  const allPages = payload.value || [];
-  const notes = allPages
-    .filter((page) => publishAll || sectionAllowlist.has(page.parentSection?.id) || page.title?.startsWith(publicPrefix))
-    .slice(0, 30)
-    .map((page) => ({
-      id: page.id,
-      source: "onenote",
-      title: page.title?.startsWith(publicPrefix) ? page.title.slice(publicPrefix.length).trim() : page.title,
-      section: page.parentSection?.displayName || "OneNote",
-      updatedAt: page.lastModifiedDateTime || page.createdDateTime || null,
-      url: page.links?.oneNoteWebUrl?.href || "",
-    }));
-
-  return {
-    notes,
-    state: sourceState("live", `OneNote 공개 페이지 ${notes.length}건 동기화`, now),
-    rotatedRefreshToken: tokenPayload.refresh_token,
-  };
-}
-
-async function fetchGitHub(previous) {
-  const owner = process.env.GITHUB_OWNER || "DongsooJung";
-  const headers = process.env.GITHUB_TOKEN ? { Authorization: `Bearer ${process.env.GITHUB_TOKEN}` } : {};
-  const repos = await requestJson(`https://api.github.com/users/${encodeURIComponent(owner)}/repos?per_page=100&sort=updated`, { headers });
-  const repositories = repos
-    .filter((repo) => !repo.fork && !repo.archived && /stargate|별의문/i.test(`${repo.name} ${repo.description || ""}`))
-    .slice(0, 20)
-    .map((repo) => ({
-      id: String(repo.id),
-      source: "github",
-      title: repo.name,
-      description: repo.description || "",
-      updatedAt: repo.pushed_at || repo.updated_at,
-      url: repo.html_url,
-      visibility: repo.visibility || (repo.private ? "private" : "public"),
-    }));
-  return { repositories, state: sourceState("live", `GitHub 프로젝트 ${repositories.length}건 동기화`, now) };
-}
-
 const previous = await readPrevious();
-const results = await Promise.allSettled([
-  fetchNotion(previous),
-  fetchOneNote(previous),
-  fetchGitHub(previous),
-]);
-
-function settled(index, key, source) {
-  const result = results[index];
-  if (result.status === "fulfilled") return result.value;
-  return {
-    [key]: previous[key] || [],
+let notion;
+try {
+  notion = await fetchNotion(previous);
+} catch (error) {
+  console.error(`Notion sync failed: ${error.message}`);
+  notion = {
+    projects: previous.projects || [],
     state: sourceState(
       "error",
-      `${source} 연결 오류 · 마지막 정상 데이터를 표시합니다.`,
-      previous.sources?.[source.toLowerCase()]?.lastSuccessfulSync || null,
+      "Notion 연결 오류 · 마지막 정상 데이터를 표시합니다.",
+      previous.sources?.notion?.lastSuccessfulSync || null,
     ),
   };
 }
-
-const notion = settled(0, "projects", "Notion");
-const onenote = settled(1, "notes", "OneNote");
-const github = settled(2, "repositories", "GitHub");
 const activeProjects = notion.projects.filter((project) => !/완료|done|complete/i.test(project.status));
+const completedProjects = notion.projects.length - activeProjects.length;
 const progressValues = notion.projects.map((project) => project.progress).filter(Number.isFinite);
 const averageProgress = progressValues.length
   ? Math.round(progressValues.reduce((sum, value) => sum + value, 0) / progressValues.length)
@@ -239,19 +152,13 @@ const output = {
   summary: {
     notionProjects: notion.projects.length,
     activeProjects: activeProjects.length,
+    completedProjects,
     averageProgress,
-    oneNotePages: onenote.notes.length,
-    githubProjects: github.repositories.length,
   },
-  sources: { notion: notion.state, onenote: onenote.state, github: github.state },
+  sources: { notion: notion.state },
   projects: notion.projects,
-  notes: onenote.notes,
-  repositories: github.repositories,
 };
 
 await mkdir(path.dirname(OUTPUT), { recursive: true });
 await writeFile(OUTPUT, `${JSON.stringify(output, null, 2)}\n`, "utf8");
 console.log(`workspace status written: ${path.relative(ROOT, OUTPUT)}`);
-if (onenote.rotatedRefreshToken && onenote.rotatedRefreshToken !== process.env.MS_REFRESH_TOKEN) {
-  console.log("::notice::Microsoft issued a rotated refresh token. Update MS_REFRESH_TOKEN to keep the connection durable.");
-}
