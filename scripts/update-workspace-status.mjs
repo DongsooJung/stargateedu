@@ -5,7 +5,7 @@ import process from "node:process";
 const ROOT = path.resolve(import.meta.dirname, "..");
 const OUTPUT = path.join(ROOT, "pmo", "data", "latest.json");
 const NOTION_VERSION = "2025-09-03";
-const DEFAULT_NOTION_SOURCE = "5e1e339e-3a7f-40b9-9690-93a8b1f6a16f";
+const DEFAULT_NOTION_SOURCE = "389627e7-cf3f-46ca-be31-2f83afd2dc6d";
 const now = new Date().toISOString();
 
 async function readPrevious() {
