@@ -61,7 +61,7 @@ GitHub Pages로 호스팅되는 STARGATE EDU 공식 원페이지 랜딩 사이�
 
 `.github/workflows/update-workspace-status.yml`이 6시간마다 공식 API를 호출해 `pmo/data/latest.json`을 갱신합니다. 대시보드는 이 공개 스냅샷만 읽으므로 인증키가 브라우저에 전달되지 않습니다.
 
-`NOTION_TOKEN` Actions secret과 `NOTION_DATA_SOURCE_IDS` Actions variable을 설정합니다. 현재 기본 데이터 소스는 프로젝트 트래커 `5e1e339e-3a7f-40b9-9690-93a8b1f6a16f`입니다. 프로젝트명, 상태, 진행률, 다음 행동만 공개 스냅샷에 기록하고 본문과 첨부파일은 수집하지 않습니다.
+`NOTION_TOKEN` Actions secret과 `NOTION_DATA_SOURCE_IDS` Actions variable을 설정합니다. 현재 기본 데이터 소스는 프로젝트 트래커 `389627e7-cf3f-46ca-be31-2f83afd2dc6d`입니다. 프로젝트명, 상태, 진행률, 다음 행동만 공개 스냅샷에 기록하고 본문과 첨부파일은 수집하지 않습니다.
 
 로컬 점검은 `node scripts/update-workspace-status.mjs`로 실행할 수 있습니다. 인증 정보가 없거나 API 오류가 발생하면 마지막 정상 스냅샷을 유지하고 연결 상태를 `cached`, `setup`, `error`로 표시합니다.
 
