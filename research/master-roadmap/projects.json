@@ -86,14 +86,14 @@
       "id": "interview-self-coach",
       "rank": 7,
       "name": "채용 면접 프레젠테이션 코치",
-      "score": 84,
-      "readiness": 65,
+      "score": 86,
+      "readiness": 80,
       "phase": "B",
-      "status": "idea",
+      "status": "mvp",
       "owner_route": "../interview-coach/",
       "goal": "지원자가 채용공고 기반 모의질문, STAR 답변 구조, 60초 자기소개, 화면·발화 전달력을 스스로 점검하는 면접 자기훈련 도구",
       "kpis": ["모의면접 완료율", "STAR 요소 충족률", "60초 자기소개 완성도", "회차별 개선 목표 달성률"],
-      "next": ["JD 파서·질문 생성", "STAR 답변 분석", "60초 자기소개 코치", "브라우저 녹화·Before/After 리포트"]
+      "next": ["STAR 답변 분석", "근거·수치 보강 제안", "브라우저 녹화", "Before/After 리포트"]
     }
   ]
 }
