@@ -1,8 +1,8 @@
 {
-  "updated_at": "2026-08-30",
+  "updated_at": "2026-09-09",
   "portfolio_score": 85,
   "target_score": 90,
-  "principle": "기존 Stargate 자산을 하나의 Data + AI Platform으로 통합하면서 6개 기능을 순차 활성화한다.",
+  "principle": "기존 Stargate 자산을 하나의 Data + AI Platform으로 통합하면서 7개 기능을 순차 활성화한다.",
   "projects": [
     {
       "id": "geo-intelligence",
@@ -81,6 +81,19 @@
       "goal": "Cloud Run·Gemini·Places·BigQuery의 호출량·오류율·비용·Quota를 통합 관제",
       "kpis": ["월 예상비용", "API 오류율", "p95 지연", "Quota 경고"],
       "next": ["Cloud Run 실배포", "사용량 수집", "비용 임계치", "PMO 장애 경고"]
+    },
+    {
+      "id": "interview-self-coach",
+      "rank": 7,
+      "name": "채용 면접 프레젠테이션 코치",
+      "score": 84,
+      "readiness": 65,
+      "phase": "B",
+      "status": "idea",
+      "owner_route": "../interview-coach/",
+      "goal": "지원자가 채용공고 기반 모의질문, STAR 답변 구조, 60초 자기소개, 화면·발화 전달력을 스스로 점검하는 면접 자기훈련 도구",
+      "kpis": ["모의면접 완료율", "STAR 요소 충족률", "60초 자기소개 완성도", "회차별 개선 목표 달성률"],
+      "next": ["JD 파서·질문 생성", "STAR 답변 분석", "60초 자기소개 코치", "브라우저 녹화·Before/After 리포트"]
     }
   ]
 }
