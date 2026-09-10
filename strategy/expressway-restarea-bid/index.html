@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>고속도로 휴게소 입찰 레이더 | STARGATE</title>
+<meta name="description" content="한국도로공사 휴게소 입찰·임대·운영·시설·용역·물품 공고를 공개 공공홈페이지에서 모아 수주 적합도와 대응전략을 점수화하는 STARGATE 전략 대시보드">
+<style>
+:root{--bg:#07111f;--panel:#0e1c2d;--panel2:#10263e;--line:#263b51;--text:#eef5fb;--muted:#9fb1c4;--blue:#4f9cff;--green:#41d6a3;--gold:#f3c969;--red:#ff7a8a;--max:1180px}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(circle at 85% 0,#153455 0,transparent 30%),var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Noto Sans KR",sans-serif;line-height:1.6}a{color:inherit;text-decoration:none}.wrap{width:min(var(--max),calc(100% - 32px));margin:auto}.top{display:flex;justify-content:space-between;gap:18px;padding:20px 0;color:var(--muted);font-size:13px}.top a:hover{color:var(--blue)}.hero{padding:52px 0 28px}.kicker{color:var(--blue);font-weight:900;letter-spacing:.09em;font-size:13px}.hero h1{font-size:clamp(38px,6vw,68px);line-height:1.08;margin:12px 0 18px}.hero p{max-width:800px;color:#c7d4e2;font-size:18px}.hero-actions,.source-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}.btn{display:inline-flex;align-items:center;justify-content:center;padding:11px 15px;border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.03);font-weight:800;font-size:13px}.btn.primary{background:var(--blue);border-color:var(--blue);color:#06101c}.btn:hover{transform:translateY(-1px);border-color:var(--blue)}.status{display:inline-flex;align-items:center;gap:7px;color:var(--green);font-size:12px;font-weight:800}.dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 0 4px rgba(65,214,163,.12)}.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:24px 0 34px}.kpi{background:linear-gradient(180deg,rgba(16,38,62,.94),rgba(14,28,45,.94));border:1px solid var(--line);border-radius:16px;padding:18px}.kpi small{color:var(--muted);font-weight:700}.kpi strong{display:block;font-size:28px;margin-top:4px}.kpi span{font-size:12px;color:var(--muted)}section{padding:28px 0}.section-head{display:flex;justify-content:space-between;gap:16px;align-items:end;margin-bottom:16px}.section-head h2{margin:0;font-size:26px}.section-head p{margin:0;color:var(--muted);font-size:13px}.panel{border:1px solid var(--line);border-radius:18px;background:rgba(14,28,45,.88);padding:18px}.filters{display:grid;grid-template-columns:1.4fr repeat(3,1fr);gap:10px;margin-bottom:14px}.filters input,.filters select{width:100%;border:1px solid var(--line);background:#091728;color:var(--text);border-radius:10px;padding:10px 12px}.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:14px}table{width:100%;border-collapse:collapse;min-width:940px;background:#091728}th,td{padding:13px 12px;text-align:left;border-bottom:1px solid #1e3348;font-size:13px;vertical-align:top}th{position:sticky;top:0;background:#10263e;color:#cfe0f0;z-index:1}tr:hover td{background:#0d2034}.score{font-weight:900;color:var(--gold)}.tag{display:inline-block;padding:3px 8px;border-radius:999px;border:1px solid var(--line);font-size:11px;white-space:nowrap}.tag.open{color:var(--green);border-color:rgba(65,214,163,.35)}.tag.watch{color:var(--gold);border-color:rgba(243,201,105,.35)}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.strategy{border:1px solid var(--line);border-radius:16px;background:rgba(14,28,45,.82);padding:20px}.strategy b{display:block;color:var(--gold);font-size:12px;margin-bottom:7px}.strategy h3{margin:0 0 8px;font-size:18px}.strategy p{margin:0;color:var(--muted);font-size:13px}.strategy ul{padding-left:18px;color:#c7d4e2;font-size:13px;margin-bottom:0}.pipeline{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}.step{padding:16px;border:1px solid var(--line);border-radius:14px;background:#0a1a2b}.step strong{color:var(--blue)}.step p{color:var(--muted);font-size:12px;margin:6px 0 0}.sources{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.source{display:block;border:1px solid var(--line);border-radius:14px;padding:16px;background:#0a1a2b}.source small{color:var(--muted)}.source strong{display:block;margin:5px 0}.source span{color:var(--blue);font-size:12px}.note{padding:14px 16px;border-left:3px solid var(--gold);background:rgba(243,201,105,.08);color:#dbe5ee;font-size:13px}.empty{padding:26px;text-align:center;color:var(--muted)}footer{padding:38px 0 54px;color:var(--muted);font-size:12px}@media(max-width:900px){.kpis,.grid3,.sources{grid-template-columns:repeat(2,1fr)}.pipeline{grid-template-columns:1fr 1fr}.filters{grid-template-columns:1fr 1fr}}@media(max-width:580px){.kpis,.grid3,.sources,.pipeline,.filters{grid-template-columns:1fr}.hero{padding-top:30px}}
+</style>
+</head>
+<body>
+<div class="wrap top"><a href="/strategy/">← 전략 대시보드</a><span class="status"><i class="dot"></i><span id="update-label">PUBLIC DATA RADAR</span></span></div>
+<main class="wrap">
+<section class="hero">
+<div class="kicker">KOREA EXPRESSWAY REST-AREA BID INTELLIGENCE</div>
+<h1>고속도로 휴게소<br>입찰·사업 레이더</h1>
+<p>한국도로공사와 공공조달 채널에서 휴게소 운영권, 전문매장 임대, 전기차·스마트시설, 공사·용역·물품 기회를 모아 STARGATE 관점의 수주 적합도와 다음 행동을 점수화합니다.</p>
+<div class="hero-actions"><a class="btn primary" href="#opportunities">공고 레이더 보기</a><a class="btn" href="#strategy">수주 전략 보기</a><a class="btn" href="https://ebid.ex.co.kr/default.do" target="_blank" rel="noopener">도로공사 전자조달 ↗</a></div>
+</section>
+<div class="kpis">
+<div class="kpi"><small>관측 공고</small><strong id="kpi-total">—</strong><span>자동수집 + 핵심 시드</span></div>
+<div class="kpi"><small>우선 검토</small><strong id="kpi-high">—</strong><span>점수 85 이상</span></div>
+<div class="kpi"><small>직접 수행 적합</small><strong id="kpi-direct">—</strong><span>IT·데이터·용역 중심</span></div>
+<div class="kpi"><small>핵심 정책기회</small><strong>8곳</strong><span>2026 직계약 시범 휴게소</span></div>
+</div>
+
+<section id="opportunities">
+<div class="section-head"><div><h2>공고 레이더</h2><p>점수 높은 순 · 원문 확인 후 입찰판단</p></div><p id="data-status">데이터 불러오는 중</p></div>
+<div class="panel">
+<div class="filters"><input id="q" placeholder="휴게소·충전·용역·매장 등 검색"><select id="category"><option value="">전체 분야</option></select><select id="fit"><option value="">전체 수행방식</option></select><select id="threshold"><option value="0">전체 점수</option><option value="85">85점 이상</option><option value="90">90점 이상</option></select></div>
+<div class="table-wrap"><table><thead><tr><th>점수</th><th>사업명</th><th>분야</th><th>상태/마감</th><th>수행방식</th><th>판단 근거</th><th>원문</th></tr></thead><tbody id="rows"></tbody></table></div>
+</div>
+</section>
+
+<section id="strategy">
+<div class="section-head"><div><h2>STARGATE 수주 전략</h2><p>단독 수주보다 적합한 역할을 먼저 고르는 구조</p></div></div>
+<div class="grid3">
+<article class="strategy"><b>A · 최우선</b><h3>IT·데이터·모니터링 용역</h3><p>STARGATE의 데이터·AI·GIS 역량과 가장 직접적으로 맞습니다.</p><ul><li>고객서비스·혼잡·매출·만족도 분석</li><li>대시보드·API·자동화·관제 구축</li><li>휴게소 수요예측·상권·입지 분석</li></ul></article>
+<article class="strategy"><b>B · 파트너형</b><h3>전문매장·직계약 입찰</h3><p>F&B 브랜드 또는 운영사를 주사업자로 세우고 STARGATE는 데이터·제안서·운영 KPI를 맡는 방식이 효율적입니다.</p><ul><li>8개 시범휴게소 우선 추적</li><li>가격·원재료·중량·서비스 KPI 설계</li><li>브랜드/지역맛집 파트너 풀 확보</li></ul></article>
+<article class="strategy"><b>C · 컨소시엄</b><h3>EV·스마트시설·공사</h3><p>전기·통신·건설 면허가 필요한 영역은 면허 보유사와 공동수급 또는 기술협력으로 접근합니다.</p><ul><li>충전사업자·전기공사업체 사전 제휴</li><li>AI 관제·데이터 부분 분담</li><li>준공 후 운영·유지관리까지 패키지화</li></ul></article>
+</div>
+</section>
+
+<section>
+<div class="section-head"><div><h2>입찰 의사결정 파이프라인</h2><p>24시간 내 Go / No-Go 결론을 내기 위한 체크 순서</p></div></div>
+<div class="pipeline">
+<div class="step"><strong>01 관측</strong><p>EX 공지·전자조달·매장현황·나라장터 수집</p></div>
+<div class="step"><strong>02 적격성</strong><p>업종·면허·실적·신용·지역·보증 조건 확인</p></div>
+<div class="step"><strong>03 경제성</strong><p>예정가격·임대료·인력·원가·마진·CAPEX 검토</p></div>
+<div class="step"><strong>04 팀 구성</strong><p>단독 / 공동수급 / 하도급 / 브랜드 제휴 결정</p></div>
+<div class="step"><strong>05 제안·투찰</strong><p>평가표 역산, 증빙파일 묶음, 제출 D-2 내부마감</p></div>
+</div>
+</section>
+
+<section>
+<div class="section-head"><div><h2>공공 데이터 소스</h2><p>대시보드가 감시해야 할 4개 원천</p></div></div>
+<div class="sources">
+<a class="source" href="https://www.ex.co.kr/portal/biz/bbs/layout1/selectBoardList.do?bbsId=BBSMSTR_000000000182" target="_blank" rel="noopener"><small>EX</small><strong>한국도로공사 공지사항</strong><span>공모·사업자모집·정책 ↗</span></a>
+<a class="source" href="https://ex.co.kr/portal/biz/svarFnd/selectFndPbanList.do" target="_blank" rel="noopener"><small>EX STORE</small><strong>휴게소 매장현황</strong><span>창업·사회적기업·입점 ↗</span></a>
+<a class="source" href="https://ebid.ex.co.kr/default.do" target="_blank" rel="noopener"><small>EX e-BID</small><strong>한국도로공사 전자조달</strong><span>공사·용역·물품·임대 ↗</span></a>
+<a class="source" href="https://www.g2b.go.kr/" target="_blank" rel="noopener"><small>KONEPS</small><strong>나라장터</strong><span>공공기관 확장검색 ↗</span></a>
+</div>
+<div class="note" style="margin-top:14px">자동수집은 공개 페이지 범위에서 동작합니다. 참가자격·공동수급·실적제한·입찰보증·마감시각은 반드시 원문 공고문을 최종 기준으로 확인합니다.</div>
+</section>
+</main>
+<footer class="wrap">© 2026 주식회사 별의문(STARGATE) · Expressway Rest-Area Bid Intelligence · 공개 공공정보 기반</footer>
+<script>
+const state={items:[]};
+const $=s=>document.querySelector(s);
+function esc(v){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+function statusClass(v){return /상시|진행|확인/.test(v||'')?'open':'watch'}
+function optionFill(id,values){const el=$(id);[...new Set(values.filter(Boolean))].sort().forEach(v=>{const o=document.createElement('option');o.value=v;o.textContent=v;el.appendChild(o)})}
+function render(){const q=$('#q').value.trim().toLowerCase(),cat=$('#category').value,fit=$('#fit').value,min=Number($('#threshold').value||0);const items=state.items.filter(x=>(!q||JSON.stringify(x).toLowerCase().includes(q))&&(!cat||x.category===cat)&&(!fit||x.fit===fit)&&Number(x.score||0)>=min).sort((a,b)=>Number(b.score||0)-Number(a.score||0));$('#rows').innerHTML=items.length?items.map(x=>`<tr><td class="score">${esc(x.score)}</td><td><strong>${esc(x.title)}</strong><br><small>${esc(x.organization)} · ${esc(x.region)}</small></td><td>${esc(x.category)}</td><td><span class="tag ${statusClass(x.status)}">${esc(x.status)}</span><br><small>${esc(x.deadline)}</small></td><td>${esc(x.fit)}</td><td>${esc(x.reason)}</td><td><a href="${esc(x.url)}" target="_blank" rel="noopener" style="color:var(--blue);font-weight:800">원문 ↗</a><br><small>${esc(x.source)}</small></td></tr>`).join(''):`<tr><td colspan="7" class="empty">조건에 맞는 공고가 없습니다.</td></tr>`}
+async function init(){try{const r=await fetch('./data/opportunities.json?t='+Date.now(),{cache:'no-store'});if(!r.ok)throw new Error('HTTP '+r.status);const data=await r.json();state.items=Array.isArray(data.opportunities)?data.opportunities:[];$('#kpi-total').textContent=state.items.length.toLocaleString('ko-KR');$('#kpi-high').textContent=state.items.filter(x=>Number(x.score)>=85).length.toLocaleString('ko-KR');$('#kpi-direct').textContent=state.items.filter(x=>String(x.fit).includes('직접')).length.toLocaleString('ko-KR');optionFill('#category',state.items.map(x=>x.category));optionFill('#fit',state.items.map(x=>x.fit));const updated=data.updatedAt?new Date(data.updatedAt):null;$('#data-status').textContent=updated&&!isNaN(updated)?'최근 갱신 '+new Intl.DateTimeFormat('ko-KR',{dateStyle:'medium',timeStyle:'short',timeZone:'Asia/Seoul'}).format(updated):'데이터 연결';$('#update-label').textContent='AUTO COLLECT · '+state.items.length+' ITEMS';render()}catch(e){$('#data-status').textContent='데이터 로드 실패 · 새로고침 필요';$('#rows').innerHTML='<tr><td colspan="7" class="empty">공고 데이터 파일을 불러오지 못했습니다.</td></tr>'}}
+['#q','#category','#fit','#threshold'].forEach(id=>$(id).addEventListener(id==='#q'?'input':'change',render));init();
+</script>
+</body>
+</html>
