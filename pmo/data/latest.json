@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-09-10T11:28:18.058Z",
+  "generatedAt": "2026-09-10T16:30:03.699Z",
   "timezone": "Asia/Seoul",
   "summary": {
     "notionProjects": 4,
@@ -12,7 +12,7 @@
     "notion": {
       "status": "cached",
       "message": "Notion API 인증 정보 대기 · 마지막 정상 데이터를 표시합니다.",
-      "checkedAt": "2026-09-10T11:28:18.058Z",
+      "checkedAt": "2026-09-10T16:30:03.699Z",
       "lastSuccessfulSync": "2026-08-28T00:00:00.000Z"
     }
   },
