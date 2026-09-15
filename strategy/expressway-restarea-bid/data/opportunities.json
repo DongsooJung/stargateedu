@@ -1,9 +1,9 @@
 {
-  "updatedAt": "2026-09-15T20:50:17+09:00",
+  "updatedAt": "2026-09-16T02:03:26+09:00",
   "sourceStatus": {
-    "한국도로공사 공지사항": "error:ConnectTimeout",
-    "한국도로공사 보도자료": "error:ConnectTimeout",
-    "한국도로공사 매장현황": "error:ConnectTimeout"
+    "한국도로공사 공지사항": "ok:8",
+    "한국도로공사 보도자료": "ok:6",
+    "한국도로공사 매장현황": "ok:7"
   },
   "opportunities": [
     {
@@ -59,6 +59,45 @@
       "source": "나라장터"
     },
     {
+      "title": "2026년 고속도로 휴게소 주차장 태양광 발전사업 사업시행자 모집 수정 공고",
+      "organization": "한국도로공사",
+      "category": "공사·용역·물품",
+      "region": "전국/공고참조",
+      "deadline": "공고참조",
+      "status": "확인필요",
+      "score": 82,
+      "fit": "직접·컨소시엄",
+      "reason": "공개 공공홈페이지에서 자동 수집. 세부 참가자격·마감일·실적요건은 원문 확인 필요.",
+      "url": "javascript:fn_egov_inqire_notice('30407');",
+      "source": "한국도로공사 공지사항"
+    },
+    {
+      "title": "2026년 고속도로 민간투자 태양광 발전사업(성토부·휴게소 주차장) 사업시행자 모집 관련 질의 및 답변",
+      "organization": "한국도로공사",
+      "category": "공사·용역·물품",
+      "region": "전국/공고참조",
+      "deadline": "공고참조",
+      "status": "확인필요",
+      "score": 82,
+      "fit": "직접·컨소시엄",
+      "reason": "공개 공공홈페이지에서 자동 수집. 세부 참가자격·마감일·실적요건은 원문 확인 필요.",
+      "url": "javascript:fn_egov_inqire_notice('30406');",
+      "source": "한국도로공사 공지사항"
+    },
+    {
+      "title": "한국도로공사, 고속도로 휴게소 직계약 시범운영 사전규격 공개…본격 입찰 일정 착수",
+      "organization": "한국도로공사",
+      "category": "공사·용역·물품",
+      "region": "전국/공고참조",
+      "deadline": "공고참조",
+      "status": "확인필요",
+      "score": 82,
+      "fit": "직접·컨소시엄",
+      "reason": "공개 공공홈페이지에서 자동 수집. 세부 참가자격·마감일·실적요건은 원문 확인 필요.",
+      "url": "javascript:fn_egov_inqire_notice('30128');",
+      "source": "한국도로공사 보도자료"
+    },
+    {
       "title": "2026년 고속도로 휴게소 전기차충전소 구축사업",
       "organization": "한국도로공사",
       "category": "전기차·스마트시설",
@@ -70,6 +109,84 @@
       "reason": "충전 인프라 구축·운영 사업. 향후 유사 공모 재발 가능성이 높아 EPC·충전사업자 파트너 풀 선확보 가치가 큼.",
       "url": "https://www.ex.co.kr/portal/biz/bbs/layout1/selectBoardArticle.do?bbsId=BBSMSTR_000000000182&nttId=29925",
       "source": "한국도로공사 공지사항"
+    },
+    {
+      "title": "’26년도 「고속도로 수소충전소 구축사업」 사업시행자 모집 공고",
+      "organization": "한국도로공사",
+      "category": "전기차·스마트시설",
+      "region": "전국/공고참조",
+      "deadline": "공고참조",
+      "status": "확인필요",
+      "score": 78,
+      "fit": "컨소시엄",
+      "reason": "공개 공공홈페이지에서 자동 수집. 세부 참가자격·마감일·실적요건은 원문 확인 필요.",
+      "url": "javascript:fn_egov_inqire_notice('30397');",
+      "source": "한국도로공사 공지사항"
+    },
+    {
+      "title": "한국도로공사 공공건축심의위원회 외부위원 모집 안내",
+      "organization": "한국도로공사",
+      "category": "공사·용역·물품",
+      "region": "전국/공고참조",
+      "deadline": "공고참조",
+      "status": "확인필요",
+      "score": 70,
+      "fit": "직접·컨소시엄",
+      "reason": "공개 공공홈페이지에서 자동 수집. 세부 참가자격·마감일·실적요건은 원문 확인 필요.",
+      "url": "javascript:fn_egov_inqire_notice('30409');",
+      "source": "한국도로공사 공지사항"
+    },
+    {
+      "title": "고속도로장학재단, ‘2026년 고속도로 장학생’ 모집",
+      "organization": "한국도로공사",
+      "category": "공사·용역·물품",
+      "region": "전국/공고참조",
+      "deadline": "공고참조",
+      "status": "확인필요",
+      "score": 70,
+      "fit": "직접·컨소시엄",
+      "reason": "공개 공공홈페이지에서 자동 수집. 세부 참가자격·마감일·실적요건은 원문 확인 필요.",
+      "url": "javascript:fn_egov_inqire_notice('30408');",
+      "source": "한국도로공사 보도자료"
+    },
+    {
+      "title": "고속도로장학재단, 원거리 진학 대학생 ‘주거 장학금 지원 사업’ 대상자 모집",
+      "organization": "한국도로공사",
+      "category": "공사·용역·물품",
+      "region": "전국/공고참조",
+      "deadline": "공고참조",
+      "status": "확인필요",
+      "score": 70,
+      "fit": "직접·컨소시엄",
+      "reason": "공개 공공홈페이지에서 자동 수집. 세부 참가자격·마감일·실적요건은 원문 확인 필요.",
+      "url": "javascript:fn_egov_inqire_notice('30164');",
+      "source": "한국도로공사 보도자료"
+    },
+    {
+      "title": "창업(일반)",
+      "organization": "한국도로공사",
+      "category": "전문매장·임대",
+      "region": "전국/공고참조",
+      "deadline": "공고참조",
+      "status": "확인필요",
+      "score": 60,
+      "fit": "파트너형",
+      "reason": "공개 공공홈페이지에서 자동 수집. 세부 참가자격·마감일·실적요건은 원문 확인 필요.",
+      "url": "https://ex.co.kr/portal/biz/svarFnd/selectFndPbanList.do",
+      "source": "한국도로공사 매장현황"
+    },
+    {
+      "title": "창업(지식)",
+      "organization": "한국도로공사",
+      "category": "전문매장·임대",
+      "region": "전국/공고참조",
+      "deadline": "공고참조",
+      "status": "확인필요",
+      "score": 60,
+      "fit": "파트너형",
+      "reason": "공개 공공홈페이지에서 자동 수집. 세부 참가자격·마감일·실적요건은 원문 확인 필요.",
+      "url": "https://ex.co.kr/portal/biz/svarFnd/selectFndPbanList.do",
+      "source": "한국도로공사 매장현황"
     }
   ]
 }
