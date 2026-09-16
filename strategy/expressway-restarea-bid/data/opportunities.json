@@ -1,9 +1,9 @@
 {
-  "updatedAt": "2026-09-16T02:03:26+09:00",
+  "updatedAt": "2026-09-16T13:54:35+09:00",
   "sourceStatus": {
-    "한국도로공사 공지사항": "ok:8",
-    "한국도로공사 보도자료": "ok:6",
-    "한국도로공사 매장현황": "ok:7"
+    "한국도로공사 공지사항": "error:ConnectTimeout",
+    "한국도로공사 보도자료": "error:ConnectTimeout",
+    "한국도로공사 매장현황": "error:ConnectTimeout"
   },
   "opportunities": [
     {
