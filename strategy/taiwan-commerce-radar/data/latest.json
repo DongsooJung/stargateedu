@@ -1,0 +1,48 @@
+{
+  "updatedAt": "2026-09-19",
+  "skuCount": 1,
+  "benchmarkSku": "Apple iPhone 17 256GB",
+  "caveat": "가격은 공개 검색 인덱스에서 확인한 관측값이며 쿠폰·회원·색상·번들·판매자 조건에 따라 결제금액이 달라질 수 있음.",
+  "entries": [
+    {
+      "platform": "Coupang Taiwan",
+      "title": "Apple iPhone 17 원厂保固 256GB",
+      "priceTwd": 28100,
+      "delivery": "검색 스냅샷 기준 익일 도착·무료배송",
+      "status": "seed",
+      "observedAt": "2026-09-19",
+      "note": "쿠팡 직매입 상품 스냅샷. 실결제 전 가격 재확인.",
+      "sourceUrl": "https://www.tw.coupang.com/products/Apple-iPhone-17-%E5%8E%9F%E5%BB%A0%E4%BF%9D%E5%9B%BA%2C-%E9%9C%A7%E8%97%8D%E8%89%B2%2C-256GB-595388520120320?itemId=595388511780868"
+    },
+    {
+      "platform": "Shopee TW",
+      "title": "Apple iPhone 17 256G 신품·대만 회사货",
+      "priceTwd": 31990,
+      "delivery": "판매자 발송 최대 3영업일·배송비 NT$0부터",
+      "status": "seed",
+      "observedAt": "2026-09-19",
+      "note": "마켓플레이스 판매자 상품. 판매자/쿠폰 조건 분리 필요.",
+      "sourceUrl": "https://shopee.tw/Apple-%E8%98%8B%E6%9E%9C-iPhone-17-256G-%E5%8E%9F%E5%BB%A0-6.3%E5%90%8B-%E5%85%A8%E6%96%B0-%E6%96%B0%E6%A9%9F-%E7%A9%BA%E6%A9%9F-i17-%E5%85%AC%E5%8F%B8%E8%B2%A8-Q%E5%93%A5-i.109729156.29791400956"
+    },
+    {
+      "platform": "momo",
+      "title": "Apple iPhone 17 256G / 6.3인치 번들",
+      "priceTwd": 28700,
+      "delivery": "프로모션 번들·증정품 조건 포함 가능",
+      "status": "seed",
+      "observedAt": "2026-09-19",
+      "note": "검색 스냅샷은 거치대/스트랩 번들. 단품과 직접 비교 주의.",
+      "sourceUrl": "https://www.momoshop.com.tw/search/IPhone-%E6%89%8B%E6%A9%9F"
+    },
+    {
+      "platform": "PChome 24h",
+      "title": "Apple iPhone 17 256G 신품 검색 기준",
+      "priceTwd": 32900,
+      "delivery": "24h 쇼핑 검색 결과·상품별 배송조건 확인",
+      "status": "seed",
+      "observedAt": "2026-09-19",
+      "note": "검색 결과에서 신품 iPhone 17 256G 기준가 관측.",
+      "sourceUrl": "https://24h.pchome.com.tw/search/iPhone%2017%20256GB"
+    }
+  ]
+}
