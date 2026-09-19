@@ -1,0 +1,33 @@
+name: Update Taiwan Commerce Radar
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "30 23 * * *"
+  push:
+    branches: [main]
+    paths:
+      - "scripts/update-taiwan-commerce-radar.py"
+      - ".github/workflows/update-taiwan-commerce-radar.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Refresh marketplace snapshot
+        run: python scripts/update-taiwan-commerce-radar.py
+      - name: Commit snapshot when changed
+        run: |
+          if git diff --quiet -- strategy/taiwan-commerce-radar/data/latest.json; then
+            echo "No data change"
+            exit 0
+          fi
+          git config user.name "stargate-commerce-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add strategy/taiwan-commerce-radar/data/latest.json
+          git commit -m "data: refresh Taiwan commerce radar"
+          git push origin HEAD:main
