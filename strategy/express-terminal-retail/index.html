@@ -3,86 +3,110 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>고속터미널 상업시설 입찰·임대 레이더 · STARGATE</title>
-<meta name="description" content="서울고속버스터미널·신세계센트럴·고투몰 상가 임대, 입점, 공개입찰 모니터링 대시보드">
+<title>서울 터미널 상권 입찰·임대 레이더 · STARGATE</title>
+<meta name="description" content="고속터미널·동서울터미널·남부터미널 상업시설 임대·입찰·복합개발 기회 모니터링">
 <style>
-:root{--bg:#07111f;--panel:#0e1c2d;--line:#263b51;--text:#eef5fb;--muted:#9fb1c4;--blue:#4f9cff;--green:#41d6a3;--gold:#f3c969;--max:1120px}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 82% 0,#153455 0,transparent 34%),var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Noto Sans KR",sans-serif;line-height:1.6}a{color:inherit;text-decoration:none}.wrap{width:min(var(--max),calc(100% - 36px));margin:auto}.top{display:flex;justify-content:space-between;gap:16px;padding:22px 0;color:var(--muted);font-size:14px;flex-wrap:wrap}.hero{padding:52px 0 28px}.kicker{color:var(--blue);font-weight:900;letter-spacing:.08em}.hero h1{font-size:clamp(36px,6vw,64px);line-height:1.08;margin:10px 0 16px}.hero p{max-width:880px;color:#c8d5e3;font-size:18px}.status{display:inline-flex;gap:8px;align-items:center;margin-top:12px;border:1px solid #6b5a2e;background:rgba(243,201,105,.1);color:var(--gold);border-radius:999px;padding:7px 12px;font-size:13px;font-weight:800}.dot{width:8px;height:8px;border-radius:50%;background:var(--gold)}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:22px 0}.metric,.card{border:1px solid var(--line);border-radius:16px;background:rgba(14,28,45,.9);padding:18px}.metric b{display:block;font-size:23px;margin-top:6px}.metric span{font-size:12px;color:var(--muted);font-weight:800}.section{margin:26px 0}.section h2{font-size:22px;margin:0 0 12px}.card p{margin:0;color:var(--muted)}table{width:100%;border-collapse:collapse;background:rgba(14,28,45,.9);border:1px solid var(--line);border-radius:16px;overflow:hidden}th,td{padding:13px 14px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}th{color:var(--muted);font-size:12px}td{font-size:14px}.tag{display:inline-block;border-radius:999px;padding:4px 8px;font-size:11px;font-weight:900;background:rgba(79,156,255,.13);color:#8dc2ff}.warn{color:var(--gold);font-weight:900}.ok{color:var(--green);font-weight:900}.links{display:flex;gap:10px;flex-wrap:wrap}.btn{display:inline-block;border:1px solid var(--line);border-radius:10px;padding:10px 13px;background:#12263d;font-weight:800;font-size:13px}.btn:hover{border-color:var(--blue)}.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.step strong{display:block;margin:5px 0}.foot{padding:34px 0 50px;color:var(--muted);font-size:12px}.note{font-size:12px;color:var(--muted);margin-top:10px}@media(max-width:850px){.grid,.steps{grid-template-columns:1fr}}@media(max-width:520px){.hero{padding-top:34px}th,td{padding:10px 9px;font-size:12px}}</style>
+:root{--bg:#07111f;--panel:#0e1c2d;--line:#263b51;--text:#eef5fb;--muted:#9fb1c4;--blue:#4f9cff;--green:#41d6a3;--gold:#f3c969;--red:#ff8d8d;--max:1180px}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 82% 0,#153455 0,transparent 34%),var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Noto Sans KR",sans-serif;line-height:1.6}a{color:inherit;text-decoration:none}.wrap{width:min(var(--max),calc(100% - 36px));margin:auto}.top{display:flex;justify-content:space-between;gap:16px;padding:22px 0;color:var(--muted);font-size:14px;flex-wrap:wrap}.hero{padding:52px 0 28px}.kicker{color:var(--blue);font-weight:900;letter-spacing:.08em}.hero h1{font-size:clamp(36px,6vw,66px);line-height:1.08;margin:10px 0 16px}.hero p{max-width:920px;color:#c8d5e3;font-size:18px}.status{display:inline-flex;gap:8px;align-items:center;margin-top:12px;border:1px solid #6b5a2e;background:rgba(243,201,105,.1);color:var(--gold);border-radius:999px;padding:7px 12px;font-size:13px;font-weight:800}.dot{width:8px;height:8px;border-radius:50%;background:var(--gold)}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:22px 0}.metric,.card{border:1px solid var(--line);border-radius:16px;background:rgba(14,28,45,.9);padding:18px}.metric b{display:block;font-size:22px;margin-top:6px}.metric span{font-size:12px;color:var(--muted);font-weight:800}.section{margin:28px 0}.section h2{font-size:22px;margin:0 0 12px}.card p{margin:0;color:var(--muted)}.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.card h3{font-size:18px;margin:8px 0}.tag{display:inline-block;border-radius:999px;padding:4px 8px;font-size:11px;font-weight:900;background:rgba(79,156,255,.13);color:#8dc2ff}.tag.gold{background:rgba(243,201,105,.12);color:var(--gold)}.tag.green{background:rgba(65,214,163,.12);color:var(--green)}table{width:100%;border-collapse:collapse;background:rgba(14,28,45,.9);border:1px solid var(--line);border-radius:16px;overflow:hidden}th,td{padding:13px 14px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}th{color:var(--muted);font-size:12px}td{font-size:14px}.warn{color:var(--gold);font-weight:900}.ok{color:var(--green);font-weight:900}.high{color:#8dc2ff;font-weight:900}.links{display:flex;gap:10px;flex-wrap:wrap}.btn{display:inline-block;border:1px solid var(--line);border-radius:10px;padding:10px 13px;background:#12263d;font-weight:800;font-size:13px}.btn:hover{border-color:var(--blue)}.note{font-size:12px;color:var(--muted);margin-top:10px}.foot{padding:34px 0 50px;color:var(--muted);font-size:12px}@media(max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}.cards{grid-template-columns:1fr}}@media(max-width:520px){.grid{grid-template-columns:1fr}.hero{padding-top:34px}th,td{padding:10px 9px;font-size:12px}}</style>
 </head>
 <body>
 <div class="wrap top"><a href="/strategy/">← 전략 대시보드</a><span>Last checked · 2026.09.21</span></div>
 <main class="wrap">
 <section class="hero">
-<div class="kicker">RETAIL LEASING · TERMINAL COMMERCE</div>
-<h1>고속터미널 상업시설<br>입찰·임대 레이더</h1>
-<p>서울고속버스터미널(경부·영동), 신세계센트럴/센트럴시티(호남), 고투몰·강남터미널 지하도상가를 분리해 상가 임대·입점제안·운영권·공개입찰 기회를 추적합니다.</p>
-<div class="status"><span class="dot"></span>2026-09-21 공개 검색 기준 신규 통합 상가 운영권 공고 미확인 · 민간임대+공공상가 병행 감시</div>
+<div class="kicker">SEOUL TERMINAL RETAIL · PROCUREMENT & DEVELOPMENT</div>
+<h1>서울 터미널 상권<br>입찰·임대 레이더</h1>
+<p>고속터미널·센트럴시티·고투몰, 동서울터미널, 서울남부터미널을 한 화면에서 비교합니다. 현재 임대·입찰 기회뿐 아니라 복합개발 이후 상업시설 선점 기회까지 추적합니다.</p>
+<div class="status"><span class="dot"></span>신규 점포·입찰 공고 + 재개발/현대화 단계 변화 동시 감시</div>
 </section>
 
 <section class="grid">
-<div class="metric"><span>서울고속버스터미널㈜ 신세계 연결지분</span><b>70.49%</b></div>
-<div class="metric"><span>㈜신세계센트럴 연결지분</span><b>60.02%</b></div>
-<div class="metric"><span>표준 계약기간</span><b>개별 공고 확인</b></div>
+<div class="metric"><span>핵심 권역</span><b>3개 터미널권</b></div>
+<div class="metric"><span>고투몰</span><b>620개 점포</b></div>
+<div class="metric"><span>동서울 현대화</span><b>2027 H1 착공 예정</b></div>
+<div class="metric"><span>남부터미널</span><b>2026 활성화 구상</b></div>
 </section>
 
 <section class="section">
-<h2>핵심: 한 상권이지만 계약주체가 다릅니다</h2>
-<table>
-<thead><tr><th>구역</th><th>주요 운영/관리 주체</th><th>진입 방식</th><th>계약기간</th></tr></thead>
-<tbody>
-<tr><td>서울고속버스터미널 경부·영동선</td><td>서울고속버스터미널㈜</td><td>민간 상가 임대·입점 협의, 개별 모집 공고 추적</td><td class="warn">점포별 확인</td></tr>
-<tr><td>센트럴시티 호남선·복합상업시설</td><td>㈜신세계센트럴</td><td>민간 임대·MD/브랜드 입점 제안 중심</td><td class="warn">점포·브랜드별 확인</td></tr>
-<tr><td>고투몰·강남터미널 지하도상가</td><td>서울시/서울시설공단 관리 체계 관련</td><td>수탁·점포단위 입찰·임대 공고를 별도 확인</td><td class="warn">공고별 확인</td></tr>
-</tbody>
-</table>
-<p class="note">수서역처럼 '10년 일괄 운영계약'으로 단순화할 근거는 현재 확인되지 않았습니다. 특히 민간터미널 상가는 개별 임대차 조건이 공개되지 않는 경우가 있어 실제 모집 공고·임대제안서를 기준으로 판단해야 합니다.</p>
-</section>
-
-<section class="section">
-<h2>현재 확인된 구조</h2>
-<div class="steps">
-<div class="card step"><span class="tag">PRIVATE · SEOUL EXPRESS BUS TERMINAL</span><strong>부동산 임대 + 여객터미널</strong><p>신세계 2026년 1분기 공시에 따르면 서울고속버스터미널㈜은 부동산임대업 및 자동차정류장사업을 영위하며, 신세계 연결실체가 70.49%를 보유합니다.</p></div>
-<div class="card step"><span class="tag">PRIVATE · SHINSEGAE CENTRAL</span><strong>센트럴시티 복합상업시설</strong><p>㈜신세계센트럴도 부동산 임대·공급·개발 및 여객터미널 운영을 주요 사업으로 하고 있으며 신세계 연결지분은 60.02%입니다.</p></div>
-<div class="card step"><span class="tag">PUBLIC-ASSET WATCH · GOTO MALL</span><strong>지하도상가 별도 트랙</strong><p>서울시의회 회의록에는 서울시설공단의 고투몰 계약·상가 운영관리와 관련된 논의가 확인됩니다. 민간 터미널동과 같은 계약으로 보면 안 됩니다.</p></div>
+<h2>터미널별 기회 맵</h2>
+<div class="cards">
+<div class="card">
+<span class="tag green">NOW · EXISTING RETAIL</span>
+<h3>고속터미널·센트럴시티·고투몰</h3>
+<p>기존 대형 상권의 개별 점포 임대·브랜드 입점·팝업과 공공 지하도상가 공고를 추적합니다. 고투몰은 서울시설공단 안내 기준 31,566㎡, 620개 점포이며 관리주체는 ㈜고투몰입니다.</p>
+</div>
+<div class="card">
+<span class="tag gold">REDEVELOPMENT · PRE-ENTRY</span>
+<h3>동서울터미널</h3>
+<p>서울시 공식 계획상 신세계동서울PFV㈜가 토지주이며 터미널·업무·판매·문화시설이 결합된 지하7층/지상39층 복합개발이 추진 중입니다. 2026년 하반기 건축허가, 2027년 상반기 착공 예정 단계입니다.</p>
+</div>
+<div class="card">
+<span class="tag">REPOSITIONING · PRIVATE PROPOSAL</span>
+<h3>서울남부터미널</h3>
+<p>서울시는 2026년 4월 터미널 1km 일대 활성화 통합구상을 발표했습니다. 터미널을 지하화하고 지상에 업무·관광숙박·문화·주거 기능을 도입하는 방향이며, 향후 민간사업자 개발계획 제안을 전제로 협의할 계획입니다.</p>
+</div>
 </div>
 </section>
 
 <section class="section">
-<h2>STARGATE 진입 전략</h2>
+<h2>현재 상태 비교</h2>
 <table>
-<thead><tr><th>우선순위</th><th>방식</th><th>실행</th></tr></thead>
+<thead><tr><th>권역</th><th>운영·개발 구조</th><th>현재 단계</th><th>STARGATE 진입 포인트</th></tr></thead>
 <tbody>
-<tr><td class="ok">1</td><td>개별 점포·팝업 입점</td><td>공실·리뉴얼·팝업·단기임대 모집을 먼저 추적. 초기 보증금과 실적요건을 최소화.</td></tr>
-<tr><td>2</td><td>브랜드/서비스 입점 제안</td><td>AI·교육·여행객 데이터·무인 리테일 등 터미널 이용객 기반 제안서를 민간 운영주체에 직접 제출.</td></tr>
-<tr><td>3</td><td>공공 지하도상가 입찰</td><td>고투몰 등은 서울시설공단·서울시 공고의 점포단위 조건, 수탁 구조, 전대 제한을 별도 검토.</td></tr>
+<tr><td>고속터미널 경부·영동</td><td>서울고속버스터미널㈜ 중심 민간 임대</td><td class="ok">기존 상권 운영</td><td>개별 점포·팝업·입점 제안</td></tr>
+<tr><td>센트럴시티 호남</td><td>㈜신세계센트럴 중심 복합상업시설</td><td class="ok">기존 상권 운영</td><td>브랜드·서비스 MD 제안</td></tr>
+<tr><td>고투몰</td><td>서울시 지하도상가 체계 / 관리주체 ㈜고투몰</td><td class="ok">620점포 운영</td><td>점포·관리·입찰 공고 추적</td></tr>
+<tr><td>동서울터미널</td><td>신세계동서울PFV㈜ 토지주, 서울시 사전협상 기반 복합개발</td><td class="warn">2027 H1 착공 예정</td><td class="high">시공·운영·MD·상업시설 선입점 파트너 탐색</td></tr>
+<tr><td>서울남부터미널</td><td>민간사업자 개발제안과 서울시 협의 구조</td><td class="warn">활성화 기본구상 수립</td><td class="high">개발제안·상업 MD·데이터/운영 파트너 포지셔닝</td></tr>
+</tbody>
+</table>
+<p class="note">※ 각 점포의 계약기간·보증금·임대료·갱신조건은 통합 표준값으로 단정하지 않고 실제 임대/입찰 공고 단위로 기록합니다.</p>
+</section>
+
+<section class="section">
+<h2>개발 파이프라인</h2>
+<table>
+<thead><tr><th>프로젝트</th><th>공식 확인 내용</th><th>모니터링 이벤트</th></tr></thead>
+<tbody>
+<tr><td>동서울터미널 현대화</td><td>광진구 구의동 546-1 일대, 계획 대상 96,754.2㎡. 터미널·업무·판매·문화 및 집회시설. 지하7/지상39층.</td><td>건축허가 → 착공 → 시공/PM/상업MD → 임차·브랜드 모집</td></tr>
+<tr><td>남부터미널 일대 활성화</td><td>반경 1km 통합구상. 터미널 지하화 및 지상 업무·관광숙박·문화·주거 기능 도입 방향.</td><td>민간 개발제안 → 사전협상/도시계획 → 사업자/시공 → 상업시설 모집</td></tr>
 </tbody>
 </table>
 </section>
 
 <section class="section">
-<h2>공고 발생 시 자동 수집 항목</h2>
+<h2>공고·제안 수집 필드</h2>
 <table>
-<thead><tr><th>분류</th><th>필드</th></tr></thead>
+<thead><tr><th>분류</th><th>필수 필드</th></tr></thead>
 <tbody>
-<tr><td>주체</td><td>서울고속버스터미널㈜ / 신세계센트럴 / 서울시설공단·서울시 / 기타 관리법인</td></tr>
-<tr><td>점포</td><td>동·층·호수 · 면적 · 업종제한 · 영업시간 · 팝업 가능 여부</td></tr>
-<tr><td>금액</td><td>보증금 · 월임대료 · 매출연동 수수료 · 관리비 · 최저입찰가 · 입찰보증금</td></tr>
-<tr><td>계약</td><td>최초 계약기간 · 갱신횟수/연장기간 · 중도해지 · 원상복구 · 권리금/전대 제한</td></tr>
-<tr><td>일정</td><td>현장설명 · 제안서 제출 · 투찰 · 개찰 · 입점 예정일</td></tr>
+<tr><td>기회유형</td><td>상가임대 · 공개입찰 · 팝업 · 브랜드 입점 · 운영권 · 개발사업 · 시공/용역 · 상업MD</td></tr>
+<tr><td>대상</td><td>터미널 · 동/층/호수 · 면적 · 업종제한 · 예상 개점/착공 시기</td></tr>
+<tr><td>금액</td><td>보증금 · 월임대료 · 관리비 · 매출연동 수수료 · 최저입찰가 · 입찰보증금 · 사업비</td></tr>
+<tr><td>계약</td><td>계약기간 · 갱신조건 · 전대 제한 · 원상복구 · 컨소시엄 허용 여부</td></tr>
+<tr><td>일정</td><td>현장설명 · 질의 · 제안/투찰 마감 · 개찰 · 우선협상 · 착공 · 입점</td></tr>
 </tbody>
 </table>
 </section>
 
 <section class="section">
-<h2>검증 소스</h2>
+<h2>STARGATE 실행 우선순위</h2>
+<div class="cards">
+<div class="card"><span class="tag green">1 · CASHFLOW</span><h3>기존 상가 단기 진입</h3><p>고속터미널권의 개별 점포·팝업·소규모 입점을 우선 추적해 실제 운영 레퍼런스를 확보합니다.</p></div>
+<div class="card"><span class="tag gold">2 · PIPELINE</span><h3>동서울 선점</h3><p>착공 전후 상업시설 운영·데이터·무인리테일·관광객 서비스 제안서를 준비하고 신세계동서울PFV 관련 발주·파트너 모집 변화를 추적합니다.</p></div>
+<div class="card"><span class="tag">3 · DEVELOPMENT</span><h3>남부터미널 개발제안 추적</h3><p>민간사업자 제안이 본격화되면 데이터 분석·상권수요 예측·스마트터미널 운영 모듈을 개발사업 파트너 패키지로 제안합니다.</p></div>
+</div>
+</section>
+
+<section class="section">
+<h2>공식·검증 소스</h2>
 <div class="links">
+<a class="btn" target="_blank" rel="noopener" href="https://news.seoul.go.kr/citybuild/archives/537004">서울시 · 동서울터미널 현대화 ↗</a>
+<a class="btn" target="_blank" rel="noopener" href="https://www.seoul.go.kr/news/news_report.do?nttNo=456500&tr_code=snews">서울시 · 남부터미널 활성화 ↗</a>
+<a class="btn" target="_blank" rel="noopener" href="https://www.sisul.or.kr/open_content/undershop/guide/terminal/gangnam.jsp">서울시설공단 · 고투몰 안내 ↗</a>
 <a class="btn" target="_blank" rel="noopener" href="https://kind.krx.co.kr/external/2026/05/19/000464/20260519001109/10002.htm">신세계 2026 1Q 공시 ↗</a>
-<a class="btn" target="_blank" rel="noopener" href="https://clik.nanet.go.kr/minutes/viewer.do?DOCID=CLIKC592735890450617&collection=minutes">서울시의회·시설공단 회의록 ↗</a>
 <a class="btn" target="_blank" rel="noopener" href="https://www.g2b.go.kr/">나라장터 ↗</a>
-<a class="btn" target="_blank" rel="noopener" href="https://www.sisul.or.kr/">서울시설공단 ↗</a>
 </div>
 </section>
 </main>
-<footer class="wrap foot">© 2026 주식회사 별의문(STARGATE) · Strategy Dashboard · 공개정보 기반 상업시설 기회 모니터링</footer>
+<footer class="wrap foot">© 2026 주식회사 별의문(STARGATE) · Strategy Dashboard · 서울 터미널 상업시설·개발기회 모니터링</footer>
 </body>
 </html>
