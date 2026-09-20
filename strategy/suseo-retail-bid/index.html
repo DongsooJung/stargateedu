@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>수서역 상업시설 입찰 레이더 · STARGATE</title>
+<meta name="description" content="수서역 역사 내 상가·임대영업·상업시설 운영권 입찰 모니터링 대시보드">
+<style>
+:root{--bg:#07111f;--panel:#0e1c2d;--line:#263b51;--text:#eef5fb;--muted:#9fb1c4;--blue:#4f9cff;--green:#41d6a3;--gold:#f3c969;--red:#ff7f7f;--max:1120px}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 82% 0,#153455 0,transparent 34%),var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Noto Sans KR",sans-serif;line-height:1.6}a{color:inherit;text-decoration:none}.wrap{width:min(var(--max),calc(100% - 36px));margin:auto}.top{display:flex;justify-content:space-between;gap:16px;padding:22px 0;color:var(--muted);font-size:14px;flex-wrap:wrap}.hero{padding:54px 0 26px}.kicker{color:var(--blue);font-weight:900;letter-spacing:.08em}.hero h1{font-size:clamp(36px,6vw,64px);line-height:1.08;margin:10px 0 16px}.hero p{max-width:850px;color:#c8d5e3;font-size:18px}.status{display:inline-flex;gap:8px;align-items:center;margin-top:12px;border:1px solid #6b5a2e;background:rgba(243,201,105,.1);color:var(--gold);border-radius:999px;padding:7px 12px;font-size:13px;font-weight:800}.dot{width:8px;height:8px;border-radius:50%;background:var(--gold)}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:22px 0}.metric,.card{border:1px solid var(--line);border-radius:16px;background:rgba(14,28,45,.9);padding:18px}.metric b{display:block;font-size:25px;margin-top:6px}.metric span{font-size:12px;color:var(--muted);font-weight:800}.section{margin:24px 0}.section h2{font-size:22px;margin:0 0 12px}.card p{margin:0;color:var(--muted)}table{width:100%;border-collapse:collapse;background:rgba(14,28,45,.9);border:1px solid var(--line);border-radius:16px;overflow:hidden}th,td{padding:13px 14px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}th{color:var(--muted);font-size:12px}td{font-size:14px}.tag{display:inline-block;border-radius:999px;padding:4px 8px;font-size:11px;font-weight:900;background:rgba(79,156,255,.13);color:#8dc2ff}.warn{color:var(--gold);font-weight:900}.ok{color:var(--green);font-weight:900}.links{display:flex;gap:10px;flex-wrap:wrap}.btn{display:inline-block;border:1px solid var(--line);border-radius:10px;padding:10px 13px;background:#12263d;font-weight:800;font-size:13px}.btn:hover{border-color:var(--blue)}.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.step strong{display:block;margin-bottom:5px}.foot{padding:34px 0 50px;color:var(--muted);font-size:12px}.note{font-size:12px;color:var(--muted);margin-top:10px}@media(max-width:850px){.grid{grid-template-columns:repeat(2,1fr)}.steps{grid-template-columns:1fr}}@media(max-width:520px){.grid{grid-template-columns:1fr}.hero{padding-top:34px}th,td{padding:10px 9px;font-size:12px}}</style>
+</head>
+<body>
+<div class="wrap top"><a href="/strategy/">← 전략 대시보드</a><span>Last checked · 2026.09.20</span></div>
+<main class="wrap">
+<section class="hero">
+<div class="kicker">PUBLIC PROCUREMENT · RAIL RETAIL</div>
+<h1>수서역 상업시설<br>입찰 레이더</h1>
+<p>수서역 역사 내 상가·임대영업·상업시설 운영권 공고를 추적하고, STARGATE의 직접 입찰·컨소시엄·개별 매장 입점 가능성을 빠르게 판단하기 위한 실행형 대시보드입니다.</p>
+<div class="status"><span class="dot"></span>신규 본입찰 공개 검색상 미확인 · 만료구간 집중 감시</div>
+</section>
+
+<section class="grid">
+<div class="metric"><span>기존 운영계약</span><b>10년</b></div>
+<div class="metric"><span>2016 공모 규모</span><b>1,440㎡</b></div>
+<div class="metric"><span>주요 계약 만료</span><b>2026.09.21</b></div>
+<div class="metric"><span>9월 만료 보도</span><b>약 20건</b></div>
+</section>
+
+<section class="section">
+<h2>현재 입찰 상태</h2>
+<table>
+<thead><tr><th>항목</th><th>현재 상태</th><th>판단</th></tr></thead>
+<tbody>
+<tr><td>수서역 신규 상업시설 본입찰</td><td>2026-09-20 공개 검색 기준 별도 신규 공고 미확인</td><td class="warn">집중 감시</td></tr>
+<tr><td>기존 운영권</td><td>2016년 SR-롯데GRS 컨소시엄 계약. 언론 보도상 10년 운영계약</td><td>만료 전환기</td></tr>
+<tr><td>주요 만료시점</td><td>약 20개 계약이 2026-09-21 만료, 일부는 2026년 11월·2027년 1월 종료 보도</td><td class="warn">공고 발생 가능 구간</td></tr>
+<tr><td>공식 확인 채널</td><td>SR 전자조달 · 나라장터 · 관련 철도 운영기관 공고</td><td class="ok">매일 확인 대상</td></tr>
+</tbody>
+</table>
+<p class="note">※ “신규 공고 미확인”은 공개 웹 검색 기준 상태이며, 실제 입찰 참가 전에는 SR 전자조달 원문과 공고 첨부파일을 최종 확인해야 합니다.</p>
+</section>
+
+<section class="section">
+<h2>기존 계약 구조</h2>
+<div class="card">
+<p>SR은 2016년 수서·동탄·지제역의 맞이방, 승강장과 수서역 환승통로 등을 포함한 총 1,440㎡ 임대매장 운영사업자를 공개모집했습니다. 대상 업종에는 카페·베이커리·편의점·약국·전문식당 등이 포함됐습니다. 당시 공모는 2016년 8월 28일까지 진행됐습니다. 이후 롯데GRS 컨소시엄이 운영권을 확보했으며, 2026년 보도에 따르면 계약기간은 10년입니다.</p>
+</div>
+</section>
+
+<section class="section">
+<h2>STARGATE 실행 시나리오</h2>
+<div class="steps">
+<div class="card step"><span class="tag">A · DIRECT BID</span><strong>전체/권역 운영권 직접 입찰</strong><p>신규 공고가 통합 운영권 형태라면 재무요건·유사업무 실적·보증금·운영조직 조건을 먼저 확인합니다. 단독 요건이 부족하면 즉시 컨소시엄 방식으로 전환합니다.</p></div>
+<div class="card step"><span class="tag">B · CONSORTIUM</span><strong>F&B·리테일 사업자와 컨소시엄</strong><p>STARGATE는 데이터·운영 자동화·수요분석을 담당하고, 기존 유통·F&B 사업자가 현장 운영과 실적요건을 담당하는 방식입니다.</p></div>
+<div class="card step"><span class="tag">C · TENANT</span><strong>개별 매장/팝업 입점</strong><p>통합 운영사업자가 선정된 뒤 하위 임차·브랜드 입점 기회를 공략합니다. 소규모 법인에는 초기 자본·실적 부담이 가장 낮은 경로입니다.</p></div>
+</div>
+</section>
+
+<section class="section">
+<h2>공고 발생 시 즉시 수집할 필드</h2>
+<table>
+<thead><tr><th>분류</th><th>필수 데이터</th></tr></thead>
+<tbody>
+<tr><td>공고</td><td>공고번호 · 공고명 · 발주기관 · 원문 URL</td></tr>
+<tr><td>상가</td><td>역사/층/호실 · 면적 · 허용업종 · 영업시간 조건</td></tr>
+<tr><td>금액</td><td>예정가격/최저입찰가 · 임대료 · 관리비 · 입찰보증금</td></tr>
+<tr><td>계약</td><td>계약기간 · 갱신/연장 조건 · 중도해지 · 원상복구 조건</td></tr>
+<tr><td>자격</td><td>사업자 업종 · 실적 · 자본 · 신용 · 컨소시엄 허용 여부</td></tr>
+<tr><td>일정</td><td>현장설명회 · 질의마감 · 투찰마감 · 개찰 · 계약 예정일</td></tr>
+</tbody>
+</table>
+</section>
+
+<section class="section">
+<h2>공식·검증 소스</h2>
+<div class="links">
+<a class="btn" target="_blank" rel="noopener" href="https://partners.srail.or.kr/login.do">SR 전자조달 ↗</a>
+<a class="btn" target="_blank" rel="noopener" href="https://www.srail.or.kr/cms/article/view.do?pageId=KR0502000000&pageIndex=9&postNo=38">2016 SR 공식 공모자료 ↗</a>
+<a class="btn" target="_blank" rel="noopener" href="https://www.srail.or.kr/cms/archive.do?pageId=KR0406010000">SR 수서역 안내 ↗</a>
+<a class="btn" target="_blank" rel="noopener" href="https://www.asiatime.co.kr/article/20260623500365">2026 계약만료 보도 ↗</a>
+<a class="btn" target="_blank" rel="noopener" href="https://www.g2b.go.kr/">나라장터 ↗</a>
+</div>
+</section>
+</main>
+<footer class="wrap foot">© 2026 주식회사 별의문(STARGATE) · Strategy Dashboard · 공개정보 기반 사업기회 모니터링</footer>
+</body>
+</html>
