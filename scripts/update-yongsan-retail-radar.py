@@ -82,34 +82,13 @@ def collect_korail(source: str, url: str) -> list[dict]:
     soup, _ = fetch(url)
     found = []
     seen = set()
+    opportunity_terms = ("전문점", "상업시설", "입찰", "모집", "임대", "운영", "공사", "구축", "매장")
 
-    for row in soup.find_all("tr"):
-        cells = row.find_all(["td", "th"])
-        if len(cells) < 2:
-            continue
-
-        first = clean(cells[0].get_text(" ", strip=True))
-        title = clean(cells[1].get_text(" ", strip=True))
-        context = clean(row.get_text(" ", strip=True))
-
-        if not title or title in ("제목", "첨부파일"):
-            continue
-        if len(title) < 5 or title in seen:
-            continue
-
-        direct = any(k in context for k in YONGSAN_TERMS)
-        contract_watch = "계약종료" in title and ("4분기" in title or "분기" in title)
-
-        if not direct and not contract_watch:
-            continue
-
-        href = url
-        a = row.find("a", href=True)
-        if a:
-            raw_href = clean(a.get("href", ""))
-            if raw_href and not raw_href.lower().startswith("javascript:") and raw_href != "#":
-                href = urljoin(url, raw_href)
-
+    def add_item(title: str, context: str, href: str, contract_watch: bool = False) -> None:
+        title = clean(title)
+        context = clean(context)
+        if not title or title in seen:
+            return
         seen.add(title)
 
         dates = DATE_RE.findall(context)
@@ -117,9 +96,9 @@ def collect_korail(source: str, url: str) -> list[dict]:
             f"{int(y):04d}-{int(mo):02d}-{int(d):02d}" for y, mo, d in dates
         ]
         published = normalized_dates[0] if normalized_dates else "공고참조"
-        deadline = normalized_dates[-1] if normalized_dates else "원문확인"
+        deadline = normalized_dates[-1] if len(normalized_dates) > 1 else "원문확인"
 
-        if contract_watch and not direct:
+        if contract_watch:
             found.append({
                 "title": title,
                 "organization": "코레일유통",
@@ -136,7 +115,7 @@ def collect_korail(source: str, url: str) -> list[dict]:
                 "url": href,
                 "source": source,
             })
-            continue
+            return
 
         found.append({
             "title": title,
@@ -150,10 +129,58 @@ def collect_korail(source: str, url: str) -> list[dict]:
             "fit": "직접·파트너형",
             "amount": "원문확인",
             "contractTerm": "원문확인",
-            "reason": "코레일유통 공개 게시판의 목록 행에서 용산 관련 문구를 자동 확인했습니다. 금액·계약기간·참가자격은 첨부파일 원문을 최종 확인해야 합니다.",
+            "reason": "코레일유통 공개 페이지의 텍스트에서 용산 관련 공고를 자동 탐지했습니다. 금액·계약기간·참가자격은 첨부파일 원문을 최종 확인해야 합니다.",
             "url": href,
             "source": source,
         })
+
+    # 1) Direct Yongsan mentions. Text-node scan is resilient to JS/onclick boards
+    # where the title is not exposed as a normal href.
+    for node in soup.find_all(string=re.compile("용산")):
+        text = clean(str(node))
+        if len(text) < 4:
+            continue
+        parent = node.parent
+        container = node.find_parent(["tr", "li", "article", "section", "div"]) or parent
+        context = clean(container.get_text(" ", strip=True)) if container else text
+        candidate = text if any(k in text for k in opportunity_terms) else context
+        if not any(k in candidate for k in opportunity_terms):
+            continue
+        # Avoid generic address/footer strings.
+        if "서울특별시 용산구" in candidate and not any(k in candidate for k in ("역", "전문점", "상업시설", "입찰", "공사")):
+            continue
+
+        href = url
+        a = parent if getattr(parent, "name", None) == "a" else parent.find_parent("a") if parent else None
+        if not a and container:
+            a = container.find("a", href=True)
+        if a and a.get("href"):
+            raw_href = clean(a.get("href", ""))
+            if raw_href and not raw_href.lower().startswith("javascript:") and raw_href != "#":
+                href = urljoin(url, raw_href)
+
+        # Prefer the direct title node when it already looks like a notice title.
+        title = text if len(text) >= 8 else candidate
+        add_item(title, context, href)
+
+    # 2) Quarterly contract-expiry notices are kept as watch items even before
+    # their attachment can be parsed, so Yongsan inclusion is not missed.
+    for node in soup.find_all(string=re.compile("계약종료")):
+        text = clean(str(node))
+        if "4분기" not in text and "분기" not in text:
+            continue
+        parent = node.parent
+        container = node.find_parent(["tr", "li", "article", "section", "div"]) or parent
+        context = clean(container.get_text(" ", strip=True)) if container else text
+        href = url
+        a = parent if getattr(parent, "name", None) == "a" else parent.find_parent("a") if parent else None
+        if not a and container:
+            a = container.find("a", href=True)
+        if a and a.get("href"):
+            raw_href = clean(a.get("href", ""))
+            if raw_href and not raw_href.lower().startswith("javascript:") and raw_href != "#":
+                href = urljoin(url, raw_href)
+        add_item(text, context, href, contract_watch=True)
 
     return found
 
