@@ -1,0 +1,42 @@
+name: Update Yongsan Station retail radar
+
+on:
+  schedule:
+    - cron: '23 0,6,12,18 * * *'
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/update-yongsan-retail-radar.py'
+      - '.github/workflows/update-yongsan-retail-radar.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: yongsan-retail-radar
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install collector dependencies
+        run: pip install requests beautifulsoup4
+      - name: Collect Yongsan opportunities
+        run: python scripts/update-yongsan-retail-radar.py
+      - name: Commit refreshed data
+        run: |
+          if git diff --quiet -- strategy/yongsan-retail-bid/data/opportunities.json; then
+            echo "No changes"
+            exit 0
+          fi
+          git config user.name "stargate-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add strategy/yongsan-retail-bid/data/opportunities.json
+          git commit -m "data(strategy): refresh Yongsan retail opportunities"
+          git push

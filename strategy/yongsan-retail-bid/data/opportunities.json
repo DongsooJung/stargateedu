@@ -1,0 +1,60 @@
+{
+  "updatedAt": "2026-09-21T11:19:00+09:00",
+  "sourceStatus": {
+    "코레일유통 전문점 모집": "bootstrap",
+    "코레일유통 상업시설 모집": "bootstrap",
+    "코레일유통 입찰공고": "bootstrap",
+    "HDC아이파크몰 입점/대관": "standing",
+    "용산국제업무지구": "standing"
+  },
+  "opportunities": [
+    {
+      "title": "용산역 3번출구(방풍실) 전문점 구축 공사",
+      "organization": "코레일유통",
+      "category": "시설·구축",
+      "location": "용산역 3번출구",
+      "published": "2026-08-12",
+      "deadline": "종료/원문확인",
+      "status": "후속모집 감시",
+      "score": 91,
+      "fit": "파트너형",
+      "amount": "원문확인",
+      "contractTerm": "공사별",
+      "reason": "전문점 공간 구축 완료 이후 운영업체 모집 또는 신규 전문점 공고 발생 여부를 집중 추적합니다.",
+      "url": "https://www.korailretail.com/bbs/selectBbsList.do?bbsId=BBSMSTR_000000000027",
+      "source": "코레일유통 입찰공고"
+    },
+    {
+      "title": "HDC아이파크몰 용산점 입점·대관 제안",
+      "organization": "HDC아이파크몰",
+      "category": "민간 입점",
+      "location": "용산역 연결 아이파크몰",
+      "published": "상시",
+      "deadline": "상시/협의",
+      "status": "상시제안",
+      "score": 82,
+      "fit": "직접제안",
+      "amount": "개별협의",
+      "contractTerm": "개별협의",
+      "reason": "아이파크몰 공식 입점·대관 채널을 통한 팝업·브랜드·공간 제안.",
+      "url": "https://www.hdc-iparkmall.com/report/enter/main.do",
+      "source": "HDC아이파크몰 공식"
+    },
+    {
+      "title": "용산국제업무지구 상업·리테일 개발 파이프라인",
+      "organization": "서울시·코레일·SH",
+      "category": "개발사업",
+      "location": "용산구 한강로3가 일대",
+      "published": "개발계획",
+      "deadline": "단계별",
+      "status": "장기감시",
+      "score": 78,
+      "fit": "파트너·컨소시엄",
+      "amount": "사업별",
+      "contractTerm": "사업별",
+      "reason": "향후 민간필지 개발과 상업시설 MD·운영·스마트공간 발주를 추적.",
+      "url": "https://www.seoul.go.kr/news/news_report.do?nttNo=446896",
+      "source": "서울시 공식"
+    }
+  ]
+}

@@ -17,7 +17,7 @@
 <div class="kicker">YONGSAN STATION · RETAIL & DEVELOPMENT RADAR</div>
 <h1>용산역 상업시설<br>입찰·임대 레이더</h1>
 <p>용산역의 코레일유통 역사 상업시설·전문점과 HDC아이파크몰 입점/대관, 광고, 시설공사, 그리고 용산국제업무지구 개발 파이프라인을 한 화면에서 추적합니다.</p>
-<div class="status"><span class="dot"></span>2026-09-21 기준 용산역 신규 운영업체 본공고는 공개 검색상 별도 확인되지 않음 · 전문점 구축 및 계약종료 공고 집중 감시</div>
+<div class="status"><span class="dot"></span><span id="live-update">AUTO FEED · 데이터 연결 준비</span></div>
 </section>
 
 <section class="grid">
@@ -25,6 +25,23 @@
 <div class="metric"><span>공식 확인 매장</span><b>6개+</b></div>
 <div class="metric"><span>최근 시설 신호</span><b>3번출구 전문점 공사</b></div>
 <div class="metric"><span>용산국제업무지구</span><b>456,099㎡</b></div>
+</section>
+
+
+<section class="section">
+<h2>자동수집 입찰·임대 피드</h2>
+<div class="grid" style="grid-template-columns:repeat(3,1fr);margin:0 0 14px">
+<div class="metric"><span>수집 건수</span><b id="feed-total">—</b></div>
+<div class="metric"><span>우선검토 85+</span><b id="feed-high">—</b></div>
+<div class="metric"><span>공식 수집원 상태</span><b id="feed-sources">—</b></div>
+</div>
+<div style="overflow:auto">
+<table style="min-width:980px">
+<thead><tr><th>점수</th><th>기회</th><th>유형</th><th>상태/일정</th><th>금액·기간</th><th>적합방식</th><th>원문</th></tr></thead>
+<tbody id="opportunity-rows"><tr><td colspan="7" style="color:var(--muted);text-align:center">자동수집 데이터를 불러오는 중입니다.</td></tr></tbody>
+</table>
+</div>
+<p class="note" id="feed-note">코레일유통 공식 게시판을 6시간마다 확인하며, 계약종료·신규개발·전문점 공고는 상세본문까지 열어 ‘용산’ 포함 여부를 재검증합니다.</p>
 </section>
 
 <section class="section">
@@ -93,7 +110,7 @@
 <a class="btn" target="_blank" rel="noopener" href="https://www.korailretail.com/board/boardList.do?boardTypeNum=4">코레일유통 전문점 모집 ↗</a>
 <a class="btn" target="_blank" rel="noopener" href="https://www.korailretail.com/board/boardList.do?boardTypeNum=46">코레일유통 상업시설 모집 ↗</a>
 <a class="btn" target="_blank" rel="noopener" href="https://www.korailretail.com/bbs/selectBbsList.do?bbsId=BBSMSTR_000000000027">코레일유통 입찰공고 ↗</a>
-<a class="btn" target="_blank" rel="noopener" href="https://www.korailretail.com/store/selectBoardList.do?pageIndex=2">용산역 매장현황 ↗</a>
+<a class="btn" target="_blank" rel="noopener" href="https://www.korailretail.com/sub7_1.do">코레일유통 서울본부·용산 관리역 ↗</a>\n<a class="btn" target="_blank" rel="noopener" href="https://www.korailretail.com/store/selectBoardList.do">코레일유통 전체 매장현황 ↗</a>
 <a class="btn" target="_blank" rel="noopener" href="https://www.hdc-iparkmall.com/report/enter/main.do">아이파크몰 입점/대관 ↗</a>
 <a class="btn" target="_blank" rel="noopener" href="https://www.seoul.go.kr/news/news_report.do?nttNo=446896">서울시 용산국제업무지구 ↗</a>
 </div>
@@ -101,5 +118,42 @@
 </section>
 </main>
 <footer class="wrap foot">© 2026 주식회사 별의문(STARGATE) · Strategy Dashboard · Yongsan Station Retail Radar</footer>
+
+<script>
+const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+const safeUrl=u=>{try{const x=new URL(String(u),location.href);return /^https?:$/.test(x.protocol)?x.href:'#'}catch{return '#'}};
+async function loadYongsanFeed(){
+  const rows=document.getElementById('opportunity-rows');
+  try{
+    const r=await fetch('./data/opportunities.json?t='+Date.now(),{cache:'no-store'});
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    const data=await r.json();
+    const items=Array.isArray(data.opportunities)?data.opportunities:[];
+    document.getElementById('feed-total').textContent=items.length.toLocaleString('ko-KR');
+    document.getElementById('feed-high').textContent=items.filter(x=>Number(x.score||0)>=85).length.toLocaleString('ko-KR');
+    const states=Object.values(data.sourceStatus||{});
+    const ok=states.filter(x=>String(x).startsWith('ok:')||x==='standing').length;
+    document.getElementById('feed-sources').textContent=ok+'/'+states.length;
+    const updated=data.updatedAt?new Date(data.updatedAt):null;
+    document.getElementById('live-update').textContent=updated&&!isNaN(updated)
+      ?'AUTO FEED · 최근 갱신 '+new Intl.DateTimeFormat('ko-KR',{dateStyle:'medium',timeStyle:'short',timeZone:'Asia/Seoul'}).format(updated)
+      :'AUTO FEED · 연결됨';
+    rows.innerHTML=items.length?items.map(x=>`<tr>
+      <td><strong style="color:var(--gold)">${esc(x.score)}</strong></td>
+      <td><strong>${esc(x.title)}</strong><br><small style="color:var(--muted)">${esc(x.organization)} · ${esc(x.location)}</small></td>
+      <td>${esc(x.category)}</td>
+      <td><strong>${esc(x.status)}</strong><br><small style="color:var(--muted)">게시 ${esc(x.published)} · 마감 ${esc(x.deadline)}</small></td>
+      <td>${esc(x.amount)}<br><small style="color:var(--muted)">기간 ${esc(x.contractTerm)}</small></td>
+      <td>${esc(x.fit)}</td>
+      <td><a href="${safeUrl(x.url)}" target="_blank" rel="noopener" style="color:var(--blue);font-weight:800">원문 ↗</a><br><small style="color:var(--muted)">${esc(x.source)}</small></td>
+    </tr>`).join(''):'<tr><td colspan="7" style="text-align:center;color:var(--muted)">현재 자동수집된 용산 관련 공고가 없습니다.</td></tr>';
+  }catch(e){
+    document.getElementById('live-update').textContent='AUTO FEED · 데이터 로드 실패';
+    rows.innerHTML='<tr><td colspan="7" style="text-align:center;color:var(--muted)">데이터 파일을 불러오지 못했습니다. 다음 자동 갱신에서 재시도합니다.</td></tr>';
+  }
+}
+loadYongsanFeed();
+</script>
+
 </body>
 </html>
