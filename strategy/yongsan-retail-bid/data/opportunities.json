@@ -1,13 +1,29 @@
 {
-  "updatedAt": "2026-09-21T11:24:07+09:00",
+  "updatedAt": "2026-09-21T11:25:22+09:00",
   "sourceStatus": {
-    "코레일유통 전문점 모집": "ok:0",
-    "코레일유통 상업시설 모집": "ok:0",
-    "코레일유통 입찰공고": "ok:0",
+    "코레일유통 전문점 모집": "ok:1",
+    "코레일유통 상업시설 모집": "ok:1",
+    "코레일유통 입찰공고": "ok:1",
     "HDC아이파크몰 입점/대관": "standing",
     "용산국제업무지구": "standing"
   },
   "opportunities": [
+    {
+      "title": "용산역 3번출구(방풍실) 전문점 구축 공사",
+      "organization": "코레일유통",
+      "category": "시설·구축",
+      "location": "용산역",
+      "published": "공고참조",
+      "deadline": "원문확인",
+      "status": "용산관련",
+      "score": 89,
+      "fit": "직접·파트너형",
+      "amount": "원문확인",
+      "contractTerm": "원문확인",
+      "reason": "코레일유통 공개 페이지의 텍스트에서 용산 관련 공고를 자동 탐지했습니다. 금액·계약기간·참가자격은 첨부파일 원문을 최종 확인해야 합니다.",
+      "url": "https://www.korailretail.com/bbs/selectBbsList.do?bbsId=BBSMSTR_000000000027",
+      "source": "코레일유통 입찰공고"
+    },
     {
       "title": "HDC아이파크몰 용산점 입점·대관 제안",
       "organization": "HDC아이파크몰",
@@ -39,6 +55,38 @@
       "reason": "기반시설·민간필지 개발 단계에 따라 리테일 MD, 스마트공간, 데이터·운영 사업 기회를 추적합니다.",
       "url": "https://www.seoul.go.kr/news/news_report.do?nttNo=446896",
       "source": "서울시 공식"
+    },
+    {
+      "title": "2026년 4분기 계약종료 매장 공개_전문점",
+      "organization": "코레일유통",
+      "category": "계약종료 사전공개",
+      "location": "용산 포함여부 확인",
+      "published": "공고참조",
+      "deadline": "분기 사전공개",
+      "status": "용산포함 검증필요",
+      "score": 72,
+      "fit": "모니터링",
+      "amount": "원문/첨부 확인",
+      "contractTerm": "매장별 상이",
+      "reason": "분기 계약종료 매장 사전공개입니다. 용산역 포함 여부는 공지 첨부파일을 최종 확인해야 하며, 이후 개별 모집공고 전환을 추적합니다.",
+      "url": "https://www.korailretail.com/board/boardList.do?boardTypeNum=4",
+      "source": "코레일유통 전문점 모집"
+    },
+    {
+      "title": "2026년 4분기 계약종료 매장 공개_편의점",
+      "organization": "코레일유통",
+      "category": "계약종료 사전공개",
+      "location": "용산 포함여부 확인",
+      "published": "공고참조",
+      "deadline": "분기 사전공개",
+      "status": "용산포함 검증필요",
+      "score": 72,
+      "fit": "모니터링",
+      "amount": "원문/첨부 확인",
+      "contractTerm": "매장별 상이",
+      "reason": "분기 계약종료 매장 사전공개입니다. 용산역 포함 여부는 공지 첨부파일을 최종 확인해야 하며, 이후 개별 모집공고 전환을 추적합니다.",
+      "url": "https://www.korailretail.com/board/boardList.do?boardTypeNum=46",
+      "source": "코레일유통 상업시설 모집"
     }
   ]
 }
