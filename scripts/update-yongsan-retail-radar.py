@@ -90,7 +90,9 @@ def collect_korail(source: str, url: str) -> list[dict]:
         if "javascript:" in href.lower() or href.endswith("#"):
             continue
         row = a.find_parent("tr")
-        context = clean(row.get_text(" ", strip=True)) if row else title
+        if row is None:
+            continue
+        context = clean(row.get_text(" ", strip=True))
         direct = any(k in context for k in YONGSAN_TERMS)
         generic_candidate = any(k in title for k in DETAIL_TRIGGERS)
         if not direct and not generic_candidate:
