@@ -14,7 +14,8 @@ from bs4 import BeautifulSoup
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "strategy" / "yongsan-retail-bid" / "data" / "opportunities.json"
 KST = timezone(timedelta(hours=9))
-UA = {"User-Agent": "STARGATE-Yongsan-Retail-Radar/1.0 (+public-web-monitor)"}\nCOLLECTOR_VERSION = "2026-09-21.3"
+UA = {"User-Agent": "STARGATE-Yongsan-Retail-Radar/1.0 (+public-web-monitor)"}
+COLLECTOR_VERSION = "2026-09-21.3"
 
 KORAIL_SOURCES = [
     ("코레일유통 전문점 모집", "https://www.korailretail.com/board/boardList.do?boardTypeNum=4"),
