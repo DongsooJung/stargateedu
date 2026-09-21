@@ -82,44 +82,79 @@ def collect_korail(source: str, url: str) -> list[dict]:
     soup, _ = fetch(url)
     found = []
     seen = set()
-    for a in soup.find_all("a", href=True):
-        title = clean(a.get_text(" ", strip=True))
+
+    for row in soup.find_all("tr"):
+        cells = row.find_all(["td", "th"])
+        if len(cells) < 2:
+            continue
+
+        first = clean(cells[0].get_text(" ", strip=True))
+        title = clean(cells[1].get_text(" ", strip=True))
+        context = clean(row.get_text(" ", strip=True))
+
+        if not title or title in ("제목", "첨부파일"):
+            continue
         if len(title) < 5 or title in seen:
             continue
-        href = urljoin(url, a.get("href", ""))
-        if "javascript:" in href.lower() or href.endswith("#"):
-            continue
-        row = a.find_parent("tr")
-        if row is None:
-            continue
-        context = clean(row.get_text(" ", strip=True))
+
         direct = any(k in context for k in YONGSAN_TERMS)
-        generic_candidate = any(k in title for k in DETAIL_TRIGGERS)
-        if not direct and not generic_candidate:
+        contract_watch = "계약종료" in title and ("4분기" in title or "분기" in title)
+
+        if not direct and not contract_watch:
             continue
-        detail_text = ""
-        if not direct and generic_candidate:
-            direct, detail_text = detail_mentions_yongsan(href)
-        if not direct:
-            continue
+
+        href = url
+        a = row.find("a", href=True)
+        if a:
+            raw_href = clean(a.get("href", ""))
+            if raw_href and not raw_href.lower().startswith("javascript:") and raw_href != "#":
+                href = urljoin(url, raw_href)
+
         seen.add(title)
-        published = parse_date(context)
+
+        dates = DATE_RE.findall(context)
+        normalized_dates = [
+            f"{int(y):04d}-{int(mo):02d}-{int(d):02d}" for y, mo, d in dates
+        ]
+        published = normalized_dates[0] if normalized_dates else "공고참조"
+        deadline = normalized_dates[-1] if normalized_dates else "원문확인"
+
+        if contract_watch and not direct:
+            found.append({
+                "title": title,
+                "organization": "코레일유통",
+                "category": "계약종료 사전공개",
+                "location": "용산 포함여부 확인",
+                "published": published,
+                "deadline": "분기 사전공개",
+                "status": "용산포함 검증필요",
+                "score": 72,
+                "fit": "모니터링",
+                "amount": "원문/첨부 확인",
+                "contractTerm": "매장별 상이",
+                "reason": "분기 계약종료 매장 사전공개입니다. 용산역 포함 여부는 공지 첨부파일을 최종 확인해야 하며, 이후 개별 모집공고 전환을 추적합니다.",
+                "url": href,
+                "source": source,
+            })
+            continue
+
         found.append({
             "title": title,
             "organization": "코레일유통",
             "category": category(title),
             "location": "용산역",
-            "published": published or "공고참조",
-            "deadline": "원문확인",
-            "status": "원문확인",
-            "score": score(title, detail_text or context),
+            "published": published,
+            "deadline": deadline,
+            "status": "용산관련",
+            "score": score(title, context),
             "fit": "직접·파트너형",
             "amount": "원문확인",
             "contractTerm": "원문확인",
-            "reason": "코레일유통 공개 게시판에서 용산 관련 문구를 자동 확인했습니다. 금액·계약기간·참가자격은 첨부파일 원문을 최종 확인해야 합니다.",
+            "reason": "코레일유통 공개 게시판의 목록 행에서 용산 관련 문구를 자동 확인했습니다. 금액·계약기간·참가자격은 첨부파일 원문을 최종 확인해야 합니다.",
             "url": href,
             "source": source,
         })
+
     return found
 
 
