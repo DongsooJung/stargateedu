@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-21 10:20 KST",
+  "updatedAt": "2026-09-22 10:42 KST",
   "skuCount": 1,
   "benchmarkSku": "Apple iPhone 17 256GB",
   "caveat": "가격은 공개 검색 인덱스에서 확인한 관측값이며 쿠폰·회원·색상·번들·판매자 조건에 따라 결제금액이 달라질 수 있음.",
@@ -40,7 +40,7 @@
       "priceTwd": 32900,
       "delivery": "24h 쇼핑 검색 결과·상품별 배송조건 확인",
       "status": "ok",
-      "observedAt": "2026-09-21",
+      "observedAt": "2026-09-22",
       "note": "검색 결과에서 신품 iPhone 17 256G 기준가 관측.",
       "sourceUrl": "https://24h.pchome.com.tw/search/iPhone%2017%20256GB"
     }
