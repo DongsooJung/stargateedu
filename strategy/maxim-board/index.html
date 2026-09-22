@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="STARGATE의 실행·학습·리더십 격언을 전광판처럼 순환해 보여주는 대시보드">
+<title>격언 대시보드 | STARGATE</title>
+<style>
+:root{--bg:#030711;--panel:#0a1220;--line:#1c2d44;--text:#f5f8fc;--muted:#8fa1b8;--cyan:#68e1fd;--gold:#ffd166;--green:#64f0ba}
+*{box-sizing:border-box}html,body{height:100%}body{margin:0;background:radial-gradient(circle at 50% 20%,#122944 0,transparent 44%),linear-gradient(145deg,#02050b,#07111f 58%,#02050b);color:var(--text);font-family:system-ui,-apple-system,"Noto Sans KR",sans-serif;overflow-x:hidden}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.13;background-image:linear-gradient(rgba(104,225,253,.13) 1px,transparent 1px);background-size:100% 5px}
+a{color:inherit;text-decoration:none}.wrap{width:min(1180px,calc(100% - 36px));margin:auto}.top{height:72px;display:flex;align-items:center;justify-content:space-between;color:var(--muted);font-size:14px;border-bottom:1px solid rgba(255,255,255,.07)}.brand{font-weight:900;letter-spacing:.14em;color:var(--text)}.brand b{color:var(--cyan)}
+.board{min-height:calc(100vh - 150px);display:grid;align-content:center;padding:42px 0 30px}.eyebrow{display:flex;align-items:center;gap:10px;color:var(--cyan);font-size:12px;font-weight:900;letter-spacing:.16em}.pulse{width:8px;height:8px;border-radius:50%;background:var(--cyan);box-shadow:0 0 18px var(--cyan);animation:pulse 1.8s infinite}
+.quote-stage{position:relative;display:grid;place-items:center;min-height:430px;padding:48px 6%;margin:22px 0;border:1px solid var(--line);border-radius:28px;background:linear-gradient(135deg,rgba(10,18,32,.95),rgba(5,12,23,.8));box-shadow:0 30px 90px rgba(0,0,0,.35);overflow:hidden}.quote-stage:after{content:"“";position:absolute;right:4%;bottom:-90px;font:700 290px/1 Georgia,serif;color:rgba(104,225,253,.06)}
+.quote{text-align:center;max-width:1000px;position:relative;z-index:1}.quote p{font-size:clamp(31px,5.4vw,70px);line-height:1.32;letter-spacing:-.045em;font-weight:850;margin:0;text-wrap:balance}.quote .author{margin-top:34px;color:var(--gold);font-size:clamp(16px,2vw,21px);font-weight:800}.quote .context{margin-top:8px;color:var(--muted);font-size:13px}
+.controls{display:grid;grid-template-columns:auto 1fr auto;gap:18px;align-items:center}.buttons,.tools{display:flex;gap:8px}.btn{min-width:44px;height:44px;border:1px solid var(--line);border-radius:12px;background:#0a1728;color:var(--text);font:inherit;font-weight:800;cursor:pointer}.btn:hover,.btn:focus-visible{border-color:var(--cyan);outline:none}.btn.primary{background:var(--cyan);color:#021018;border-color:var(--cyan)}.progress{height:5px;background:#13243a;border-radius:99px;overflow:hidden}.progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--cyan),var(--green));border-radius:99px}
+.meta{display:flex;justify-content:space-between;gap:16px;margin-top:15px;color:var(--muted);font-size:13px}.filters{display:flex;gap:8px;flex-wrap:wrap;margin-top:24px}.filter{border:1px solid var(--line);border-radius:999px;background:transparent;color:var(--muted);padding:8px 13px;font:inherit;font-size:13px;font-weight:800;cursor:pointer}.filter.active{color:#021018;background:var(--green);border-color:var(--green)}
+footer{padding:18px 0 30px;display:flex;justify-content:space-between;color:var(--muted);font-size:12px}.hint{color:#6f829a}
+@keyframes pulse{50%{opacity:.35;transform:scale(.82)}}@keyframes enter{from{opacity:0;transform:translateY(16px);filter:blur(4px)}to{opacity:1;transform:none;filter:none}}.enter{animation:enter .5s ease both}
+:fullscreen .top,:fullscreen footer{display:none}:fullscreen .board{min-height:100vh;padding:28px 0}:fullscreen .wrap{width:min(1400px,calc(100% - 48px))}
+@media(max-width:720px){.top span{display:none}.board{padding-top:24px}.quote-stage{min-height:390px;padding:36px 24px}.controls{grid-template-columns:1fr}.buttons,.tools{justify-content:center}.progress{grid-row:1}.meta{flex-direction:column;gap:5px}.filters{justify-content:center}footer{display:block}.hint{margin-top:5px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<header class="wrap top"><a href="/strategy/">← 전략 대시보드</a><div class="brand">STARGATE <b>MAXIM</b></div><span>Execution · Learning · Leadership</span></header>
+<main class="wrap board">
+<div class="eyebrow"><i class="pulse"></i> LIVE MAXIM BOARD</div>
+<section class="quote-stage" aria-live="polite"><div class="quote" id="quoteBox"><p id="quoteText"></p><div class="author" id="quoteAuthor"></div><div class="context" id="quoteContext"></div></div></section>
+<div class="controls">
+<div class="buttons"><button class="btn" id="prev" aria-label="이전 격언">←</button><button class="btn primary" id="play" aria-label="자동 재생 일시정지">Ⅱ</button><button class="btn" id="next" aria-label="다음 격언">→</button></div>
+<div class="progress" aria-hidden="true"><i id="bar"></i></div>
+<div class="tools"><button class="btn" id="copy" aria-label="격언 복사">복사</button><button class="btn" id="full" aria-label="전체화면">전체</button></div>
+</div>
+<div class="meta"><span id="counter">01 / 12</span><span id="category">실행</span><span>8초마다 자동 전환</span></div>
+<div class="filters" aria-label="격언 카테고리">
+<button class="filter active" data-filter="전체">전체</button><button class="filter" data-filter="실행">실행</button><button class="filter" data-filter="학습">학습</button><button class="filter" data-filter="리더십">리더십</button>
+</div>
+</main>
+<footer class="wrap"><span>© 2026 주식회사 별의문(STARGATE)</span><span class="hint">← → 이동 · Space 재생/정지 · F 전체화면</span></footer>
+<script>
+const quotes=[
+{text:"나는 내가 좋아하는 일을 하며 산다.",author:"워런 버핏",context:"일과 삶의 방향",category:"실행"},
+{text:"미래를 예측하는 가장 좋은 방법은 미래를 발명하는 것이다.",author:"앨런 케이",context:"창조와 기술",category:"실행"},
+{text:"행동에는 위험과 비용이 따른다. 그러나 편안한 무행동보다 훨씬 작다.",author:"존 F. 케네디",context:"결정과 책임",category:"실행"},
+{text:"완벽함은 더할 것이 없을 때가 아니라 뺄 것이 없을 때 완성된다.",author:"앙투안 드 생텍쥐페리",context:"단순함과 설계",category:"실행"},
+{text:"배움은 결코 마음을 지치게 하지 않는다.",author:"레오나르도 다빈치",context:"지속적인 탐구",category:"학습"},
+{text:"중요한 것은 질문을 멈추지 않는 것이다.",author:"알베르트 아인슈타인",context:"호기심과 연구",category:"학습"},
+{text:"우리는 아는 것을 말할 수 있는 것보다 더 많이 안다.",author:"마이클 폴라니",context:"암묵지와 경험",category:"학습"},
+{text:"우연은 준비된 마음을 편든다.",author:"루이 파스퇴르",context:"관찰과 발견",category:"학습"},
+{text:"경영이란 일을 올바르게 하는 것이고, 리더십이란 올바른 일을 하는 것이다.",author:"피터 드러커",context:"경영과 방향",category:"리더십"},
+{text:"혼자서는 할 수 있는 일이 적지만, 함께하면 많은 일을 할 수 있다.",author:"헬렌 켈러",context:"협업과 조직",category:"리더십"},
+{text:"리더십과 배움은 서로에게 없어서는 안 된다.",author:"존 F. 케네디",context:"성장하는 리더",category:"리더십"},
+{text:"본보기가 되는 것은 다른 사람에게 영향을 주는 주된 방법이 아니라 유일한 방법이다.",author:"알베르트 슈바이처",context:"행동으로 이끄는 리더십",category:"리더십"}
+];
+let filter="전체",visible=[...quotes],index=0,playing=true,timer,startAt;
+const DURATION=8000,q=id=>document.getElementById(id);
+function refreshList(){visible=filter==="전체"?[...quotes]:quotes.filter(x=>x.category===filter);index=0;render()}
+function render(){const item=visible[index];const box=q("quoteBox");box.classList.remove("enter");void box.offsetWidth;box.classList.add("enter");q("quoteText").textContent=item.text;q("quoteAuthor").textContent="— "+item.author;q("quoteContext").textContent=item.context;q("category").textContent=item.category;q("counter").textContent=String(index+1).padStart(2,"0")+" / "+String(visible.length).padStart(2,"0");restart()}
+function move(delta){index=(index+delta+visible.length)%visible.length;render()}
+function restart(){clearInterval(timer);startAt=Date.now();q("bar").style.width="0%";if(playing)timer=setInterval(()=>{const p=(Date.now()-startAt)/DURATION*100;q("bar").style.width=Math.min(p,100)+"%";if(p>=100)move(1)},80)}
+function toggle(){playing=!playing;q("play").textContent=playing?"Ⅱ":"▶";restart()}
+q("prev").onclick=()=>move(-1);q("next").onclick=()=>move(1);q("play").onclick=toggle;
+q("copy").onclick=async()=>{const item=visible[index];try{await navigator.clipboard.writeText("“"+item.text+"” — "+item.author);q("copy").textContent="완료";setTimeout(()=>q("copy").textContent="복사",1200)}catch(e){q("copy").textContent="실패"}};
+q("full").onclick=()=>document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen();
+document.querySelectorAll(".filter").forEach(btn=>btn.onclick=()=>{document.querySelectorAll(".filter").forEach(x=>x.classList.remove("active"));btn.classList.add("active");filter=btn.dataset.filter;refreshList()});
+document.addEventListener("keydown",e=>{if(e.key==="ArrowLeft")move(-1);if(e.key==="ArrowRight")move(1);if(e.code==="Space"){e.preventDefault();toggle()}if(e.key.toLowerCase()==="f")q("full").click()});
+render();
+</script>
+</body>
+</html>
