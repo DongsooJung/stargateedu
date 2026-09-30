@@ -81,6 +81,20 @@
   .cover-story__flow span{padding:7px 11px;border:1px solid rgba(103,232,249,.2);border-radius:999px;background:rgba(14,165,233,.08);color:#c8e9f8;font-size:12px;font-weight:700}
   @media(max-width:820px){.cover-story{padding:56px 0}.cover-story__head{align-items:flex-start;flex-direction:column}.cover-story__head .btn{width:100%;justify-content:center}.cover-story__frame{border-radius:16px}.cover-story__frame figcaption{font-size:10px}}
 
+  .cover-story__map{position:relative}
+  .cover-story__hotspot{position:absolute;z-index:2;border:2px solid transparent;border-radius:24px;outline:none;transition:border-color .18s ease,background .18s ease,box-shadow .18s ease}
+  .cover-story__hotspot::after{content:attr(data-label);position:absolute;left:50%;bottom:12px;transform:translateX(-50%) translateY(6px);padding:7px 11px;border-radius:999px;background:rgba(4,12,29,.9);border:1px solid rgba(255,255,255,.18);color:#fff;font-size:11px;font-weight:800;white-space:nowrap;opacity:0;pointer-events:none;transition:.18s ease}
+  .cover-story__hotspot:hover,.cover-story__hotspot:focus-visible{border-color:rgba(103,232,249,.9);background:rgba(103,232,249,.05);box-shadow:inset 0 0 34px rgba(56,189,248,.16),0 0 0 3px rgba(56,189,248,.08)}
+  .cover-story__hotspot:hover::after,.cover-story__hotspot:focus-visible::after{opacity:1;transform:translateX(-50%) translateY(0)}
+  .cover-story__hotspot--commander{left:29.05%;top:20.55%;width:41.9%;height:24.5%}
+  .cover-story__hotspot--strategy{left:5.62%;top:62.2%;width:26.9%;height:26.7%}
+  .cover-story__hotspot--silo{left:36.55%;top:62.2%;width:26.9%;height:26.7%}
+  .cover-story__hotspot--lab{left:67.5%;top:62.2%;width:26.9%;height:26.7%}
+  .cover-story__links{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:14px}
+  .cover-story__link{padding:13px 14px;border:1px solid rgba(255,255,255,.1);border-radius:14px;background:rgba(255,255,255,.035);color:#dce8fb;font-size:12px;font-weight:800;text-align:center;transition:.18s ease}
+  .cover-story__link:hover{transform:translateY(-2px);border-color:rgba(103,232,249,.45);background:rgba(14,165,233,.08)}
+  @media(max-width:820px){.cover-story__hotspot::after{display:none}.cover-story__links{grid-template-columns:repeat(2,1fr)}}
+
 </style>
 </head>
 <body>
@@ -108,9 +122,21 @@
       <a class="btn btn-primary" href="/strategy/">전략 대시보드 보기 →</a>
     </div>
     <figure class="cover-story__frame">
-      <img src="/assets/stargate-cover-story.svg?v=260930" alt="커맨더를 중심으로 전략 대시보드, 사일로 연구대시보드, 실험실이 연결된 STARGATE EDU 운영 구조" width="1600" height="900" loading="eager" fetchpriority="high">
+      <div class="cover-story__map">
+        <img src="/assets/stargate-cover-story.svg?v=260930" alt="커맨더를 중심으로 전략 대시보드, 사일로 연구대시보드, 실험실이 연결된 STARGATE EDU 운영 구조" width="1600" height="900" loading="eager" fetchpriority="high">
+        <a class="cover-story__hotspot cover-story__hotspot--commander" href="/pmo/" data-label="커맨더 · Executive PMO" aria-label="커맨더 Executive PMO 열기"></a>
+        <a class="cover-story__hotspot cover-story__hotspot--strategy" href="/strategy/" data-label="전략 대시보드" aria-label="전략 대시보드 열기"></a>
+        <a class="cover-story__hotspot cover-story__hotspot--silo" href="/research/" data-label="사일로 연구대시보드" aria-label="사일로 연구대시보드 열기"></a>
+        <a class="cover-story__hotspot cover-story__hotspot--lab" href="/lab/" data-label="실험실 · Laboratory" aria-label="실험실 허브 열기"></a>
+      </div>
       <figcaption>STARGATE EDU · COMMANDER → STRATEGY DASHBOARD · SILO RESEARCH · LABORATORY → EXECUTION</figcaption>
     </figure>
+    <nav class="cover-story__links" aria-label="커버스토리 바로가기">
+      <a class="cover-story__link" href="/pmo/">COMMANDER · 커맨더</a>
+      <a class="cover-story__link" href="/strategy/">STRATEGY · 전략</a>
+      <a class="cover-story__link" href="/research/">SILO · 연구</a>
+      <a class="cover-story__link" href="/lab/">LAB · 실험실</a>
+    </nav>
   </div>
 </section>
 
