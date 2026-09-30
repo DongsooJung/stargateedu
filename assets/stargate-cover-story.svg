@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+<title id="title">STARGATE EDU Commander Cover Story</title>
+<desc id="desc">커맨더를 중심으로 전략 대시보드, 사일로 연구대시보드, 실험실이 연결된 STARGATE EDU 운영 구조</desc>
+<defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#07142f"/><stop offset=".5" stop-color="#0b2652"/><stop offset="1" stop-color="#071126"/></linearGradient>
+  <radialGradient id="glow" cx="50%" cy="50%" r="50%"><stop stop-color="#38bdf8" stop-opacity=".28"/><stop offset="1" stop-color="#38bdf8" stop-opacity="0"/></radialGradient>
+  <linearGradient id="gold" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#f7d58c"/><stop offset="1" stop-color="#d9a441"/></linearGradient>
+  <linearGradient id="cyan" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#67e8f9"/><stop offset="1" stop-color="#0ea5e9"/></linearGradient>
+  <linearGradient id="violet" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#c4b5fd"/><stop offset="1" stop-color="#7c3aed"/></linearGradient>
+  <filter id="shadow"><feDropShadow dx="0" dy="20" stdDeviation="24" flood-color="#000" flood-opacity=".35"/></filter>
+  <filter id="soft"><feGaussianBlur stdDeviation="18"/></filter>
+  <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0V40" fill="none" stroke="#7dd3fc" stroke-opacity=".08"/></pattern>
+</defs>
+<rect width="1600" height="900" fill="url(#bg)"/>
+<rect width="1600" height="900" fill="url(#grid)"/>
+<circle cx="800" cy="390" r="430" fill="url(#glow)"/>
+<g fill="#fff" opacity=".55">
+  <circle cx="105" cy="92" r="2"/><circle cx="233" cy="150" r="1.5"/><circle cx="412" cy="83" r="1.8"/><circle cx="1274" cy="112" r="2"/><circle cx="1452" cy="182" r="1.4"/><circle cx="1362" cy="82" r="1.3"/><circle cx="938" cy="104" r="1.4"/><circle cx="674" cy="122" r="1.8"/>
+</g>
+
+<text x="80" y="84" fill="#fff" font-family="Noto Sans KR,Arial,sans-serif" font-size="42" font-weight="800" letter-spacing="3">STARGATE EDU</text>
+<text x="82" y="120" fill="#9fb4d7" font-family="Noto Sans KR,Arial,sans-serif" font-size="17">COVER STORY · COMMAND SYSTEM</text>
+<text x="1520" y="83" text-anchor="end" fill="#f1c77a" font-family="Noto Sans KR,Arial,sans-serif" font-size="16">탐색 → 분석 → 연구 → 실험 → 실행</text>
+
+<!-- connector routes -->
+<g fill="none" stroke-linecap="round">
+  <path d="M800 345 C800 470 420 430 330 590" stroke="#67e8f9" stroke-opacity=".72" stroke-width="8"/>
+  <path d="M800 345 C800 470 800 470 800 590" stroke="#67e8f9" stroke-opacity=".72" stroke-width="8"/>
+  <path d="M800 345 C800 470 1180 430 1270 590" stroke="#67e8f9" stroke-opacity=".72" stroke-width="8"/>
+  <path d="M800 345 C800 470 420 430 330 590" stroke="#fff" stroke-opacity=".3" stroke-width="2"/>
+  <path d="M800 345 C800 470 800 470 800 590" stroke="#fff" stroke-opacity=".3" stroke-width="2"/>
+  <path d="M800 345 C800 470 1180 430 1270 590" stroke="#fff" stroke-opacity=".3" stroke-width="2"/>
+</g>
+
+<!-- Commander -->
+<g filter="url(#shadow)">
+  <rect x="465" y="185" width="670" height="220" rx="42" fill="#0d1b38" stroke="#5bd8ff" stroke-opacity=".72" stroke-width="2"/>
+  <rect x="485" y="205" width="630" height="180" rx="30" fill="#0b2449"/>
+  <circle cx="800" cy="278" r="62" fill="#06213f" stroke="#67e8f9" stroke-width="2"/>
+  <circle cx="800" cy="278" r="42" fill="none" stroke="#67e8f9" stroke-opacity=".65"/>
+  <path d="M760 278h80M800 238v80" stroke="#67e8f9" stroke-width="2" stroke-opacity=".7"/>
+  <circle cx="800" cy="278" r="8" fill="#f1c77a"/>
+  <text x="800" y="337" text-anchor="middle" fill="#fff" font-family="Noto Sans KR,Arial,sans-serif" font-size="32" font-weight="800">커맨더 · COMMANDER</text>
+  <text x="800" y="369" text-anchor="middle" fill="#b8c7e5" font-family="Noto Sans KR,Arial,sans-serif" font-size="17">큰 그림을 보고, 데이터로 방향을 정하는 전략 본부</text>
+</g>
+
+<!-- Strategy -->
+<g filter="url(#shadow)">
+  <rect x="90" y="560" width="430" height="240" rx="34" fill="#111d34" stroke="#e9b95b" stroke-opacity=".82" stroke-width="2"/>
+  <rect x="118" y="590" width="76" height="76" rx="20" fill="#332817"/>
+  <path d="M138 642v-24h12v24zm18 0v-40h12v40zm18 0v-58h12v58z" fill="url(#gold)"/>
+  <text x="218" y="616" fill="#f7d58c" font-family="Noto Sans KR,Arial,sans-serif" font-size="26" font-weight="800">전략 대시보드</text>
+  <text x="218" y="646" fill="#93a5c7" font-family="JetBrains Mono,monospace" font-size="14">STRATEGY DASHBOARD</text>
+  <text x="120" y="708" fill="#fff" font-family="Noto Sans KR,Arial,sans-serif" font-size="18" font-weight="700">데이터로 기회를 찾는다</text>
+  <text x="120" y="741" fill="#aebbd3" font-family="Noto Sans KR,Arial,sans-serif" font-size="15">시장 · 산업 · 지역 · 정책 · 기업 데이터를</text>
+  <text x="120" y="767" fill="#aebbd3" font-family="Noto Sans KR,Arial,sans-serif" font-size="15">비교해 의사결정 포인트를 빠르게 포착</text>
+</g>
+
+<!-- Silo -->
+<g filter="url(#shadow)">
+  <rect x="585" y="560" width="430" height="240" rx="34" fill="#0c2034" stroke="#38bdf8" stroke-opacity=".85" stroke-width="2"/>
+  <rect x="613" y="590" width="76" height="76" rx="20" fill="#0a3148"/>
+  <ellipse cx="651" cy="610" rx="24" ry="8" fill="none" stroke="#67e8f9" stroke-width="4"/>
+  <path d="M627 610v30c0 5 11 9 24 9s24-4 24-9v-30M627 625c0 5 11 9 24 9s24-4 24-9" fill="none" stroke="#67e8f9" stroke-width="4"/>
+  <text x="714" y="616" fill="#67e8f9" font-family="Noto Sans KR,Arial,sans-serif" font-size="26" font-weight="800">사일로 연구대시보드</text>
+  <text x="714" y="646" fill="#93a5c7" font-family="JetBrains Mono,monospace" font-size="14">SILO RESEARCH</text>
+  <text x="615" y="708" fill="#fff" font-family="Noto Sans KR,Arial,sans-serif" font-size="18" font-weight="700">지식을 축적하고 연결한다</text>
+  <text x="615" y="741" fill="#aebbd3" font-family="Noto Sans KR,Arial,sans-serif" font-size="15">교통 · 부동산 · 교육 · 기술 · 글로벌 연구를</text>
+  <text x="615" y="767" fill="#aebbd3" font-family="Noto Sans KR,Arial,sans-serif" font-size="15">분야별로 쌓아 재사용 가능한 지식자산으로 전환</text>
+</g>
+
+<!-- Lab -->
+<g filter="url(#shadow)">
+  <rect x="1080" y="560" width="430" height="240" rx="34" fill="#151a37" stroke="#9f7aea" stroke-opacity=".9" stroke-width="2"/>
+  <rect x="1108" y="590" width="76" height="76" rx="20" fill="#29204c"/>
+  <path d="M1139 603h14v15l16 25c4 7-1 13-9 13h-28c-8 0-13-6-9-13l16-25z" fill="none" stroke="#c4b5fd" stroke-width="4"/>
+  <path d="M1132 642h28" stroke="#c4b5fd" stroke-width="4"/>
+  <text x="1209" y="616" fill="#c4b5fd" font-family="Noto Sans KR,Arial,sans-serif" font-size="26" font-weight="800">실험실</text>
+  <text x="1209" y="646" fill="#93a5c7" font-family="JetBrains Mono,monospace" font-size="14">LABORATORY</text>
+  <text x="1110" y="708" fill="#fff" font-family="Noto Sans KR,Arial,sans-serif" font-size="18" font-weight="700">아이디어를 실행으로 바꾼다</text>
+  <text x="1110" y="741" fill="#aebbd3" font-family="Noto Sans KR,Arial,sans-serif" font-size="15">AI · 데이터 · 웹서비스 · 교육 콘텐츠를</text>
+  <text x="1110" y="767" fill="#aebbd3" font-family="Noto Sans KR,Arial,sans-serif" font-size="15">빠르게 프로토타이핑해 실제 서비스로 검증</text>
+</g>
+
+<g>
+  <rect x="490" y="836" width="620" height="42" rx="21" fill="#07152b" stroke="#405578"/>
+  <text x="800" y="863" text-anchor="middle" fill="#dbeafe" font-family="Noto Sans KR,Arial,sans-serif" font-size="15" font-weight="600">COMMANDER → STRATEGY → SILO RESEARCH → LABORATORY → EXECUTION</text>
+</g>
+</svg>
