@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>STARGATE LAB | 실험실</title>
+<meta name="description" content="STARGATE EDU 실험실 — AI, 데이터, 웹서비스, 교육 콘텐츠 아이디어를 빠르게 프로토타이핑하고 실제 서비스로 검증합니다.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#071126;--panel:#0d1933;--panel2:#151a37;--text:#f8fbff;--muted:#9fb0cf;--violet:#c4b5fd;--cyan:#67e8f9;--gold:#f1c77a;--line:rgba(196,181,253,.22)}
+*{box-sizing:border-box}html,body{margin:0;font-family:"Noto Sans KR",system-ui,sans-serif;background:radial-gradient(circle at 70% 0,#182558 0,transparent 38%),var(--bg);color:var(--text)}a{color:inherit;text-decoration:none}
+.wrap{max-width:1180px;margin:auto;padding:0 24px}
+.top{position:sticky;top:0;z-index:20;background:rgba(7,17,38,.86);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}.top .wrap{height:68px;display:flex;align-items:center;justify-content:space-between;gap:18px}.brand{font-weight:900;letter-spacing:1px}.back{font-size:13px;color:var(--muted)}.back:hover{color:#fff}
+.hero{padding:92px 0 60px}.eyebrow{font:700 13px "JetBrains Mono",monospace;color:var(--violet);letter-spacing:1.6px}.hero h1{font-size:clamp(38px,6vw,72px);line-height:1.08;margin:14px 0 18px}.hero p{max-width:780px;color:var(--muted);font-size:18px;line-height:1.75;margin:0}.flow{display:flex;gap:8px;flex-wrap:wrap;margin-top:28px}.flow span{padding:8px 12px;border:1px solid var(--line);border-radius:999px;color:#d8d1ff;background:rgba(124,58,237,.08);font-size:12px;font-weight:700}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;padding-bottom:86px}.card{min-height:220px;padding:28px;border:1px solid var(--line);border-radius:22px;background:linear-gradient(180deg,rgba(255,255,255,.055),rgba(255,255,255,.025));box-shadow:0 18px 50px rgba(0,0,0,.2);transition:.18s ease}.card:hover{transform:translateY(-4px);border-color:rgba(196,181,253,.55);background:rgba(124,58,237,.09)}.tag{font:700 12px "JetBrains Mono",monospace;color:var(--violet);letter-spacing:.6px}.card h2{margin:12px 0 9px;font-size:24px}.card p{color:var(--muted);font-size:14px;line-height:1.7;margin:0 0 24px}.go{color:var(--cyan);font-weight:800;font-size:14px}
+.note{margin:0 0 72px;padding:22px 24px;border:1px solid rgba(103,232,249,.18);border-radius:18px;background:rgba(14,165,233,.06);color:#c8d7ee;line-height:1.7}
+footer{border-top:1px solid var(--line);padding:28px 0 42px;color:#72819f;font-size:12px}
+@media(max-width:760px){.hero{padding-top:64px}.grid{grid-template-columns:1fr}.top .wrap{height:60px}}
+</style>
+</head>
+<body>
+<nav class="top"><div class="wrap"><a class="brand" href="/">STARGATE <span style="color:var(--violet)">LAB</span></a><a class="back" href="/#cover-story">← 커버스토리로 돌아가기</a></div></nav>
+<main>
+<section class="hero"><div class="wrap">
+<div class="eyebrow">LABORATORY · PROTOTYPE TO SERVICE</div>
+<h1>아이디어를<br><span style="color:var(--violet)">실행 가능한 서비스</span>로.</h1>
+<p>STARGATE LAB은 AI·데이터·웹서비스·교육 콘텐츠를 짧은 실험 단위로 만들고, 실제 사용자 반응과 운영 데이터를 통해 다음 결정을 내리는 실행 허브입니다.</p>
+<div class="flow"><span>IDEA</span><span>PROTOTYPE</span><span>TEST</span><span>MEASURE</span><span>SHIP</span></div>
+</div></section>
+<section><div class="wrap">
+<div class="grid">
+<a class="card" href="/math-grader/"><div class="tag">AI · EDUCATION</div><h2>서술형 AI 채점</h2><p>손글씨 답안 업로드, 단계별 부분점수, 최초 오류 탐지와 재도전 힌트를 실험하는 수학 교육 AI.</p><div class="go">실험 열기 →</div></a>
+<a class="card" href="/koi-coach/"><div class="tag">ALGORITHM · COACHING</div><h2>KOI Coach</h2><p>문제 큐레이션, 풀이 아카이브, 학습 경로 추천을 결합한 정보올림피아드 코칭 프로토타입.</p><div class="go">실험 열기 →</div></a>
+<a class="card" href="/strategy/bidscout/" rel="nofollow"><div class="tag">AI · PROCUREMENT</div><h2>BidScout</h2><p>나라장터·위시켓 공고를 분류하고 적합도 판정과 제안서 초안을 자동화하는 입찰 실행 엔진.</p><div class="go">실험 열기 →</div></a>
+<a class="card" href="/commerce-sync/" rel="nofollow"><div class="tag">COMMERCE · AUTOMATION</div><h2>상거래 동기화</h2><p>상품·재고·주문 데이터를 연결해 반복 운영을 자동화하는 커머스 백오피스 실험.</p><div class="go">실험 열기 →</div></a>
+</div>
+<div class="note"><strong>운영 원칙:</strong> 전략 대시보드에서 기회를 발견하고, 사일로 연구대시보드에서 근거를 쌓은 뒤, 실험실에서 최소 기능 제품으로 검증합니다. 검증된 실험은 메인 서비스와 사업 운영으로 승격합니다.</div>
+</div></section>
+</main>
+<footer><div class="wrap">© 2026 Stargate Corp · STARGATE LAB</div></footer>
+</body>
+</html>
