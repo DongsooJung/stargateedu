@@ -1,7 +1,7 @@
 {
-  "updatedAt": "2026-09-30T14:44:00+09:00",
+  "updatedAt": "2026-09-30T21:47:34+09:00",
   "sourceStatus": {
-    "코레일유통 전문점 모집": "ok:1",
+    "코레일유통 전문점 모집": "ok:0",
     "코레일유통 상업시설 모집": "ok:1",
     "코레일유통 입찰공고": "ok:1",
     "HDC아이파크몰 입점/대관": "standing",
@@ -57,23 +57,7 @@
       "source": "서울시 공식"
     },
     {
-      "title": "2026년 4분기 계약종료 매장 공개_전문점",
-      "organization": "코레일유통",
-      "category": "계약종료 사전공개",
-      "location": "용산 포함여부 확인",
-      "published": "공고참조",
-      "deadline": "분기 사전공개",
-      "status": "용산포함 검증필요",
-      "score": 72,
-      "fit": "모니터링",
-      "amount": "원문/첨부 확인",
-      "contractTerm": "매장별 상이",
-      "reason": "분기 계약종료 매장 사전공개입니다. 용산역 포함 여부는 공지 첨부파일을 최종 확인해야 하며, 이후 개별 모집공고 전환을 추적합니다.",
-      "url": "https://www.korailretail.com/board/boardList.do?boardTypeNum=4",
-      "source": "코레일유통 전문점 모집"
-    },
-    {
-      "title": "2026년 4분기 계약종료 매장 공개_편의점",
+      "title": "2027년 1분기 계약종료 매장 공개_편의점",
       "organization": "코레일유통",
       "category": "계약종료 사전공개",
       "location": "용산 포함여부 확인",
