@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>STARGATE Executive PMO</title>
-<meta name="description" content="STARGATE Notion 프로젝트 상태·진행률 대시보드">
+<title>STARGATE COMMANDER | Control Tower</title>
+<meta name="description" content="STARGATE COMMANDER Control Tower — 전략·연구·실험·실행을 한 화면에서 지휘하는 통합 관제 대시보드">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%230b1738'/><text x='32' y='43' text-anchor='middle' font-size='34' fill='%23d9a441'>S</text></svg>">
 <script defer src="../assets/analytics-loader.js"></script>
 <style>
@@ -18,10 +18,74 @@
 .item-meta{margin-top:4px;font-size:11px;color:var(--muted)}
 @media(max-width:980px){.source-grid{grid-template-columns:1fr}}
 </style>
+
+<style>
+.commander-shell{margin-bottom:20px;background:linear-gradient(145deg,#071126,#0e1d40 55%,#101a38);border:1px solid rgba(103,232,249,.18);border-radius:24px;padding:22px;box-shadow:0 22px 60px rgba(11,23,56,.16);color:#fff;overflow:hidden;position:relative}
+.commander-shell:before{content:"";position:absolute;width:360px;height:360px;border-radius:50%;right:-120px;top:-180px;background:radial-gradient(circle,rgba(56,189,248,.22),rgba(56,189,248,0) 68%);pointer-events:none}
+.commander-head{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;position:relative;z-index:1}.commander-kicker{font:800 11px/1.4 ui-monospace,SFMono-Regular,monospace;letter-spacing:1.5px;color:#67e8f9}.commander-head h2{font-size:28px;margin:6px 0 5px}.commander-head p{margin:0;color:#aebbd3;max-width:760px;font-size:13px;line-height:1.6}.commander-state{display:inline-flex;align-items:center;gap:8px;padding:8px 11px;border:1px solid rgba(103,232,249,.24);border-radius:999px;color:#d9f7ff;background:rgba(14,165,233,.08);font-size:11px;font-weight:900;white-space:nowrap}.commander-state i{width:8px;height:8px;border-radius:50%;background:#38bdf8;box-shadow:0 0 0 5px rgba(56,189,248,.12)}
+.commander-modules{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:20px;position:relative;z-index:1}.command-module{display:block;padding:16px;border-radius:16px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.045);color:#fff;text-decoration:none;transition:.18s ease}.command-module:hover{transform:translateY(-3px);border-color:rgba(103,232,249,.42);background:rgba(14,165,233,.08)}.command-module .unit{font:800 10px/1.4 ui-monospace,SFMono-Regular,monospace;color:#8fdcf4;letter-spacing:1px}.command-module strong{display:block;font-size:17px;margin-top:5px}.command-module span{display:block;color:#91a3c4;font-size:11px;line-height:1.55;margin-top:5px}.command-module .module-status{display:flex;align-items:center;justify-content:space-between;margin-top:12px;padding-top:10px;border-top:1px solid rgba(255,255,255,.08);color:#d6e5f8;font:800 10px/1.4 ui-monospace,SFMono-Regular,monospace}.command-module .module-status b{font-size:10px;color:#67e8f9}
+.commander-cycle{display:grid;grid-template-columns:repeat(7,auto);align-items:center;justify-content:center;gap:8px;margin-top:14px;position:relative;z-index:1;color:#7dd3fc;font:800 10px/1.4 ui-monospace,SFMono-Regular,monospace}.commander-cycle .step{padding:6px 9px;border:1px solid rgba(125,211,252,.16);border-radius:999px;background:rgba(14,165,233,.05);color:#d7eff9}.commander-cycle .arrow{color:#536886}
+.commander-brief{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:14px;position:relative;z-index:1}.brief-cell{padding:13px 14px;border-radius:14px;background:#08162f;border:1px solid rgba(255,255,255,.08)}.brief-cell label{display:block;color:#7185a6;font-size:10px;font-weight:800;letter-spacing:.5px}.brief-cell strong{display:block;margin-top:3px;font-size:18px;color:#fff}.brief-cell small{display:block;margin-top:2px;color:#8fa0be;font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media(max-width:980px){.commander-modules,.commander-brief{grid-template-columns:repeat(2,1fr)}.commander-cycle{grid-template-columns:auto auto auto auto}.commander-cycle .arrow:nth-of-type(4){display:none}}
+@media(max-width:560px){.commander-shell{padding:16px}.commander-head{flex-direction:column}.commander-modules,.commander-brief{grid-template-columns:1fr}.commander-cycle{justify-content:flex-start;overflow:auto;padding-bottom:3px}.commander-head h2{font-size:24px}}
+</style>
 </head>
 <body>
-<header><div class="wrap"><div class="top"><div class="brand">STARGATE · EXECUTIVE PMO</div><a class="home" href="/">← 메인으로</a></div><div class="hero"><h1>Notion 프로젝트 관제</h1><p>Notion 공식 API에서 프로젝트 상태, 진행률, 다음 행동을 가져옵니다. 공개 허용 필드만 표시하며 API 키는 브라우저에 노출하지 않습니다.</p><div class="toolbar"><button class="btn primary" id="refresh-api" type="button" title="서버에 공개된 최신 Notion 스냅샷을 캐시 없이 다시 확인합니다">↻ 새로고침</button><a class="btn secondary" href="https://github.com/DongsooJung/stargateedu/actions/workflows/update-workspace-status.yml" target="_blank" rel="noopener noreferrer">Notion 동기화 실행 ↗</a><button class="btn secondary" id="save">운영 메모 저장</button><button class="btn secondary" id="reset">운영 메모 초기화</button></div><div class="sync-line"><span class="sync-dot" id="sync-dot"></span><span id="sync-status" role="status" aria-live="polite">데이터를 확인하는 중입니다.</span></div></div></div></header>
+<header><div class="wrap"><div class="top"><div class="brand">STARGATE · COMMANDER</div><a class="home" href="/">← 메인으로</a></div><div class="hero"><h1>Control Tower</h1><p>전략 대시보드에서 기회를 포착하고, 사일로 연구대시보드에서 근거를 축적하고, 실험실에서 빠르게 검증한 뒤 Executive PMO에서 실행을 관제합니다. Notion 공식 API 프로젝트 상태도 같은 화면에서 확인합니다.</p><div class="toolbar"><button class="btn primary" id="refresh-api" type="button" title="서버에 공개된 최신 Notion 스냅샷을 캐시 없이 다시 확인합니다">↻ 새로고침</button><a class="btn secondary" href="https://github.com/DongsooJung/stargateedu/actions/workflows/update-workspace-status.yml" target="_blank" rel="noopener noreferrer">Notion 동기화 실행 ↗</a><button class="btn secondary" id="save">운영 메모 저장</button><button class="btn secondary" id="reset">운영 메모 초기화</button></div><div class="sync-line"><span class="sync-dot" id="sync-dot"></span><span id="sync-status" role="status" aria-live="polite">데이터를 확인하는 중입니다.</span></div></div></div></header>
 <main><div class="wrap">
+
+<section class="commander-shell" aria-labelledby="commander-title">
+  <div class="commander-head">
+    <div>
+      <div class="commander-kicker">COMMANDER · CONTROL TOWER</div>
+      <h2 id="commander-title">전략 · 연구 · 실험 · 실행 통합 관제</h2>
+      <p>각 허브의 역할을 분리하되 의사결정 흐름은 하나로 연결합니다. 아래 모듈을 눌러 즉시 이동할 수 있습니다.</p>
+    </div>
+    <div class="commander-state"><i></i><span id="commander-state-text">CONTROL LINKS READY</span></div>
+  </div>
+
+  <div class="commander-modules">
+    <a class="command-module" href="/strategy/">
+      <div class="unit">01 · STRATEGY</div>
+      <strong>전략 대시보드</strong>
+      <span>시장·산업·지역·정책 데이터를 비교해 기회를 찾는 분석 허브</span>
+      <div class="module-status"><span>ROLE</span><b>DISCOVER</b></div>
+    </a>
+    <a class="command-module" href="/research/">
+      <div class="unit">02 · SILO RESEARCH</div>
+      <strong>사일로 연구대시보드</strong>
+      <span>분야별 데이터와 리포트를 축적해 재사용 가능한 지식자산으로 전환</span>
+      <div class="module-status"><span>ROLE</span><b>UNDERSTAND</b></div>
+    </a>
+    <a class="command-module" href="/lab/">
+      <div class="unit">03 · LABORATORY</div>
+      <strong>실험실</strong>
+      <span>AI·데이터·웹서비스 아이디어를 MVP로 만들고 실제 사용성 검증</span>
+      <div class="module-status"><span>ROLE</span><b>TEST</b></div>
+    </a>
+    <a class="command-module" href="#notion-projects">
+      <div class="unit">04 · EXECUTION PMO</div>
+      <strong>실행 관제</strong>
+      <span>프로젝트 상태·진행률·다음 행동·리스크를 추적하고 완료까지 밀어붙임</span>
+      <div class="module-status"><span>NOTION</span><b id="command-pmo-state">CHECKING</b></div>
+    </a>
+  </div>
+
+  <div class="commander-cycle" aria-label="Commander 운영 사이클">
+    <span class="step">DISCOVER</span><span class="arrow">→</span>
+    <span class="step">UNDERSTAND</span><span class="arrow">→</span>
+    <span class="step">TEST</span><span class="arrow">→</span>
+    <span class="step">EXECUTE</span>
+  </div>
+
+  <div class="commander-brief">
+    <div class="brief-cell"><label>ACTIVE PROJECTS</label><strong id="command-active">—</strong><small>Notion 활성 프로젝트</small></div>
+    <div class="brief-cell"><label>AVG PROGRESS</label><strong id="command-progress">—</strong><small>현재 평균 진행률</small></div>
+    <div class="brief-cell"><label>TOP PRIORITY</label><strong style="font-size:14px" id="command-focus">전자책 결제·배포 완결</strong><small>운영 메모 기준</small></div>
+    <div class="brief-cell"><label>BOTTLENECK</label><strong style="font-size:14px" id="command-bottleneck">결제·배포 연결</strong><small>운영 메모 기준</small></div>
+  </div>
+</section>
+
 <section class="kpis">
 <div class="card kpi"><div class="label">전체 프로젝트</div><div class="value" id="kpi-total">—</div></div>
 <div class="card kpi"><div class="label">활성 프로젝트</div><div class="value" id="kpi-active">—</div></div>
@@ -55,13 +119,13 @@
 <div class="foot">STARGATE Corp · Executive PMO v2.1 · Notion API</div>
 </div></main>
 <script>
-const defaults={};document.querySelectorAll('[data-key]').forEach(el=>defaults[el.dataset.key]=el.textContent.trim());function loadNotes(){document.querySelectorAll('[data-key]').forEach(el=>{const v=localStorage.getItem('pmo:'+el.dataset.key);if(v!==null)el.textContent=v})}function saveNotes(){document.querySelectorAll('[data-key]').forEach(el=>localStorage.setItem('pmo:'+el.dataset.key,el.textContent.trim()));alert('운영 메모를 이 브라우저에 저장했습니다.')}document.getElementById('save').onclick=saveNotes;document.getElementById('reset').onclick=()=>{if(confirm('운영 메모를 초기값으로 복원할까요?')){Object.entries(defaults).forEach(([k,v])=>localStorage.setItem('pmo:'+k,v));loadNotes()}};loadNotes();
+const defaults={};document.querySelectorAll('[data-key]').forEach(el=>defaults[el.dataset.key]=el.textContent.trim());function loadNotes(){document.querySelectorAll('[data-key]').forEach(el=>{const v=localStorage.getItem('pmo:'+el.dataset.key);if(v!==null)el.textContent=v});const focus=document.querySelector('[data-key="focus"]')?.textContent.trim();const bottleneck=document.querySelector('[data-key="bottleneck"]')?.textContent.trim();if(document.getElementById('command-focus')&&focus)document.getElementById('command-focus').textContent=focus;if(document.getElementById('command-bottleneck')&&bottleneck)document.getElementById('command-bottleneck').textContent=bottleneck}function saveNotes(){document.querySelectorAll('[data-key]').forEach(el=>localStorage.setItem('pmo:'+el.dataset.key,el.textContent.trim()));alert('운영 메모를 이 브라우저에 저장했습니다.')}document.getElementById('save').onclick=saveNotes;document.getElementById('reset').onclick=()=>{if(confirm('운영 메모를 초기값으로 복원할까요?')){Object.entries(defaults).forEach(([k,v])=>localStorage.setItem('pmo:'+k,v));loadNotes()}};loadNotes();
 const statusLabels={live:'정상',cached:'캐시',setup:'설정 필요',error:'오류'};
 function dateText(value){if(!value)return'갱신 기록 없음';try{return new Intl.DateTimeFormat('ko-KR',{dateStyle:'medium',timeStyle:'short',timeZone:'Asia/Seoul'}).format(new Date(value))}catch{return value}}
 function el(tag,className,text){const node=document.createElement(tag);if(className)node.className=className;if(text!==undefined)node.textContent=text;return node}
 let lastSnapshotAt=null;let refreshInFlight=false;
 function render(data,{manual=false}={}){
-  const summary=data.summary||{};const notionSource=data.sources?.notion||{};document.getElementById('kpi-total').textContent=summary.notionProjects??'—';document.getElementById('kpi-active').textContent=summary.activeProjects??'—';document.getElementById('kpi-completed').textContent=summary.completedProjects??'—';document.getElementById('kpi-progress').textContent=Number.isFinite(summary.averageProgress)?`${summary.averageProgress}%`:'—';document.getElementById('kpi-connection').textContent=statusLabels[notionSource.status]||'미확인';
+  const summary=data.summary||{};const notionSource=data.sources?.notion||{};if(document.getElementById('command-active'))document.getElementById('command-active').textContent=summary.activeProjects??'—';if(document.getElementById('command-progress'))document.getElementById('command-progress').textContent=Number.isFinite(summary.averageProgress)?`${summary.averageProgress}%`:'—';if(document.getElementById('command-pmo-state'))document.getElementById('command-pmo-state').textContent=(statusLabels[notionSource.status]||'미확인').toUpperCase();if(document.getElementById('commander-state-text'))document.getElementById('commander-state-text').textContent=notionSource.status==='live'?'NOTION LIVE · CONTROL READY':notionSource.status==='cached'?'NOTION CACHED · CONTROL READY':'CONTROL LINKS READY';document.getElementById('kpi-total').textContent=summary.notionProjects??'—';document.getElementById('kpi-active').textContent=summary.activeProjects??'—';document.getElementById('kpi-completed').textContent=summary.completedProjects??'—';document.getElementById('kpi-progress').textContent=Number.isFinite(summary.averageProgress)?`${summary.averageProgress}%`:'—';document.getElementById('kpi-connection').textContent=statusLabels[notionSource.status]||'미확인';
   const tbody=document.getElementById('notion-projects');tbody.replaceChildren();if(!(data.projects||[]).length){const row=el('tr');const cell=el('td','empty','표시할 프로젝트가 없습니다.');cell.colSpan=3;row.append(cell);tbody.append(row)}else{for(const project of data.projects){const row=el('tr');const projectCell=el('td');const link=el('a','project-link',project.title);link.href=project.url||'#';link.target='_blank';link.rel='noopener noreferrer';projectCell.append(link);if(project.nextAction)projectCell.append(el('div','next-action',`다음: ${project.nextAction}`));const progressCell=el('td','progress-cell');const progress=Number.isFinite(project.progress)?Math.max(0,Math.min(100,project.progress)):0;const track=el('div','progress');const bar=el('i');bar.style.width=`${progress}%`;track.append(bar);progressCell.append(track,el('div','progress-label',Number.isFinite(project.progress)?`${progress}%`:'미산정'));const statusCell=el('td');const badge=el('span','badge',project.status||'미분류');badge.classList.add(/완료/.test(project.status)?'green':/진행/.test(project.status)?'yellow':'red');statusCell.append(badge);row.append(projectCell,progressCell,statusCell);tbody.append(row)}}
   const health=document.getElementById('source-health');health.replaceChildren();const card=el('article','source-card');const top=el('div','source-top');top.append(el('div','source-name','Notion'),el('span',`source-badge ${notionSource.status||'setup'}`,statusLabels[notionSource.status]||'미확인'));card.append(top,el('div','source-message',notionSource.message||'Notion 연결 정보를 확인하는 중입니다.'),el('div','item-meta',`마지막 정상 동기화: ${dateText(notionSource.lastSuccessfulSync)}`));health.append(card);
   const previousSnapshot=lastSnapshotAt;lastSnapshotAt=data.generatedAt||null;const isLive=notionSource.status==='live';const changed=Boolean(previousSnapshot&&lastSnapshotAt&&previousSnapshot!==lastSnapshotAt);const notionState=statusLabels[notionSource.status]||notionSource.status||'미확인';const resultText=manual?(changed?'새 데이터 반영됨':'변경 없음 · 최신 스냅샷 확인'):'자동 확인';document.getElementById('sync-status').textContent=`${resultText} · 확인 ${dateText(new Date().toISOString())} · 생성 ${dateText(data.generatedAt)} · Notion ${notionState}`;document.getElementById('sync-dot').className=`sync-dot${isLive?' live':notionSource.status?' partial':''}`;
