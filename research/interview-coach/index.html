@@ -3,28 +3,31 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>채용 면접 프레젠테이션 코치 M2 | STARGATE RESEARCH</title>
-  <meta name="description" content="채용공고 기반 예상질문 생성, 60초 자기소개, STAR 답변 구조 분석, 근거·수치 보강 제안을 제공하는 STARGATE 면접 자기훈련 MVP입니다.">
+  <title>채용 면접 프레젠테이션 코치 M3 | STARGATE RESEARCH</title>
+  <meta name="description" content="채용공고 기반 예상질문, STAR 답변 구조 분석, 브라우저 음성 녹음과 말하기 속도·침묵·반복어 자기점검을 제공하는 STARGATE 면접 자기훈련 M3입니다.">
   <link rel="canonical" href="https://www.stargateedu.co.kr/research/interview-coach/">
   <style>
     :root{--navy:#0b1738;--navy2:#142150;--gold:#d9a441;--gold2:#f1c77a;--paper:#f6f8fc;--line:#e3e8f2;--text:#182038;--muted:#66708d;--green:#0d8a5f;--amber:#9a5d00;--red:#a32929;--blue:#315bd6}
     *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:"Noto Sans KR","Malgun Gothic",system-ui,sans-serif;color:var(--text);background:#fff;line-height:1.7;word-break:keep-all}.wrap{width:min(1100px,calc(100% - 36px));margin:auto}a{color:inherit}.top{position:sticky;top:0;z-index:20;background:rgba(11,23,56,.97);color:#fff;backdrop-filter:blur(10px)}.top .wrap{min-height:64px;display:flex;align-items:center;justify-content:space-between;gap:16px}.brand{text-decoration:none;font-weight:900}.brand b{color:var(--gold2)}.nav{display:flex;gap:14px;align-items:center}.nav a{color:#dce2f3;text-decoration:none;font-size:13px}.hero{padding:82px 0 72px;background:radial-gradient(900px 430px at 15% 0,rgba(217,164,65,.18),transparent 60%),linear-gradient(145deg,var(--navy),var(--navy2));color:#fff}.tag{display:inline-block;padding:6px 12px;border-radius:999px;border:1px solid rgba(241,199,122,.4);color:var(--gold2);font-size:12px;font-weight:900;letter-spacing:1px}.hero h1{margin:20px 0 12px;font-size:clamp(34px,6vw,58px);line-height:1.15}.hero p{max-width:840px;margin:0;color:#cad3e8;font-size:18px}.hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:26px}.btn{appearance:none;border:0;border-radius:12px;padding:12px 16px;font-weight:800;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center}.btn.primary{background:var(--gold);color:var(--navy)}.btn.secondary{background:#fff;color:var(--navy);border:1px solid var(--line)}.btn.ghost{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.28)}.status{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:-28px}.stat{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:0 14px 34px rgba(11,23,56,.08)}.stat b{display:block;color:var(--navy);font-size:18px}.stat span{font-size:12px;color:var(--muted)}section{padding:64px 0}.section-head{max-width:820px;margin-bottom:26px}.kicker{font-size:12px;font-weight:900;color:#a46b0f;letter-spacing:1px}.section-head h2{margin:7px 0;font-size:32px;line-height:1.25}.section-head p{margin:0;color:var(--muted)}.workspace{background:var(--paper)}.panel{background:#fff;border:1px solid var(--line);border-radius:20px;padding:24px;box-shadow:0 14px 40px rgba(11,23,56,.06)}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.field{display:grid;gap:7px}.field.full{grid-column:1/-1}.field label{font-weight:800;font-size:14px}.field small{color:var(--muted)}input,textarea,select{width:100%;border:1px solid #ccd5e4;border-radius:12px;padding:13px 14px;font:inherit;color:var(--text);background:#fff;outline:none}textarea{min-height:170px;resize:vertical}input:focus,textarea:focus,select:focus{border-color:#7389d5;box-shadow:0 0 0 3px rgba(49,91,214,.1)}.action-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}.notice{margin-top:16px;padding:14px 16px;border-radius:12px;background:#eef6ff;color:#294274;font-size:13px}.results{display:none;margin-top:24px}.results.show{display:block}.result-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:16px}.result-card{border:1px solid var(--line);border-radius:16px;padding:20px;background:#fff}.result-card h3{margin:0 0 12px}.chips{display:flex;flex-wrap:wrap;gap:8px}.chip{padding:6px 10px;border-radius:999px;background:#eef2fb;color:#29416f;font-size:12px;font-weight:800}.questions{display:grid;gap:10px;counter-reset:q}.question{position:relative;padding:14px 14px 14px 46px;border:1px solid var(--line);border-radius:12px;background:#fbfcff}.question:before{counter-increment:q;content:counter(q);position:absolute;left:14px;top:14px;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:var(--navy);color:var(--gold2);font-size:12px;font-weight:900}.intro-box{white-space:pre-wrap;background:#081126;color:#e8edfa;border-radius:14px;padding:18px;min-height:150px;font-size:14px}.copy-ok{font-size:12px;color:var(--green);display:none}.copy-ok.show{display:inline}.m2{background:#fff}.star-layout{display:grid;grid-template-columns:1fr 1fr;gap:18px}.score-card{border:1px solid var(--line);border-radius:18px;padding:20px}.score-head{display:flex;align-items:center;justify-content:space-between;gap:12px}.score-num{font-size:34px;font-weight:900;color:var(--navy)}.bars{display:grid;gap:10px;margin-top:14px}.bar-row{display:grid;grid-template-columns:70px 1fr 46px;gap:10px;align-items:center}.bar{height:10px;background:#edf1f7;border-radius:999px;overflow:hidden}.bar>span{display:block;height:100%;background:linear-gradient(90deg,var(--blue),var(--gold));width:0}.flag-list{display:grid;gap:9px;margin-top:14px}.flag{padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:#fbfcff;font-size:13px}.flag.good{border-color:#bfe8d6;background:#f1fbf7;color:#0a6c4b}.flag.warn{border-color:#edd6a5;background:#fff9eb;color:#82520a}.suggestions{display:grid;gap:10px}.suggestion{padding:14px;border-left:4px solid var(--gold);background:#fffaf0;border-radius:10px;font-size:13px}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}.card{border:1px solid var(--line);border-radius:18px;padding:22px;background:#fff}.card h3{margin:0 0 8px}.card p,.card li{color:var(--muted);font-size:14px}.card ul{margin:10px 0 0;padding-left:20px}.guard{border-left:5px solid var(--red);background:#fff4f4;border-radius:14px;padding:20px 22px}.guard strong{display:block;margin-bottom:6px}.guard ul{margin:6px 0 0;padding-left:20px}.guard li{margin:4px 0}.next{background:var(--navy);color:#fff}.next .kicker{color:var(--gold2)}.next .section-head p{color:#c5cee3}.todo{display:grid;gap:10px}.task{padding:16px;border:1px solid rgba(255,255,255,.14);border-radius:14px;background:rgba(255,255,255,.05)}.task b{color:var(--gold2)}footer{padding:30px 0;background:#07102a;color:#929dbc;text-align:center;font-size:13px}@media(max-width:840px){.status,.result-grid,.form-grid,.grid,.star-layout{grid-template-columns:1fr 1fr}.nav{display:none}}@media(max-width:580px){.status,.result-grid,.form-grid,.grid,.star-layout{grid-template-columns:1fr}.field.full{grid-column:auto}.hero{padding-top:64px}.panel{padding:18px}.bar-row{grid-template-columns:58px 1fr 40px}}
+  
+    .m3{background:linear-gradient(180deg,#f7f9fd,#eef3fb)}.record-grid{display:grid;grid-template-columns:1fr .9fr;gap:18px}.recorder{border:1px solid var(--line);border-radius:18px;padding:20px;background:#fff}.record-head{display:flex;align-items:center;justify-content:space-between;gap:12px}.rec-dot{width:10px;height:10px;border-radius:50%;background:#adb7c8;display:inline-block;margin-right:7px}.rec-dot.live{background:#d83b3b;box-shadow:0 0 0 6px rgba(216,59,59,.12);animation:pulse 1.3s infinite}@keyframes pulse{50%{box-shadow:0 0 0 11px rgba(216,59,59,0)}}.timer{font:800 30px/1 ui-monospace,SFMono-Regular,Consolas,monospace;color:var(--navy)}.audio-box{margin-top:14px;padding:14px;border-radius:14px;background:#f7f9fc;border:1px solid var(--line)}audio{width:100%}.metrics{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.metric{padding:14px;border-radius:14px;border:1px solid var(--line);background:#fff}.metric b{display:block;font-size:24px;color:var(--navy)}.metric span{font-size:12px;color:var(--muted)}.speech-note{margin-top:12px;padding:13px 15px;border-left:4px solid var(--amber);background:#fff9eb;border-radius:10px;color:#78510d;font-size:13px}.toggle{display:flex;gap:9px;align-items:flex-start;margin-top:12px;font-size:13px;color:var(--muted)}.toggle input{width:auto;margin-top:4px}.transcript{min-height:150px}.speech-feedback{display:grid;gap:9px;margin-top:14px}.speech-feedback .flag{margin:0}.mini{font-size:12px;color:var(--muted)}.record-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}.btn.danger{background:#b52a32;color:#fff}.btn[disabled]{opacity:.48;cursor:not-allowed}
+
   </style>
 </head>
 <body>
-  <nav class="top"><div class="wrap"><a class="brand" href="/research/">STARGATE <b>RESEARCH</b></a><div class="nav"><a href="#m1">M1</a><a href="#m2">M2 STAR</a><a href="#guide">활용법</a><a href="#roadmap">다음 단계</a><a href="/research/">연구 허브 →</a></div></div></nav>
+  <nav class="top"><div class="wrap"><a class="brand" href="/research/">STARGATE <b>RESEARCH</b></a><div class="nav"><a href="#m1">M1</a><a href="#m2">M2 STAR</a><a href="#m3">M3 발화</a><a href="#guide">활용법</a><a href="#roadmap">다음 단계</a><a href="/research/">연구 허브 →</a></div></div></nav>
   <header class="hero"><div class="wrap">
-    <span class="tag">M2 MVP · INTERVIEW SELF-COACHING</span>
-    <h1>예상질문을 만들고<br>답변 구조까지 점검합니다</h1>
-    <p>채용공고에서 핵심역량과 예상질문을 만들고, 실제 답변을 STAR 구조로 분석해 빠진 요소와 수치·근거 보강 포인트를 즉시 보여줍니다. 모든 분석은 브라우저에서 작동합니다.</p>
-    <div class="hero-actions"><a class="btn primary" href="#m2">STAR 답변 분석 →</a><a class="btn ghost" href="#m1">JD 질문 생성 →</a></div>
+    <span class="tag">M3 LIVE · INTERVIEW SELF-COACHING</span>
+    <h1>답변 구조를 잡고<br>실제 말하기까지 점검합니다</h1>
+    <p>채용공고에서 예상질문을 만들고 STAR 답변을 점검한 뒤, 실제 음성을 녹음해 말하기 속도·침묵·반복어를 자기점검합니다. 녹음과 음량 분석은 브라우저에서 처리합니다.</p>
+    <div class="hero-actions"><a class="btn primary" href="#m3">발화 분석 시작 →</a><a class="btn ghost" href="#m2">STAR 답변 분석 →</a><a class="btn ghost" href="#m1">JD 질문 생성 →</a></div>
   </div></header>
 
   <div class="wrap status">
-    <div class="stat"><b>M1 + M2</b><span>JD 분석 + STAR 코칭</span></div>
+    <div class="stat"><b>M1 + M2 + M3</b><span>JD · STAR · 발화 코칭</span></div>
     <div class="stat"><b>5 Questions</b><span>예상 면접질문 자동 생성</span></div>
     <div class="stat"><b>4 STAR</b><span>상황·과제·행동·결과 점검</span></div>
-    <div class="stat"><b>Local</b><span>서버 전송 없는 브라우저 처리</span></div>
+    <div class="stat"><b>Local Audio</b><span>녹음·침묵 분석은 브라우저 처리</span></div>
   </div>
 
   <section class="workspace" id="m1"><div class="wrap">
@@ -75,20 +78,54 @@
     </div>
   </div></section>
 
+
+  <section class="m3" id="m3"><div class="wrap">
+    <div class="section-head"><span class="kicker">M3 · SPEECH DELIVERY COACH</span><h2>직접 말해 보고 속도·침묵·반복어를 확인합니다</h2><p>마이크 녹음의 음량 변화를 브라우저에서 분석해 발화 시간과 침묵 비율을 계산합니다. 전사문을 입력하면 말하기 속도와 반복어도 함께 점검합니다.</p></div>
+    <div class="record-grid">
+      <div class="recorder">
+        <div class="record-head"><div><span class="rec-dot" id="recDot"></span><b id="recState">대기 중</b><div class="mini" id="micSupport">마이크 권한을 허용하면 시작할 수 있습니다.</div></div><div class="timer" id="recordTimer">00:00</div></div>
+        <div class="record-actions">
+          <button class="btn primary" id="startRecord">녹음 시작</button>
+          <button class="btn danger" id="stopRecord" disabled>녹음 종료</button>
+          <button class="btn secondary" id="clearRecord">초기화</button>
+        </div>
+        <label class="toggle"><input type="checkbox" id="useSpeechRecognition"><span><b>선택: 브라우저 음성인식으로 전사문 자동 작성</b><br>이 기능은 Chrome/OS 제공자의 음성인식 서버를 사용할 수 있습니다. 민감한 면접 내용이면 체크하지 말고 전사문을 직접 입력하세요.</span></label>
+        <div class="audio-box" id="audioBox" hidden><audio id="playback" controls></audio><div class="record-actions"><button class="btn secondary" id="downloadAudio">녹음 파일 저장</button></div></div>
+        <div class="speech-note">이 도구는 말하기 습관 자기점검용입니다. 목소리의 억양·성별·나이·성격·지능·채용 적합도를 추정하지 않습니다.</div>
+      </div>
+      <div class="recorder">
+        <h3 style="margin-top:0">발화 지표</h3>
+        <div class="metrics">
+          <div class="metric"><b id="metricDuration">0초</b><span>녹음 길이</span></div>
+          <div class="metric"><b id="metricSilence">0%</b><span>침묵 비율</span></div>
+          <div class="metric"><b id="metricPause">0.0초</b><span>최장 침묵 구간</span></div>
+          <div class="metric"><b id="metricWpm">—</b><span>분당 단어 수</span></div>
+          <div class="metric"><b id="metricFillers">—</b><span>반복어·군더더기</span></div>
+          <div class="metric"><b id="metricWords">—</b><span>전사 단어 수</span></div>
+        </div>
+        <div class="speech-feedback" id="speechFeedback"><div class="flag">녹음 후 전사문을 입력하면 피드백이 표시됩니다.</div></div>
+      </div>
+    </div>
+    <div class="panel" style="margin-top:18px">
+      <div class="field full"><label for="speechTranscript">전사문</label><textarea class="transcript" id="speechTranscript" placeholder="직접 입력하거나, 선택적으로 브라우저 음성인식을 켜고 녹음하면 전사문이 들어옵니다."></textarea><small>자동 전사가 부정확하면 실제 말한 내용에 맞게 수정한 뒤 분석하세요.</small></div>
+      <div class="action-row"><button class="btn primary" id="analyzeSpeech">발화 지표 분석</button><button class="btn secondary" id="sampleSpeech">샘플 전사문</button></div>
+    </div>
+  </div></section>
+
   <section id="guide"><div class="wrap">
     <div class="section-head"><span class="kicker">USE CASE</span><h2>면접 30분 전 사용 순서</h2></div>
     <div class="grid">
       <article class="card"><h3>1. JD 붙여넣기</h3><p>핵심역량과 예상질문을 빠르게 확보합니다.</p></article>
       <article class="card"><h3>2. 질문 하나 선택</h3><p>가장 중요한 질문부터 실제 말하듯 답변을 작성합니다.</p></article>
       <article class="card"><h3>3. STAR 분석</h3><p>빠진 구조와 근거 부족을 확인해 답변을 재작성합니다.</p></article>
-      <article class="card"><h3>4. 소리 내서 2회</h3><p>최종 답변은 외우지 말고 핵심 구조만 기억해 말합니다.</p></article>
+      <article class="card"><h3>4. M3 녹음 2회</h3><p>첫 녹음의 속도·침묵·반복어를 확인한 뒤 같은 답변을 한 번 더 말해 개선 여부를 비교합니다.</p></article>
     </div>
   </div></section>
 
   <section><div class="wrap"><div class="guard"><strong>평가 범위 제한</strong><ul><li>얼굴 생김새·관상·목소리 특징으로 성격, 지능, 성실성, 채용 적합도를 추정하지 않습니다.</li><li>성별·인종·장애·건강 등 민감·보호 특성을 추정하지 않습니다.</li><li>이 도구의 점수는 답변 구조 자기점검용이며 합격/불합격 또는 지원자 순위화에 사용하지 않습니다.</li></ul></div></div></section>
 
-  <section class="next" id="roadmap"><div class="wrap"><div class="section-head"><span class="kicker">NEXT BUILD</span><h2>M3 구현 후보</h2><p>다음 단계는 브라우저 녹화와 발화 지표입니다. 서버 업로드 없이 로컬 분석부터 확장합니다.</p></div><div class="todo"><div class="task"><b>M3-1</b> 브라우저 음성/영상 녹화</div><div class="task"><b>M3-2</b> 말하기 속도 · 침묵 구간 · 반복어 자기점검</div><div class="task"><b>M3-3</b> 질문별 Before / After 기록</div><div class="task"><b>M4</b> 회차별 면접 준비 리포트 및 PDF 출력</div></div></div></section>
-  <footer>© 2026 Stargate Corp · Interview Self-Coaching M2</footer>
+  <section class="next" id="roadmap"><div class="wrap"><div class="section-head"><span class="kicker">NEXT BUILD</span><h2>M3 발화 분석 구현 완료</h2><p>현재 음성 녹음, 침묵 구간, 전사문 기반 말하기 속도·반복어 자기점검까지 작동합니다. 다음은 회차 비교와 리포트입니다.</p></div><div class="todo"><div class="task"><b>DONE · M3-1</b> 브라우저 음성 녹음 · 재생 · 파일 저장</div><div class="task"><b>DONE · M3-2</b> 말하기 속도 · 침묵 비율 · 최장 침묵 · 반복어 분석</div><div class="task"><b>NEXT · M3-3</b> 질문별 Before / After 기록과 개선 추세</div><div class="task"><b>M4</b> 회차별 면접 준비 리포트 및 PDF 출력</div></div></div></section>
+  <footer>© 2026 Stargate Corp · Interview Self-Coaching M3</footer>
 
   <script>
     const $=id=>document.getElementById(id);
@@ -172,6 +209,103 @@
     $('analyzeStar').onclick=analyzeStar;
     $('sampleStar').onclick=()=>{ $('questionInput').value='가장 어려웠던 프로젝트와 해결 과정을 설명해 주세요.'; $('answerInput').value='당시 803억원 규모의 활주로 재포장 프로젝트에서 공정 지연 위험이 커진 상황이었습니다. 저는 시설장교로서 공정·예산·이해관계자 조정을 맡았고, 핵심 목표는 운영 차질 없이 정해진 기간 안에 공사를 완료하는 것이었습니다. 제가 직접 공정별 병목을 재분류하고 시공사와 작업 순서를 조정했으며, 주요 리스크를 주간 단위로 추적했습니다. 그 결과 핵심 공정을 계획 범위 안에서 관리했고 프로젝트 진행 안정성을 높였습니다.'; analyzeStar(); };
     $('clearStar').onclick=()=>{ $('questionInput').value='';$('answerInput').value='';$('starResults').classList.remove('show')};
+
+    let mediaRecorder=null, mediaStream=null, audioContext=null, analyser=null, meterTimer=null, uiTimer=null, recordedChunks=[], audioUrl=null;
+    let recordStarted=0, silenceMs=0, currentSilenceMs=0, longestSilenceMs=0, sampleCount=0, speechFinal='', recognition=null;
+    const silenceThreshold=0.022;
+    const fmtTime=ms=>{const s=Math.floor(ms/1000);return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')};
+    function updateTimer(){ if(recordStarted) $('recordTimer').textContent=fmtTime(Date.now()-recordStarted); }
+    function resetSpeechMetrics(){
+      silenceMs=0;currentSilenceMs=0;longestSilenceMs=0;sampleCount=0;speechFinal='';
+      $('recordTimer').textContent='00:00';$('metricDuration').textContent='0초';$('metricSilence').textContent='0%';$('metricPause').textContent='0.0초';$('metricWpm').textContent='—';$('metricFillers').textContent='—';$('metricWords').textContent='—';
+      $('speechFeedback').innerHTML='<div class="flag">녹음 후 전사문을 입력하면 피드백이 표시됩니다.</div>';
+    }
+    function meterTick(){
+      if(!analyser)return;
+      const buf=new Float32Array(analyser.fftSize); analyser.getFloatTimeDomainData(buf);
+      let sum=0; for(let i=0;i<buf.length;i++)sum+=buf[i]*buf[i];
+      const rms=Math.sqrt(sum/buf.length), step=100; sampleCount++;
+      if(rms<silenceThreshold){silenceMs+=step;currentSilenceMs+=step;if(currentSilenceMs>longestSilenceMs)longestSilenceMs=currentSilenceMs}else currentSilenceMs=0;
+    }
+    function setupRecognition(){
+      if(!$('useSpeechRecognition').checked)return;
+      const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+      if(!SR){$('micSupport').textContent='이 브라우저는 음성인식 API를 지원하지 않습니다. 전사문을 직접 입력하세요.';return}
+      recognition=new SR();recognition.lang='ko-KR';recognition.continuous=true;recognition.interimResults=true;
+      recognition.onresult=e=>{
+        let interim='';
+        for(let i=e.resultIndex;i<e.results.length;i++){const t=e.results[i][0].transcript;if(e.results[i].isFinal)speechFinal+=t+' ';else interim+=t}
+        $('speechTranscript').value=(speechFinal+interim).trim();
+      };
+      recognition.onerror=e=>{$('micSupport').textContent='음성인식: '+e.error+' · 녹음은 계속됩니다.'};
+      try{recognition.start()}catch(e){}
+    }
+    async function startRecording(){
+      if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia||!window.MediaRecorder){$('micSupport').textContent='이 브라우저에서는 마이크 녹음을 지원하지 않습니다.';return}
+      try{
+        mediaStream=await navigator.mediaDevices.getUserMedia({audio:true});
+        recordedChunks=[];resetSpeechMetrics();
+        const preferred=MediaRecorder.isTypeSupported&&MediaRecorder.isTypeSupported('audio/webm;codecs=opus')?'audio/webm;codecs=opus':'';
+        mediaRecorder=preferred?new MediaRecorder(mediaStream,{mimeType:preferred}):new MediaRecorder(mediaStream);
+        mediaRecorder.ondataavailable=e=>{if(e.data&&e.data.size)recordedChunks.push(e.data)};
+        mediaRecorder.onstop=finishRecording;
+        audioContext=new (window.AudioContext||window.webkitAudioContext)();
+        const source=audioContext.createMediaStreamSource(mediaStream);analyser=audioContext.createAnalyser();analyser.fftSize=2048;source.connect(analyser);
+        recordStarted=Date.now();meterTimer=setInterval(meterTick,100);uiTimer=setInterval(updateTimer,250);
+        mediaRecorder.start(250);setupRecognition();
+        $('recDot').classList.add('live');$('recState').textContent='녹음 중';$('micSupport').textContent='마이크 입력을 로컬에서 측정 중입니다.';
+        $('startRecord').disabled=true;$('stopRecord').disabled=false;$('audioBox').hidden=true;
+      }catch(e){$('micSupport').textContent='마이크를 시작하지 못했습니다: '+(e.message||e.name)}
+    }
+    function stopRecording(){
+      if(mediaRecorder&&mediaRecorder.state!=='inactive')mediaRecorder.stop();
+      if(recognition){try{recognition.stop()}catch(e){} recognition=null}
+      clearInterval(meterTimer);clearInterval(uiTimer);
+      if(mediaStream)mediaStream.getTracks().forEach(t=>t.stop());
+      if(audioContext){try{audioContext.close()}catch(e){}}
+      $('recDot').classList.remove('live');$('recState').textContent='분석 준비';$('startRecord').disabled=false;$('stopRecord').disabled=true;
+    }
+    function finishRecording(){
+      const duration=Math.max(0,Date.now()-recordStarted);recordStarted=0;
+      const type=(mediaRecorder&&mediaRecorder.mimeType)||'audio/webm';const blob=new Blob(recordedChunks,{type});
+      if(audioUrl)URL.revokeObjectURL(audioUrl);audioUrl=URL.createObjectURL(blob);$('playback').src=audioUrl;$('audioBox').hidden=false;
+      $('downloadAudio').onclick=()=>{const a=document.createElement('a');a.href=audioUrl;a.download='stargate-interview-'+new Date().toISOString().replace(/[:.]/g,'-')+'.webm';a.click()};
+      const effectiveSilence=Math.min(silenceMs,duration), silencePct=duration?Math.round(effectiveSilence/duration*100):0;
+      $('metricDuration').textContent=(duration/1000).toFixed(1)+'초';$('metricSilence').textContent=silencePct+'%';$('metricPause').textContent=(longestSilenceMs/1000).toFixed(1)+'초';
+      analyzeSpeech(duration);
+      $('micSupport').textContent='녹음 완료. 전사문을 확인하고 발화 지표를 다시 분석할 수 있습니다.';
+    }
+    function countFillers(text){
+      const fillers=['음','어','그','저','약간','이제','뭐','그러니까','사실','일단','아무튼'];
+      let count=0, detail=[];
+      fillers.forEach(w=>{const m=text.match(new RegExp('(^|\\s|[,.!?])'+w+'(?=\\s|[,.!?]|$)','g'));const n=m?m.length:0;if(n){count+=n;detail.push(w+' '+n+'회')}});
+      return {count,detail};
+    }
+    function analyzeSpeech(forcedDuration){
+      const text=$('speechTranscript').value.trim();
+      const displayed=parseFloat(($('metricDuration').textContent||'0').replace('초',''))||0;
+      const durationSec=forcedDuration?forcedDuration/1000:displayed;
+      const words=text?text.split(/\\s+/).filter(Boolean):[];
+      const wpm=durationSec>1&&words.length?Math.round(words.length/(durationSec/60)):null;
+      const fillers=countFillers(text);
+      $('metricWpm').textContent=wpm===null?'—':String(wpm);
+      $('metricFillers').textContent=text?String(fillers.count):'—';
+      $('metricWords').textContent=text?String(words.length):'—';
+      const silencePct=parseInt(($('metricSilence').textContent||'0').replace('%',''),10)||0;
+      const longest=parseFloat(($('metricPause').textContent||'0').replace('초',''))||0;
+      const feedback=[];
+      if(durationSec){if(durationSec<25)feedback.push(['warn','답변이 '+durationSec.toFixed(0)+'초로 짧습니다. STAR의 행동과 결과 근거를 조금 더 구체화하세요.']);else if(durationSec>120)feedback.push(['warn','2분을 넘겼습니다. 핵심 행동과 결과를 남기고 배경 설명을 줄여 보세요.']);else feedback.push(['good','답변 길이가 실전 연습 범위에 들어옵니다.'])}
+      if(silencePct>32)feedback.push(['warn','침묵 비율이 '+silencePct+'%입니다. 문장을 외우기보다 핵심 키워드 3~4개로 말 흐름을 잡아 보세요.']);else if(durationSec)feedback.push(['good','침묵 비율이 과도하지 않습니다.']);
+      if(longest>3.5)feedback.push(['warn','최장 침묵이 '+longest.toFixed(1)+'초입니다. 답변 시작 전 1회 생각하고, 중간에는 짧은 호흡으로 이어가 보세요.']);
+      if(wpm!==null){if(wpm<85)feedback.push(['warn','현재 약 '+wpm+'단어/분입니다. 지나치게 느리다면 핵심 문장을 더 짧게 연결해 보세요.']);else if(wpm>185)feedback.push(['warn','현재 약 '+wpm+'단어/분입니다. 숫자·성과 문장 앞뒤에 짧은 멈춤을 넣어 보세요.']);else feedback.push(['good','말하기 속도가 연습용 기준 범위에 있습니다.'])}
+      if(text&&fillers.count>Math.max(3,Math.round(words.length/18)))feedback.push(['warn','반복어가 '+fillers.count+'회 감지됐습니다'+(fillers.detail.length?' ('+fillers.detail.join(', ')+')':'')+'. 불필요한 연결어를 침묵 0.5초로 바꿔 보세요.']);else if(text)feedback.push(['good','반복어 사용이 많지 않습니다.']);
+      if(!text)feedback.push(['warn','전사문이 없어 속도·반복어는 계산하지 않았습니다. 직접 입력하거나 선택적 브라우저 음성인식을 사용하세요.']);
+      $('speechFeedback').innerHTML=feedback.map(x=>'<div class="flag '+x[0]+'">'+x[1]+'</div>').join('');
+    }
+    $('startRecord').onclick=startRecording;$('stopRecord').onclick=stopRecording;$('analyzeSpeech').onclick=()=>analyzeSpeech();
+    $('clearRecord').onclick=()=>{if(mediaRecorder&&mediaRecorder.state!=='inactive')stopRecording();if(audioUrl){URL.revokeObjectURL(audioUrl);audioUrl=null}$('playback').removeAttribute('src');$('audioBox').hidden=true;$('speechTranscript').value='';resetSpeechMetrics();$('recState').textContent='대기 중';$('micSupport').textContent='마이크 권한을 허용하면 시작할 수 있습니다.'};
+    $('sampleSpeech').onclick=()=>{$('speechTranscript').value='당시 프로젝트 일정이 두 달 정도 지연될 위험이 있었습니다. 저는 핵심 공정을 다시 분류하고 주간 회의를 통해 시공사와 작업 순서를 조정했습니다. 특히 세 개의 병목 공정을 매일 점검했고 담당자별 마감일을 명확히 했습니다. 그 결과 주요 공정을 계획 범위 안으로 회복했고 이후 네 주 동안 추가 지연 없이 진행했습니다.'; if(!$('metricDuration').textContent||$('metricDuration').textContent==='0초'){$('metricDuration').textContent='55.0초';$('metricSilence').textContent='14%';$('metricPause').textContent='1.6초'} analyzeSpeech();};
+
   </script>
 </body>
 </html>
