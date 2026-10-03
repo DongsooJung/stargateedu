@@ -95,6 +95,45 @@
   .cover-story__link:hover{transform:translateY(-2px);border-color:rgba(103,232,249,.45);background:rgba(14,165,233,.08)}
   @media(max-width:820px){.cover-story__hotspot::after{display:none}.cover-story__links{grid-template-columns:repeat(2,1fr)}}
 
+
+  /* MAIN ↔ LIST DASHBOARD SWITCH */
+  .view-switcher{position:sticky;top:58px;z-index:45;background:rgba(255,255,255,.94);backdrop-filter:blur(10px);border-bottom:1px solid #e7eaf4}
+  .view-switcher__inner{max-width:1120px;margin:0 auto;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;gap:14px}
+  .view-switcher__label{font-size:12px;font-weight:800;color:var(--muted);letter-spacing:.3px}
+  .view-switcher__buttons{display:flex;gap:8px}
+  .view-switcher__btn{appearance:none;border:1px solid #dfe4ef;background:#fff;color:var(--navy);padding:9px 14px;border-radius:999px;font:800 12px/1 "Noto Sans KR",sans-serif;cursor:pointer;transition:.18s ease}
+  .view-switcher__btn:hover{border-color:var(--gold);transform:translateY(-1px)}
+  .view-switcher__btn.is-active{background:var(--navy);border-color:var(--navy);color:#fff;box-shadow:0 7px 18px rgba(11,23,56,.16)}
+  .dashboard-view{min-height:72vh;background:#f7f8fc;padding:58px 0 84px}
+  .dashboard-view[hidden]{display:none!important}
+  .dashboard-head{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:24px}
+  .dashboard-title-wrap .kicker{margin-bottom:7px}
+  .dashboard-title-wrap p{margin-top:8px;color:var(--muted);font-size:14px}
+  .dashboard-count{flex:0 0 auto;padding:9px 13px;border-radius:999px;background:#fff;border:1px solid #e3e7f1;color:var(--navy);font:800 12px "JetBrains Mono",monospace}
+  .dashboard-tools{display:grid;grid-template-columns:minmax(0,1fr) 170px;gap:10px;margin-bottom:16px}
+  .dashboard-search,.dashboard-filter{width:100%;border:1px solid #dfe4ef;border-radius:12px;background:#fff;color:var(--navy);padding:12px 14px;font:600 13px "Noto Sans KR",sans-serif;outline:none}
+  .dashboard-search:focus,.dashboard-filter:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(217,164,65,.12)}
+  .dashboard-table{overflow:hidden;border:1px solid #e1e5ef;border-radius:18px;background:#fff;box-shadow:0 14px 34px rgba(11,23,56,.05)}
+  .dashboard-row{display:grid;grid-template-columns:minmax(0,2.15fr) minmax(92px,.65fr) minmax(78px,.55fr) 92px;gap:16px;align-items:center;padding:17px 20px;border-top:1px solid #edf0f6}
+  .dashboard-row:first-child{border-top:0}
+  .dashboard-row--head{padding-top:12px;padding-bottom:12px;background:#0b1738;color:#fff;border-top:0;font-size:11px;font-weight:800;letter-spacing:.6px}
+  .dashboard-item__title{font-size:14px;font-weight:800;color:var(--navy);line-height:1.4}
+  .dashboard-item__desc{margin-top:4px;color:var(--muted);font-size:12px;line-height:1.45}
+  .dashboard-category{display:inline-flex;width:max-content;max-width:100%;padding:5px 9px;border-radius:999px;background:#f1f4f9;color:#46516f;font-size:11px;font-weight:800}
+  .dashboard-status{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:800;color:#315d43}
+  .dashboard-status::before{content:"";width:7px;height:7px;border-radius:50%;background:#22c55e;box-shadow:0 0 0 3px rgba(34,197,94,.11)}
+  .dashboard-status.is-ready{color:#7a5d1c}.dashboard-status.is-ready::before{background:#d9a441;box-shadow:0 0 0 3px rgba(217,164,65,.12)}
+  .dashboard-open{display:inline-flex;justify-content:center;padding:8px 10px;border-radius:10px;background:var(--navy);color:#fff;font-size:11px;font-weight:800}
+  .dashboard-open:hover{background:var(--gold);color:var(--navy)}
+  .dashboard-open.is-disabled{background:#eef1f6;color:#8e97ac;pointer-events:none}
+  .dashboard-empty{padding:40px 20px;text-align:center;color:var(--muted);font-size:13px}
+  @media(max-width:720px){
+    .view-switcher{top:57px}.view-switcher__inner{padding:9px 16px}.view-switcher__label{display:none}.view-switcher__buttons{width:100%}.view-switcher__btn{flex:1;padding:10px 12px}
+    .dashboard-view{padding:38px 0 64px}.dashboard-head{align-items:flex-start;flex-direction:column}.dashboard-tools{grid-template-columns:1fr}
+    .dashboard-row{grid-template-columns:1fr auto;gap:10px 12px;padding:15px 16px}.dashboard-row--head{display:none}
+    .dashboard-item{grid-column:1/-1}.dashboard-category,.dashboard-status{align-self:center}.dashboard-open{grid-column:2;grid-row:2}
+  }
+
 </style>
 </head>
 <body>
@@ -108,6 +147,18 @@
 </a>
 
 <nav class="top"><div class="wrap"><a class="brand" href="https://www.stargateedu.co.kr/"><span class="dot"></span>STARGATE&nbsp;EDU</a><ul><li><a href="#about">소개</a></li><li><a href="#koi">KOI 과정</a></li><li><a href="/koi-coach/" style="color:var(--gold-2);font-weight:700">🏆 KOI Coach</a></li><li><a href="/math-grader/" style="color:var(--gold-2);font-weight:700">✍️ AI 서술형 채점</a></li><li><a href="/strategy/bidscout/" style="color:var(--gold-2);font-weight:700">🎯 BidScout</a></li><li><a href="/research/" style="color:var(--gold-2);font-weight:700">🔬 연구</a></li><li><a href="/strategy/" style="color:var(--gold-2);font-weight:700">📊 전략</a></li><li><a href="/research/google-trends/" style="color:var(--gold-2);font-weight:700">📈 Google Trends</a></li><li><a href="/pmo/" style="color:var(--gold-2);font-weight:700">📊 Executive PMO</a></li><li><a href="/trade/">무역·환율</a></li><li><a href="#live-data">CODEF 데이터</a></li><li><a href="#pubstats">출판통계</a></li><li><a href="#hub">링크 허브</a></li><li><a href="/commerce-sync/" data-commerce-nav="true" style="color:var(--gold-2);font-weight:700">🔄 상거래 동기화</a></li><li><a href="https://stargateedu.co.kr/faq/" style="color:var(--gold-2);font-weight:700">FAQ</a></li><li><a href="#contact">연락처</a></li><li><a href="/consult/" style="color:var(--gold-2);font-weight:700">상담 신청</a></li></ul><a class="cta" href="/consult/">1:1 상담 신청 →</a></div></nav>
+
+<div class="view-switcher" aria-label="홈 화면 보기 방식">
+  <div class="view-switcher__inner">
+    <span class="view-switcher__label">STARGATE VIEW</span>
+    <div class="view-switcher__buttons" role="tablist" aria-label="화면 전환">
+      <button class="view-switcher__btn is-active" type="button" data-site-view="main" role="tab" aria-selected="true">메인 보기</button>
+      <button class="view-switcher__btn" type="button" data-site-view="dashboard" role="tab" aria-selected="false">목록 대시보드</button>
+    </div>
+  </div>
+</div>
+
+<div id="main-view" class="site-view">
 <header class="hero"><div class="wrap"><span class="badge">대치동 · KOI 수학정보올림피아드 · AI 교육</span><h1>수학과 알고리즘,<br/><span>AI 시대의 언어</span>로 가르칩니다.</h1><p class="lead">STARGATE EDU는 한국정보올림피아드(KOI) · 수학올림피아드 영재를 위한 서울대 박사 직강 전문 교육 브랜드입니다. 대치동 현장 경험과 공간계량·AI 연구 역량을 결합해 "생각의 구조"를 훈련합니다.</p><div class="cta-row"><a class="btn btn-primary" href="/consult/">✨ 1:1 상담 신청</a><a class="btn btn-ghost" href="/research/">🔬 공공데이터 연구</a><a class="btn btn-ghost" href="https://stargateedu.co.kr/faq/">❓ FAQ · 고객센터</a><a class="btn btn-ghost" href="https://litt.ly/stargateedu" target="_blank" rel="noopener">🔗 리틀리 링크 허브</a><a class="btn btn-primary" href="/commerce-sync/" data-commerce-hero="true">🔄 상거래 동기화</a><a class="btn btn-ghost" href="#live-data">↻ 최신 환율 데이터</a><a class="btn btn-ghost" href="#pubstats">📊 2025 출판생산 통계</a><a class="btn btn-ghost" href="mailto:ceo@stargateedu.co.kr">✉️ 상담 문의</a></div></div></header>
 
 <section class="cover-story" id="cover-story">
@@ -170,7 +221,131 @@
 <a class="link" href="/commerce-sync/" rel="nofollow"><div><div class="t">🔄 상거래 동기화 관리자</div><div class="s">도매꾹·도매매 ↔ 네이버 스마트스토어 상품·재고·주문 연동</div></div><span class="arrow">→</span></a>
 <a class="link" href="mailto:ceo@stargateedu.co.kr"><div><div class="t">✏️ CEO 직통 이메일</div><div class="s">ceo@stargateedu.co.kr</div></div><span class="arrow">→</span></a></div></div></section>
 <section class="contact" id="contact"><div class="wrap"><span class="kicker">Contact</span><h2>상담 및 수강 문의</h2><p class="desc">대치동 현장 수업 · 1:1 개별 지도 · 온라인 그룹 클래스 모두 운영합니다. 이메일로 목표 대회·학년·현재 수준을 알려주시면 맞춤 커리큘럼을 제안해 드립니다.</p><div class="contact-card"><div><h3>지금 바로 문의하세요</h3><p style="color:var(--muted);margin-top:10px">온라인 상담 신청서를 작성하거나 CEO 직통 이메일로 문의해 주세요. 일반적으로 영업일 기준 24시간 이내 연락드립니다.</p><a class="email-btn" href="/consult/" style="background:var(--gold);color:var(--navy);margin-right:8px">✨ 온라인 상담 신청</a><a class="email-btn" href="mailto:ceo@stargateedu.co.kr">✉️ ceo@stargateedu.co.kr 메일 보내기</a></div><div class="info-grid"><div class="row"><b>이메일</b><span>ceo@stargateedu.co.kr</span></div><div class="row"><b>홈페이지</b><a href="https://www.stargateedu.co.kr/">www.stargateedu.co.kr</a></div><div class="row"><b>FAQ</b><a href="https://stargateedu.co.kr/faq/">자주 묻는 질문 · 고객센터</a></div><div class="row"><b>링크 허브</b><span>litt.ly/stargateedu</span></div><div class="row"><b>포털</b><span>portal.stargateedu.co.kr</span></div><div class="row"><b>수업 지역</b><span>서울 대치동 · 온라인 (전국)</span></div><div class="row"><b>운영 주체</b><span>Stargate Corp</span></div></div></div></div></section>
+
+</div>
+<section id="dashboard-view" class="dashboard-view site-view" hidden aria-labelledby="dashboard-title">
+  <div class="wrap">
+    <div class="dashboard-head">
+      <div class="dashboard-title-wrap">
+        <span class="kicker">Directory · Dashboard</span>
+        <h2 id="dashboard-title">STARGATE 전체 서비스 목록</h2>
+        <p>현재 메인의 링크 허브를 목록형으로 재구성합니다. 검색하거나 분야별로 빠르게 걸러볼 수 있습니다.</p>
+      </div>
+      <div class="dashboard-count" id="dashboard-count">0 ITEMS</div>
+    </div>
+    <div class="dashboard-tools">
+      <input id="dashboard-search" class="dashboard-search" type="search" placeholder="서비스·연구·대시보드 검색" autocomplete="off" aria-label="목록 검색">
+      <select id="dashboard-filter" class="dashboard-filter" aria-label="분야 필터">
+        <option value="all">전체 분야</option>
+        <option value="교육">교육</option>
+        <option value="연구">연구</option>
+        <option value="전략">전략</option>
+        <option value="데이터">데이터</option>
+        <option value="운영">운영</option>
+        <option value="커머스">커머스</option>
+        <option value="기타">기타</option>
+      </select>
+    </div>
+    <div class="dashboard-table" role="table" aria-label="STARGATE 서비스 목록">
+      <div class="dashboard-row dashboard-row--head" role="row">
+        <div role="columnheader">서비스 / 프로젝트</div><div role="columnheader">분야</div><div role="columnheader">상태</div><div role="columnheader">이동</div>
+      </div>
+      <div id="dashboard-rows"></div>
+      <div id="dashboard-empty" class="dashboard-empty" hidden>조건에 맞는 항목이 없습니다.</div>
+    </div>
+  </div>
+</section>
+
 <footer><div class="wrap"><div class="visitor-counter" aria-label="방문자 통계"><div class="visitor-card"><span class="visitor-label">TODAY · 오늘 방문자</span><strong class="visitor-number" id="visitor-today" aria-live="polite">—</strong></div><div class="visitor-card"><span class="visitor-label">TOTAL · 총 방문자</span><strong class="visitor-number" id="visitor-total" aria-live="polite">—</strong></div><div class="visitor-note" id="visitor-status">한국시간 기준 · 동일 브라우저 하루 1회 집계 · 개인정보 미수집</div></div><a class="brand" href="https://www.stargateedu.co.kr/"><span class="dot"></span>STARGATE&nbsp;EDU</a><div>© 2026 Stargate Corp. All rights reserved.</div><div style="margin-top:8px"><a href="https://www.stargateedu.co.kr/">www.stargateedu.co.kr</a>&nbsp;·&nbsp;<a href="https://stargateedu.co.kr/faq/">FAQ · 고객센터</a>&nbsp;·&nbsp;<a href="https://litt.ly/stargateedu" target="_blank" rel="noopener">litt.ly/stargateedu</a>&nbsp;·&nbsp;<a href="mailto:ceo@stargateedu.co.kr">ceo@stargateedu.co.kr</a></div></div></footer>
+
+<script>
+(()=>{
+  const mainView=document.getElementById("main-view");
+  const dashboardView=document.getElementById("dashboard-view");
+  const buttons=[...document.querySelectorAll("[data-site-view]")];
+  const rowsHost=document.getElementById("dashboard-rows");
+  const empty=document.getElementById("dashboard-empty");
+  const count=document.getElementById("dashboard-count");
+  const search=document.getElementById("dashboard-search");
+  const filter=document.getElementById("dashboard-filter");
+  if(!mainView||!dashboardView||!rowsHost)return;
+
+  const categoryFor=(title,href)=>{
+    const t=(title+" "+href).toLowerCase();
+    if(/koi|math|수학|교육|과외|consult/.test(t)) return "교육";
+    if(/research|연구|trend|realtor|immigration|debate/.test(t)) return "연구";
+    if(/strategy|bidscout|amazon|weather|instagram|healthcare|전략/.test(t)) return "전략";
+    if(/trade|dart|출판|data|환율|통계/.test(t)) return "데이터";
+    if(/shop|commerce|상거래|커머스/.test(t)) return "커머스";
+    if(/pmo|admin|portal|drive|faq|visitor|운영/.test(t)) return "운영";
+    return "기타";
+  };
+
+  const source=[...document.querySelectorAll("#hub .hub-grid > .link")].map((el,index)=>{
+    const title=(el.querySelector(".t")?.textContent||"").trim();
+    const desc=(el.querySelector(".s")?.textContent||"").trim();
+    const href=el.tagName==="A"?(el.getAttribute("href")||""):"";
+    const ready=!href;
+    return {index,title,desc,href,ready,category:categoryFor(title,href)};
+  }).filter(item=>item.title);
+
+  const render=()=>{
+    const q=(search?.value||"").trim().toLowerCase();
+    const cat=filter?.value||"all";
+    const list=source.filter(item=>{
+      const hay=(item.title+" "+item.desc+" "+item.category).toLowerCase();
+      return (!q||hay.includes(q))&&(cat==="all"||item.category===cat);
+    });
+    rowsHost.replaceChildren(...list.map(item=>{
+      const row=document.createElement("div"); row.className="dashboard-row"; row.setAttribute("role","row");
+      const itemCell=document.createElement("div"); itemCell.className="dashboard-item"; itemCell.setAttribute("role","cell");
+      const title=document.createElement("div"); title.className="dashboard-item__title"; title.textContent=item.title;
+      const desc=document.createElement("div"); desc.className="dashboard-item__desc"; desc.textContent=item.desc||"STARGATE 서비스";
+      itemCell.append(title,desc);
+      const category=document.createElement("div"); category.setAttribute("role","cell");
+      const categoryBadge=document.createElement("span"); categoryBadge.className="dashboard-category"; categoryBadge.textContent=item.category; category.append(categoryBadge);
+      const status=document.createElement("div"); status.setAttribute("role","cell");
+      const statusBadge=document.createElement("span"); statusBadge.className="dashboard-status"+(item.ready?" is-ready":""); statusBadge.textContent=item.ready?"준비중":"운영중"; status.append(statusBadge);
+      const action=document.createElement("div"); action.setAttribute("role","cell");
+      if(item.href){
+        const a=document.createElement("a"); a.className="dashboard-open"; a.href=item.href; a.textContent="열기 →";
+        if(/^https?:\/\//.test(item.href)&&!item.href.includes(location.hostname)){a.target="_blank";a.rel="noopener";}
+        action.append(a);
+      }else{
+        const span=document.createElement("span"); span.className="dashboard-open is-disabled"; span.textContent="준비중"; action.append(span);
+      }
+      row.append(itemCell,category,status,action);
+      return row;
+    }));
+    empty.hidden=list.length>0;
+    count.textContent=list.length+" ITEMS";
+  };
+
+  const setView=(name,{updateHash=true}={})=>{
+    const dashboard=name==="dashboard";
+    mainView.hidden=dashboard;
+    dashboardView.hidden=!dashboard;
+    buttons.forEach(btn=>{
+      const active=btn.dataset.siteView===name;
+      btn.classList.toggle("is-active",active);
+      btn.setAttribute("aria-selected",String(active));
+    });
+    if(updateHash){
+      if(dashboard) history.replaceState(null,"","#dashboard");
+      else history.replaceState(null,"",location.pathname+location.search);
+    }
+    if(dashboard){render();window.scrollTo({top:0,behavior:"smooth"});}
+  };
+
+  buttons.forEach(btn=>btn.addEventListener("click",()=>setView(btn.dataset.siteView)));
+  search?.addEventListener("input",render);
+  filter?.addEventListener("change",render);
+  window.addEventListener("hashchange",()=>setView(location.hash==="#dashboard"?"dashboard":"main",{updateHash:false}));
+  setView(location.hash==="#dashboard"?"dashboard":"main",{updateHash:false});
+  render();
+})();
+</script>
+
 <script>(()=>{const endpoint="https://stargateedu-codef-api.vercel.app/api/exchange";const refreshButton=document.getElementById("data-refresh");const status=document.getElementById("data-status");const grid=document.getElementById("rate-grid");const labels={USD:"미국 달러",JPY:"일본 엔",EUR:"유로",CNY:"중국 위안",GBP:"영국 파운드",AUD:"호주 달러",CAD:"캐나다 달러",CHF:"스위스 프랑"};function setStatus(message,state=""){status.textContent=message;status.className=`data-status${state?` is-${state}`:""}`}function renderRates(rates){const preferred=["USD","JPY","EUR","CNY"];const selected=[...rates].sort((a,b)=>{const ai=preferred.indexOf(String(a.currency).toUpperCase());const bi=preferred.indexOf(String(b.currency).toUpperCase());return(ai<0?99:ai)-(bi<0?99:bi)}).slice(0,4);if(!selected.length)throw new Error("EMPTY_DATA");grid.replaceChildren(...selected.map(item=>{const code=String(item.currency||"").toUpperCase();const card=document.createElement("article");card.className="rate-card";const currency=document.createElement("div");currency.className="currency";currency.textContent=labels[code]?`${code} · ${labels[code]}`:code;const rate=document.createElement("div");rate.className="rate";rate.textContent=item.rate||"—";const unit=document.createElement("div");unit.className="unit";unit.textContent="KRW 기준";card.append(currency,rate,unit);return card}))}async function refreshData(){refreshButton.disabled=true;refreshButton.classList.add("is-loading");grid.setAttribute("aria-busy","true");setStatus("CODEF에서 최신 데이터를 가져오는 중입니다.");const controller=new AbortController();const timer=setTimeout(()=>controller.abort(),15000);try{const response=await fetch(`${endpoint}?t=${Date.now()}`,{cache:"no-store",signal:controller.signal});const payload=await response.json();if(!response.ok||!payload.ok){if(payload.error==="CONFIG_REQUIRED")throw new Error("CONFIG_REQUIRED");throw new Error("FETCH_FAILED")}renderRates(Array.isArray(payload.rates)?payload.rates:[]);const updated=new Intl.DateTimeFormat("ko-KR",{dateStyle:"medium",timeStyle:"medium",timeZone:"Asia/Seoul"}).format(new Date(payload.fetchedAt));setStatus(`CODEF 연결 정상 · ${updated} 갱신`,"live")}catch(error){const message=error.message==="CONFIG_REQUIRED"?"CODEF API 키와 조회 기관 설정이 필요합니다.":"데이터를 가져오지 못했습니다. 잠시 후 다시 시도해 주세요.";setStatus(message,"error")}finally{clearTimeout(timer);refreshButton.disabled=false;refreshButton.classList.remove("is-loading");grid.setAttribute("aria-busy","false")}}refreshButton.addEventListener("click",refreshData)})();</script>
 <script>(()=>{const namespace="stargateedu-co-kr";const apiBase=`https://api.counterapi.dev/v1/${namespace}`;const todayElement=document.getElementById("visitor-today");const totalElement=document.getElementById("visitor-total");const statusElement=document.getElementById("visitor-status");const productionHosts=new Set(["stargateedu.co.kr","www.stargateedu.co.kr"]);function getKoreaDateKey(){const parts=new Intl.DateTimeFormat("en-CA",{timeZone:"Asia/Seoul",year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(new Date());const values=Object.fromEntries(parts.map(({type,value})=>[type,value]));return`${values.year}-${values.month}-${values.day}`}function formatCount(value){const count=Number(value);return Number.isFinite(count)?count.toLocaleString("ko-KR"):"—"}async function loadCounter(name,storageKey,element){let countedToday=false;try{countedToday=localStorage.getItem(storageKey)==="1"}catch(_){countedToday=false}const shouldIncrement=productionHosts.has(location.hostname)&&!countedToday;const url=`${apiBase}/${encodeURIComponent(name)}${shouldIncrement?"/up":""}`;const response=await fetch(url,{cache:"no-store",mode:"cors"});if(!response.ok)throw new Error(`COUNTER_${response.status}`);const payload=await response.json();element.textContent=formatCount(payload.count);if(shouldIncrement){try{localStorage.setItem(storageKey,"1")}catch(_){}}}async function updateVisitorCounters(){const dateKey=getKoreaDateKey();const dailyName=`daily-${dateKey}`;const results=await Promise.allSettled([loadCounter(dailyName,`stargateedu-daily-counted-${dateKey}`,todayElement),loadCounter("total-visitors",`stargateedu-total-counted-${dateKey}`,totalElement)]);if(results.some(result=>result.status==="rejected")){statusElement.textContent="방문자 집계 서버 연결이 지연되고 있습니다. 잠시 후 다시 확인해 주세요."}}updateVisitorCounters()})();</script>
 <a class="teacher-screening-link" href="strategy/kimstudy-math/" aria-label="김과외 수학 전략 데이터 대시보드 열기">🎯 수학 전략 데이터</a>
