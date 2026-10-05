@@ -31,6 +31,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Keep private screening out of the public site
+        run: |
+          if [ -e teacher-screening ]; then
+            echo "Private student screening files must not be deployed by GitHub Pages." >&2
+            exit 1
+          fi
+
       - name: Build GA4 runtime config
         env:
           GA4_MEASUREMENT_ID: ${{ vars.GA4_MEASUREMENT_ID || secrets.GA4_MEASUREMENT_ID }}

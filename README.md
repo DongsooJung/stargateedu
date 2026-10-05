@@ -10,10 +10,9 @@ GitHub Pages로 호스팅되는 STARGATE EDU 공식 원페이지 랜딩 사이�
 - `robots.txt` — 크롤링 허용 + sitemap 지시
 - `sitemap.xml` — 검색엔진 색인용
 - `trade/` — 한국수출입은행 Open API 기반 무역 환율 대시보드
-- `strategy/kimstudy-math/` — 김과외 수학·과외시장 전략 데이터 테이블(페이지당 100건)
+- `strategy/kimstudy-math/` — 익명 샘플 기반 수학·과외시장 전략 데이터 테이블
 - `strategy/used-car/` — 중고차 일일 가격 전략 대시보드(페이지당 100건·CSV 내보내기)
 - `strategy/job-opportunities/` — 채용·체험공고 일일 TOP 20 전략 대시보드(JSON·CSV·날짜별 보관)
-- `teacher-screening/` — 승인 데이터 기반 과외학생 스크리닝 운영 화면
 - `research/seoul-realtors/` — 강남·서초·송파 공인중개사사무소 3,000개 공간지도 시범판
 - `pmo/` — Notion 공식 API 기반 프로젝트 상태 대시보드
 - `scripts/fetch-exim-rates.mjs` — 최근 영업일 환율 수집·정규화 스크립트
@@ -28,18 +27,6 @@ GitHub Pages로 호스팅되는 STARGATE EDU 공식 원페이지 랜딩 사이�
 ### 환율 데이터 자동 갱신
 
 저장소 `Settings → Secrets and variables → Actions`에 `EXIM_AUTH_KEY`를 등록하면 평일 11:30 KST에 최신 환율을 가져와 `trade/data/latest.json`을 자동 갱신합니다. 인증키는 HTML·JSON·로그에 저장하지 않습니다.
-
-### 과외학생 주간 스크리닝
-
-매주 월요일 09:15 KST에 최대 5,000명의 승인된 과외학생 문의를 평가하고 전략 대시보드에서 페이지당 100건씩 표시합니다. `AUTHORIZED_STUDENT_EXPORT_URL` 저장소 시크릿에 공식 API 또는 학생·보호자 동의를 받은 JSON 내보내기 URL을 등록하면 실데이터 모드로 전환됩니다. 김과외의 현재 `robots.txt`는 일반 수집 봇의 전체 경로 접근을 차단하므로 직접 대량 크롤링은 중지하며, 시크릿이 없을 때는 개인정보가 없는 익명 학생 데모 데이터만 생성합니다.
-
-#### Supabase 이력 저장
-
-1. Supabase SQL Editor에서 `supabase/migrations/202608020001_create_student_screening.sql`을 실행합니다.
-2. 저장소 Actions secrets에 `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`를 등록합니다.
-3. 주간 실행 시 회차 요약과 학생별 평가 결과가 `student_screening_batches`, `student_screening_candidates`에 누적 저장됩니다.
-
-두 테이블은 RLS를 활성화하고 브라우저의 익명·로그인 사용자 접근을 차단합니다. 서버용 키는 GitHub Actions에서만 사용하며 HTML이나 JSON에 포함하지 않습니다.
 
 ### 중고차 가격 일일 갱신
 
@@ -72,7 +59,6 @@ PMO의 `↻ 새로고침` 버튼은 공개 스냅샷을 캐시 없이 다시 조
 - 링크 허브: https://litt.ly/stargateedu
 - 포털: https://portal.stargateedu.co.kr
 - 무역 환율: https://stargateedu.co.kr/trade/
-- 과외학생 스크리닝: https://www.stargateedu.co.kr/stargateedu/teacher-screening/
 - 이메일: ceo@stargateedu.co.kr
 
 ## 운영
