@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>김프 레이더 | STARGATE RESEARCH</title>
+  <meta name="description" content="KRX 금 3년 일별 김치 프리미엄, 업비트 코인·테더 김프, 은 실물 기준가를 매일 자동 갱신해 한 화면에서 비교하는 STARGATE 연구 대시보드입니다.">
+  <link rel="canonical" href="https://www.stargateedu.co.kr/research/kimchi-premium/">
+  <meta property="og:title" content="김프 레이더 | STARGATE RESEARCH">
+  <meta property="og:description" content="금·은·코인·테더 김치 프리미엄 일별 자동 갱신 대시보드">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+  <style>
+/* 레이아웃: 상단 요약 4칸(금·은·코인·테더) → 금 3년 괴리율 차트 → 코인 표+1년 차트 → 계산기 → 산출 방법 */
+:root{
+  --bg:#f4f6fb; --surface:#ffffff; --ink:#17203a; --muted:#65708c; --line:#dfe5f0; --grid:#e9edf5;
+  --navy:#0b1738; --gold:#d9a441; --gold2:#f3ce86;
+  --accent:#1e3a8a; --accent-soft:#e6ecfa;
+  --hot:#c2362b; --hot-soft:#fbe4e1; --warn:#b36b00; --warn-soft:#fff3dc; --ok:#0d8a5f; --ok-soft:#e3f6ee; --cool:#2f5fc4; --cool-soft:#e4ecfb;
+  --s2:#b07a10;
+  --f-body:"Noto Sans KR","Malgun Gothic","Apple SD Gothic Neo",system-ui,sans-serif;
+  --f-num:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Consolas,monospace;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.6;word-break:keep-all}
+main{padding:28px 16px 56px}
+.top{position:sticky;top:0;z-index:20;background:rgba(8,17,41,.95);color:#fff;border-bottom:1px solid rgba(217,164,65,.28)}
+.top .bar{max-width:1080px;margin:0 auto;min-height:58px;padding:0 16px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.top a{color:#fff;text-decoration:none;font-size:14px}.brand{font-weight:900;letter-spacing:.4px}.brand b{color:var(--gold2)}.top nav{display:flex;gap:16px}
+footer{padding:28px 16px;background:#07102a;color:#8f9abb;text-align:center;font-size:13px}footer a{color:var(--gold2)}
+.loading{padding:40px 16px;text-align:center;color:var(--muted)}
+.wrap{max-width:1080px;margin:0 auto;display:flex;flex-direction:column;gap:28px}
+.num{font-family:var(--f-num);font-variant-numeric:tabular-nums}
+h1,h2,h3{margin:0;text-wrap:balance}
+.hdr{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px 24px}
+h1{font-size:30px;font-weight:800;letter-spacing:-.01em;color:var(--navy)}
+.sub{color:var(--muted);margin:4px 0 0;font-size:14px}
+.meta{display:flex;flex-wrap:wrap;gap:8px}
+.chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:4px 12px;font-size:13px;color:var(--muted)}
+.chip b{color:var(--ink);font-weight:600}
+.tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+@media (max-width:860px){.tiles{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:440px){.tiles{grid-template-columns:1fr}}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.tile .lbl{font-size:12px;letter-spacing:.06em;color:var(--muted);font-weight:600}
+.tile .big{font-size:30px;font-weight:600;line-height:1.15}
+.tile .det{font-size:12.5px;color:var(--muted)}
+.pill{align-self:flex-start;font-size:12px;font-weight:600;border-radius:999px;padding:2px 10px}
+.p-ok{background:var(--ok-soft);color:var(--ok)}.p-warn{background:var(--warn-soft);color:var(--warn)}.p-hot{background:var(--hot-soft);color:var(--hot)}.p-cool{background:var(--cool-soft);color:var(--cool)}.p-na{background:var(--grid);color:var(--muted)}
+section{display:flex;flex-direction:column;gap:14px}
+.sec-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:6px 16px;border-bottom:1px solid var(--line);padding-bottom:8px}
+h2{font-size:19px;font-weight:700}
+.sec-head p{margin:0;color:var(--muted);font-size:13px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;min-width:0}
+.chart{position:relative;width:100%}
+.chart svg{display:block;width:100%;height:auto}
+.tip{position:absolute;pointer-events:none;background:var(--ink);color:var(--surface);font-size:12px;line-height:1.45;padding:6px 9px;border-radius:6px;white-space:nowrap;transform:translate(-50%,-110%);opacity:0;transition:opacity .1s}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:12.5px;color:var(--muted);margin-bottom:6px}
+.legend i{display:inline-block;width:18px;height:0;border-top:2.5px solid;vertical-align:middle;margin-right:6px}
+.split{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:14px}
+@media (max-width:860px){.split{grid-template-columns:1fr}}
+.tbl-wrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+th,td{padding:8px 10px;text-align:right;border-bottom:1px solid var(--grid);white-space:nowrap}
+th{font-size:12px;color:var(--muted);font-weight:600;letter-spacing:.03em}
+th:first-child,td:first-child{text-align:left}
+tbody tr:last-child td{border-bottom:0}
+.pos{color:var(--hot)}.neg{color:var(--cool)}
+.note{font-size:13px;color:var(--muted);margin:0}
+.callout{border-left:3px solid var(--gold);background:var(--accent-soft);padding:10px 14px;border-radius:0 8px 8px 0;font-size:14px}
+.calc{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;align-items:end}
+@media (max-width:760px){.calc{grid-template-columns:repeat(2,minmax(0,1fr))}}
+label{display:flex;flex-direction:column;gap:4px;font-size:12.5px;color:var(--muted);font-weight:500}
+input,select{font:inherit;font-family:var(--f-num);font-size:15px;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 10px;width:100%;min-width:0}
+input:focus-visible,select:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.result{display:flex;flex-wrap:wrap;gap:12px 28px;align-items:baseline;margin-top:14px;padding-top:14px;border-top:1px dashed var(--line)}
+.result .big{font-size:28px;font-weight:600}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.seg button{font:inherit;font-size:13px;background:var(--surface);color:var(--muted);border:0;padding:6px 12px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--navy);color:var(--gold2)}
+ol.method{margin:0;padding-left:20px;font-size:13px;color:var(--muted);display:flex;flex-direction:column;gap:4px}
+.yearrow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:12px}
+@media (max-width:520px){.yearrow{grid-template-columns:1fr}}
+.yr{border:1px solid var(--grid);border-radius:8px;padding:10px 12px;font-size:13px}
+.yr b{font-size:13px}
+@media (prefers-reduced-motion:reduce){.tip{transition:none}}
+</style>
+</head>
+<body>
+<header class="top"><div class="bar"><a class="brand" href="/research/">STARGATE <b>RESEARCH</b></a><nav><a href="/research/#tools">연구 도구</a><a href="/">홈으로</a></nav></div></header>
+<main>
+<p class="loading" id="loading">최신 김프 데이터를 불러오는 중입니다…</p>
+
+
+<div class="wrap" id="app" hidden>
+  <div class="hdr">
+    <div>
+      <h1>김프 레이더</h1>
+      <p class="sub">국내 가격이 국제 시세보다 얼마나 비싼지 금·은·코인을 한 화면에서 비교합니다. 매일 16:20(KST) 자동 갱신됩니다.</p>
+    </div>
+    <div class="meta">
+      <span class="chip">기준 <b class="num" id="asof"></b></span>
+      <span class="chip">원/달러 <b class="num" id="fx"></b></span>
+      <span class="chip">업비트 USDT <b class="num" id="usdt"></b></span>
+    </div>
+  </div>
+
+  <div class="tiles" id="tiles"></div>
+
+  <section aria-labelledby="g-h">
+    <div class="sec-head"><h2 id="g-h">금 김프 3년 추이</h2><p>KRX 금현물 종가 vs 국제 금(COMEX)×환율, 일별</p></div>
+    <div class="panel">
+      <div class="legend"><span><i style="border-color:var(--accent)"></i>금 김프(%)</span><span><i style="border-color:var(--warn);border-top-style:dashed"></i>5% 주의선</span><span><i style="border-color:var(--hot);border-top-style:dashed"></i>10% 과열선</span></div>
+      <div class="chart" id="goldChart"></div>
+      <div class="yearrow" id="years"></div>
+    </div>
+    <p class="callout" id="goldCallout"></p>
+  </section>
+
+  <section aria-labelledby="c-h">
+    <div class="sec-head"><h2 id="c-h">코인 김프</h2><p>업비트 원화 vs OKX USDT 시세</p></div>
+    <div class="split">
+      <div class="panel tbl-wrap">
+        <table>
+          <thead><tr><th>코인</th><th>업비트(원)</th><th>해외(USDT)</th><th>김프·환율</th><th>김프·테더</th></tr></thead>
+          <tbody id="coinRows"></tbody>
+        </table>
+      </div>
+      <div class="panel">
+        <div class="legend"><span><i style="border-color:var(--accent)"></i>BTC 김프(환율 기준)</span><span><i style="border-color:var(--s2);border-top-style:dashed"></i>테더 프리미엄</span></div>
+        <div class="chart" id="coinChart"></div>
+      </div>
+    </div>
+    <p class="callout" id="coinCallout"></p>
+  </section>
+
+  <section aria-labelledby="k-h">
+    <div class="sec-head"><h2 id="k-h">김프 계산기</h2><p>시세를 넣으면 김프와 비용 차감 후 순차익을 계산합니다</p></div>
+    <div class="panel">
+      <div style="margin-bottom:12px" class="seg" role="group" aria-label="자산 단위">
+        <button type="button" id="m-coin" aria-pressed="true">코인 (원 vs 달러)</button>
+        <button type="button" id="m-gold" aria-pressed="false">금·은 (원/g vs 달러/oz)</button>
+      </div>
+      <div class="calc">
+        <label for="c-krw"><span>국내 가격 (원<span id="u1"></span>)</span><input id="c-krw" inputmode="decimal"></label>
+        <label for="c-usd"><span>해외 가격 (달러<span id="u2"></span>)</span><input id="c-usd" inputmode="decimal"></label>
+        <label for="c-fx"><span>환율 또는 테더 (원)</span><input id="c-fx" inputmode="decimal"></label>
+        <label for="c-cost"><span>왕복 비용 (%)</span><input id="c-cost" inputmode="decimal" value="0.8"></label>
+      </div>
+      <div class="result">
+        <div><div class="note">김프</div><div class="big num" id="r-prem">–</div></div>
+        <div><div class="note">비용 차감 후</div><div class="big num" id="r-net">–</div></div>
+        <span class="pill p-na" id="r-pill">입력 대기</span>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="m-h">
+    <div class="sec-head"><h2 id="m-h">산출 방법과 한계</h2></div>
+    <ol class="method">
+      <li>금 김프 = KRX 금 99.99% 1kg 종가(원/g) ÷ (COMEX 금 근월물 직전 종가 ÷ 31.1035 × 원/달러) − 1. 언론 보도 수치(2025.2.14 20.1%, 2025.10.15 18.56%)와 ±1%p 이내로 일치합니다. 선물 기준이라 현물 대비 소폭 낮게 나올 수 있습니다.</li>
+      <li>은은 국내 거래소 시세가 없어 김프를 단일 지표로 산출할 수 없습니다. 국제 시세를 원화로 환산해 실물 매입가와 비교하는 기준값만 제공합니다.</li>
+      <li>코인 김프·환율 = 업비트 원화가 ÷ (OKX USDT가 × 원/달러) − 1. 김프·테더는 원/달러 대신 업비트 USDT 원화가를 씁니다. 일별 값은 매일 09:00 KST 마감 기준입니다.</li>
+      <li>데이터는 매일 16:20(KST) GitHub Actions로 다시 계산됩니다. 실시간 값이 아니므로 매매 전에 거래소에서 직접 확인하세요. 정보 제공용이며 투자 권유가 아닙니다.</li>
+    </ol>
+    <p class="note">출처: 한국거래소 KRX 금시장·CME COMEX·서울외환시장(네이버 금융 경유), 업비트·OKX(장애 시 Kraken) 공개 시세 API. 수집 코드: <a href="https://github.com/DongsooJung/stargateedu/blob/main/scripts/update-kimchi-premium.mjs" target="_blank" rel="noopener">scripts/update-kimchi-premium.mjs</a></p>
+  </section>
+</div>
+
+</main>
+<footer>© 2026 Stargate Corp · <a href="/research/">STARGATE RESEARCH</a> · 정보 제공용이며 투자 권유가 아닙니다.</footer>
+<script>
+
+function render(D){
+const $ = id => document.getElementById(id);
+const fmt = (n, d=0) => Number(n).toLocaleString('ko-KR',{minimumFractionDigits:d,maximumFractionDigits:d});
+const pct = (n, d=2) => (n>0?'+':'') + Number(n).toFixed(d) + '%';
+function status(p){
+  if (p == null) return ['p-na','산출 불가'];
+  if (p < 0) return ['p-cool','역프'];
+  if (p < 2) return ['p-ok','정상'];
+  if (p < 5) return ['p-warn','주의'];
+  return ['p-hot','과열'];
+}
+$('asof').textContent = D.asof;
+$('fx').textContent = fmt(D.fx,1);
+$('usdt').textContent = fmt(D.usdt) + ' (' + pct(D.usdtPrem) + ')';
+
+// 요약 타일
+const g = D.goldNow, btc = D.coins[0];
+const tiles = [
+  {lbl:'금 · KRX', p:g[3], det:`국내 ${fmt(g[1])}원/g · 국제 ${fmt(g[2])}원/g (${g[0]} 종가)`},
+  {lbl:'은 · 실물', p:null, big:fmt(D.silver.krwDon)+'원', det:`국제 시세 환산 3.75g 기준가 (COMEX ${D.silver.usdOz}달러/oz). 실물 매입가가 이보다 25% 이상 비싸면 계좌형 상품이 유리합니다.`},
+  {lbl:'비트코인 · 업비트', p:btc.fx, det:`테더 기준으로는 ${pct(btc.tether)} · 차이는 대부분 테더 프리미엄`},
+  {lbl:'테더(USDT)', p:D.usdtPrem, det:`업비트 ${fmt(D.usdt)}원 vs 원/달러 ${fmt(D.fx,1)}원`},
+];
+$('tiles').innerHTML = tiles.map(t=>{
+  const [cls,txt] = status(t.p);
+  return `<div class="tile"><span class="lbl">${t.lbl}</span><span class="big num">${t.big ?? pct(t.p)}</span><span class="pill ${cls}">${t.p==null?'단일 지표 없음':txt}</span><span class="det">${t.det}</span></div>`;
+}).join('');
+
+// 연도별 요약
+const yrs = Object.entries(D.stats);
+$('years').innerHTML = yrs.map(([y,s])=>`<div class="yr"><b>${y}년</b><br>평균 <span class="num">${pct(s.mean)}</span> · 최고 <span class="num">${pct(s.max[3])}</span><br><span class="note">${s.max[0]} (KRX ${fmt(s.max[1])}원/g)</span></div>`).join('');
+const above5 = D.gold.filter(r=>r[3]>=5).length, above10 = D.gold.filter(r=>r[3]>=10).length;
+$('goldCallout').textContent = `3년(${D.gold.length}거래일) 중 김프 5% 이상은 ${above5}일, 10% 이상은 ${above10}일뿐입니다. 급등은 2025년 2월·10월, 2026년 1월에 몰렸고 매번 수주 안에 0% 근처로 돌아왔습니다. 오늘은 ${pct(g[3])}로 정상 범위입니다.`;
+
+// 코인 표
+$('coinRows').innerHTML = D.coins.map(c=>`<tr><td><b>${c.sym}</b> <span class="note">${c.name}</span></td><td class="num">${fmt(c.krw, c.krw<1000?0:0)}</td><td class="num">${c.usdt<10?c.usdt.toFixed(4):fmt(c.usdt,2)}</td><td class="num ${c.fx>=0?'pos':'neg'}">${pct(c.fx)}</td><td class="num ${c.tether>=0?'pos':'neg'}">${pct(c.tether)}</td></tr>`).join('');
+const ch = D.coinHist, mx = ch.reduce((a,b)=>b[1]>a[1]?b:a), mn = ch.reduce((a,b)=>b[1]<a[1]?b:a);
+const avg = ch.reduce((s,r)=>s+r[1],0)/ch.length;
+$('coinCallout').textContent = `지난 1년 BTC 김프는 평균 ${pct(avg)}, 최고 ${pct(mx[1])}(${mx[0]}), 최저 ${pct(mn[1])}(${mn[0]})입니다. 두 선이 거의 겹친다는 것은 코인 김프의 대부분이 원화로 달러(테더)를 사는 프리미엄이라는 뜻입니다. 테더로 환산하면 지금 차익은 ${pct(btc.tether)}로 사실상 없습니다.`;
+
+// SVG 라인차트
+function lineChart(el, series, opts){
+  const W=opts.w||1000, H=opts.h||320, m={l:44,r:14,t:12,b:28};
+  const xs = series[0].data.map(r=>r[0]);
+  const n = xs.length;
+  const all = series.flatMap(s=>s.data.map(r=>r[1])).concat(opts.refs.map(r=>r.v));
+  let lo = Math.floor(Math.min(...all)), hi = Math.ceil(Math.max(...all));
+  const step = (hi-lo) > 12 ? 5 : (hi-lo) > 5 ? 2 : 1;
+  lo = Math.floor(lo/step)*step; hi = Math.ceil(hi/step)*step;
+  const X = i => m.l + (W-m.l-m.r) * i/(n-1);
+  const Y = v => m.t + (H-m.t-m.b) * (hi-v)/(hi-lo);
+  let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${opts.label}">`;
+  for (let v=lo; v<=hi; v+=step){
+    s += `<line x1="${m.l}" x2="${W-m.r}" y1="${Y(v)}" y2="${Y(v)}" stroke="var(--grid)" stroke-width="1"/>`;
+    s += `<text x="${m.l-8}" y="${Y(v)+4}" text-anchor="end" font-size="12" fill="var(--muted)" font-family="IBM Plex Mono,monospace">${v}%</text>`;
+  }
+  s += `<line x1="${m.l}" x2="${W-m.r}" y1="${Y(0)}" y2="${Y(0)}" stroke="var(--muted)" stroke-width="1"/>`;
+  opts.refs.forEach(r=>{ s += `<line x1="${m.l}" x2="${W-m.r}" y1="${Y(r.v)}" y2="${Y(r.v)}" stroke="${r.c}" stroke-width="1.2" stroke-dasharray="5 4"/>`; });
+  // x 눈금: 분기/월 경계
+  let last='';
+  xs.forEach((d,i)=>{ const key = opts.tick(d); if (key && key!==last){ last=key; s += `<text x="${X(i)}" y="${H-8}" text-anchor="middle" font-size="12" fill="var(--muted)" font-family="IBM Plex Mono,monospace">${key}</text><line x1="${X(i)}" x2="${X(i)}" y1="${H-m.b}" y2="${H-m.b+4}" stroke="var(--muted)"/>`; }});
+  series.forEach(se=>{
+    const pts = se.data.map((r,i)=>`${X(i).toFixed(1)},${Y(r[1]).toFixed(1)}`).join(' ');
+    if (se.area) s += `<polygon points="${X(0)},${Y(0)} ${pts} ${X(n-1)},${Y(0)}" fill="${se.c}" fill-opacity=".10"/>`;
+    s += `<polyline points="${pts}" fill="none" stroke="${se.c}" stroke-width="${se.w||1.8}" ${se.dash?'stroke-dasharray="5 3"':''} stroke-linejoin="round"/>`;
+    const lr = se.data[n-1]; s += `<circle cx="${X(n-1)}" cy="${Y(lr[1])}" r="4" fill="${se.c}"/>`;
+  });
+  s += `<line id="${el.id}-cur" y1="${m.t}" y2="${H-m.b}" stroke="var(--muted)" stroke-width="1" opacity="0"/>`;
+  s += `<rect x="${m.l}" y="${m.t}" width="${W-m.l-m.r}" height="${H-m.t-m.b}" fill="transparent"/></svg><div class="tip"></div>`;
+  el.innerHTML = s;
+  const svg = el.querySelector('svg'), tip = el.querySelector('.tip'), cur = el.querySelector('line[id$="-cur"]');
+  const move = e => {
+    const r = svg.getBoundingClientRect(); const px = (e.clientX - r.left) / r.width * W;
+    const i = Math.max(0, Math.min(n-1, Math.round((px-m.l)/(W-m.l-m.r)*(n-1))));
+    cur.setAttribute('x1',X(i)); cur.setAttribute('x2',X(i)); cur.setAttribute('opacity','1');
+    tip.innerHTML = `<b>${xs[i]}</b><br>` + series.map(se=>`${se.name} ${pct(se.data[i][1])}`).join('<br>') + (opts.extra?opts.extra(i):'');
+    const tx = X(i)/W*r.width, ty = Y(series[0].data[i][1])/H*r.height;
+    tip.style.left = Math.max(70, Math.min(r.width-70, tx)) + 'px'; tip.style.top = Math.max(60, ty) + 'px'; tip.style.opacity = 1;
+  };
+  svg.addEventListener('pointermove', move);
+  svg.addEventListener('pointerleave', ()=>{ tip.style.opacity=0; cur.setAttribute('opacity','0'); });
+}
+const css = getComputedStyle(document.documentElement);
+lineChart($('goldChart'), [{name:'금 김프', data:D.gold.map(r=>[r[0],r[3]]), c:'var(--accent)', area:true}], {
+  label:'금 김치 프리미엄 3년 추이', h:330,
+  refs:[{v:5,c:'var(--warn)'},{v:10,c:'var(--hot)'}],
+  tick:d=>{ const mth=+d.slice(5,7); return (mth===1||mth===7) ? d.slice(2,4)+'.'+d.slice(5,7) : null; },
+  extra:i=>`<br>KRX ${fmt(D.gold[i][1])}원 · 국제 ${fmt(D.gold[i][2])}원`
+});
+lineChart($('coinChart'), [
+  {name:'BTC 김프', data:ch.map(r=>[r[0],r[1]]), c:'var(--accent)', w:1.8},
+  {name:'테더 프리미엄', data:ch.map(r=>[r[0],r[2]]), c:'var(--s2)', dash:true, w:1.6}
+], { label:'BTC 김프와 테더 프리미엄 1년 추이', w:560, h:360, refs:[{v:5,c:'var(--warn)'}],
+  tick:d=>{ const mth=+d.slice(5,7); return (mth%3===1) ? d.slice(2,4)+'.'+d.slice(5,7) : null; } });
+
+// 계산기
+let mode='coin';
+const presets = { coin:{krw:btc.krw, usd:btc.usdt, fx:D.fx, cost:0.8}, gold:{krw:g[1], usd:+(g[2]*31.1034768/D.fx).toFixed(1), fx:D.fx, cost:0.5} };
+function setMode(m){
+  mode=m; $('m-coin').setAttribute('aria-pressed', m==='coin'); $('m-gold').setAttribute('aria-pressed', m==='gold');
+  $('u1').textContent = m==='gold'?'/g':''; $('u2').textContent = m==='gold'?'/oz':'';
+  const p=presets[m]; $('c-krw').value=p.krw; $('c-usd').value=p.usd; $('c-fx').value=p.fx; $('c-cost').value=p.cost; calc();
+}
+function calc(){
+  const k=parseFloat($('c-krw').value.replace(/,/g,'')), u=parseFloat($('c-usd').value.replace(/,/g,'')), f=parseFloat($('c-fx').value.replace(/,/g,'')), c=parseFloat($('c-cost').value)||0;
+  if (!(k>0&&u>0&&f>0)){ $('r-prem').textContent='–'; $('r-net').textContent='–'; $('r-pill').className='pill p-na'; $('r-pill').textContent='세 가격을 모두 입력하세요'; return; }
+  const intl = mode==='gold' ? u*f/31.1034768 : u*f;
+  const p = (k/intl-1)*100, net = Math.abs(p) - c;
+  $('r-prem').textContent = pct(p); $('r-net').textContent = pct(net);
+  const [cls,txt] = status(p); $('r-pill').className='pill '+cls;
+  $('r-pill').textContent = txt + (net>0 ? ' · 비용을 넘는 괴리' : ' · 비용 이하, 차익 없음');
+}
+['c-krw','c-usd','c-fx','c-cost'].forEach(id=>$(id).addEventListener('input',calc));
+$('m-coin').onclick=()=>setMode('coin'); $('m-gold').onclick=()=>setMode('gold');
+setMode('coin');
+}
+fetch('data/latest.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw new Error(r.status);return r.json();}).then(D=>{document.getElementById('app').hidden=false;document.getElementById('loading').hidden=true;render(D);}).catch(e=>{document.getElementById('loading').textContent='데이터를 불러오지 못했습니다. 잠시 후 새로고침해 주세요. ('+e.message+')';});
+</script>
+</body>
+</html>

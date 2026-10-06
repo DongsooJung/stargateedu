@@ -14,6 +14,7 @@ GitHub Pages로 호스팅되는 STARGATE EDU 공식 원페이지 랜딩 사이�
 - `strategy/used-car/` — 중고차 일일 가격 전략 대시보드(페이지당 100건·CSV 내보내기)
 - `strategy/job-opportunities/` — 채용·체험공고 일일 TOP 20 전략 대시보드(JSON·CSV·날짜별 보관)
 - `research/seoul-realtors/` — 강남·서초·송파 공인중개사사무소 3,000개 공간지도 시범판
+- `research/kimchi-premium/` — 김프 레이더: 금(KRX vs COMEX)·코인·테더 김치 프리미엄 대시보드, `scripts/update-kimchi-premium.mjs`가 매일 16:20 KST 자동 갱신
 - `pmo/` — Notion 공식 API 기반 프로젝트 상태 대시보드
 - `scripts/fetch-exim-rates.mjs` — 최근 영업일 환율 수집·정규화 스크립트
 - `.github/workflows/update-exim-rates.yml` — 평일 11:30 KST 자동 갱신

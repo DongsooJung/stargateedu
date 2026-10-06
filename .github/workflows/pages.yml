@@ -8,6 +8,7 @@ on:
   workflow_run:
     workflows:
       - Update Yongsan Station retail radar
+      - Update kimchi premium radar
     types:
       - completed
 
