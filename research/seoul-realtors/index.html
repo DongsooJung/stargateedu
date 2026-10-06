@@ -25,7 +25,7 @@
   </style>
 </head>
 <body>
-  <nav class="top"><div class="wrap"><a class="brand" href="/">STARGATE <b>RESEARCH</b></a><div class="nav"><a href="/research/">연구 허브</a><a href="#map-panel">지도</a><a href="#analysis">분석</a><a href="/">홈</a></div></div></nav>
+  <nav class="top"><div class="wrap"><a class="brand" href="../../">STARGATE <b>RESEARCH</b></a><div class="nav"><a href="../">연구 허브</a><a href="#map-panel">지도</a><a href="#analysis">분석</a><a href="../../">홈</a></div></div></nav>
   <header class="hero"><div class="wrap"><span class="eyebrow">SPATIAL PILOT · SEOUL REALTORS</span><h1>서울 강남권<br>공인중개사 공간지도</h1><p>강남구·서초구·송파구의 공인중개사사무소 3,000개 시범 표본을 지도 클러스터와 지역 필터로 탐색합니다. 원천 좌표가 없는 주소는 검증된 지오코딩 결과만 지도에 반영합니다.</p><div class="source"><span id="updated">데이터 확인 중</span><a id="source-link" href="https://www.data.go.kr/data/15107745/openapi.do" target="_blank" rel="noopener">공공데이터 원문 ↗</a><span>공공누리 1유형 · 출처표시</span></div></div></header>
   <main><div class="wrap">
     <section class="metrics" aria-label="주요 지표"><article class="metric"><span>시범 데이터</span><strong id="total">—</strong><small>개 사무소</small></article><article class="metric"><span>지도 좌표 확인</span><strong id="mapped">—</strong><small>개 위치</small></article><article class="metric"><span>강남구</span><strong id="gangnam">—</strong><small>개</small></article><article class="metric"><span>서초구</span><strong id="seocho">—</strong><small>개</small></article><article class="metric"><span>송파구</span><strong id="songpa">—</strong><small>개</small></article></section>
@@ -33,7 +33,7 @@
     <section class="panel" id="map-panel"><div class="toolbar"><input id="search" type="search" placeholder="사무소명·주소·등록번호 검색" aria-label="검색"><select id="district" aria-label="자치구"><option value="">강남권 전체</option><option>강남구</option><option>서초구</option><option>송파구</option></select><select id="location-state" aria-label="좌표 상태"><option value="mapped">지도 좌표 확인</option><option value="">전체 데이터</option><option value="pending">좌표 확인 대기</option></select><button id="reset" type="button">초기화</button></div><div class="map-layout"><div id="map" aria-label="공인중개사사무소 위치 지도"></div><aside class="side"><div class="side-head"><b>검색 결과</b><span id="result-count">—</span></div><div class="list" id="office-list"></div></aside></div></section>
     <section class="analysis" id="analysis"><article class="analysis-card"><h2>자치구별 시범 표본</h2><div id="bars"></div></article><article class="analysis-card"><h2>연구 설계·해석 주의</h2><ol class="method"><li>강남권은 1차 범위로 강남·서초·송파 3구를 적용했습니다.</li><li>공개 지도에는 대표자명을 제외하고 사무소·주소·등록번호 중심으로 제공합니다.</li><li>좌표가 없는 레코드는 지도에서 제외하며, 주소 지오코딩 완료 후 자동 반영됩니다.</li><li>후속 단계에서 행정동 밀도, 아파트·실거래·상권 접근성 변수를 결합할 수 있습니다.</li></ol></article></section>
   </div></main>
-  <footer>© 2026 Stargate Corp · <a href="/research/">STARGATE 연구 대시보드</a> · 데이터: 서울특별시·공공데이터포털 · 좌표: <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">© OpenStreetMap contributors · ODbL</a></footer>
+  <footer>© 2026 Stargate Corp · <a href="../">STARGATE 연구 대시보드</a> · 데이터: 서울특별시·공공데이터포털 · 좌표: <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">© OpenStreetMap contributors · ODbL</a></footer>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
   <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
   <script>

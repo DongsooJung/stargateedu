@@ -10,7 +10,7 @@
 </style>
 </head>
 <body>
-<nav class="top"><div class="wrap"><a class="brand" href="/research/">STARGATE <b>RESEARCH</b></a><div class="nav"><a href="#tool">분석기</a><a href="#criteria">평가기준</a><a href="/research/">연구 허브</a><a href="/">홈</a></div></div></nav>
+<nav class="top"><div class="wrap"><a class="brand" href="../">STARGATE <b>RESEARCH</b></a><div class="nav"><a href="#tool">분석기</a><a href="#criteria">평가기준</a><a href="../">연구 허브</a><a href="../../">홈</a></div></div></nav>
 <header class="hero"><div class="wrap"><span class="tag">POLITICAL DEBATE · EXPLAINABLE AI MVP</span><h1>3자 정치토론<br><span>AI 비교 분석기</span></h1><p>TV 토론 자막이나 전사문을 붙여넣으면 핵심 주장 요약, 5개 기준 점수, 평가 근거와 개선 피드백을 한 화면에서 비교합니다.</p><div class="chips"><span class="chip">3명 동시 비교</span><span class="chip">100점 환산</span><span class="chip">근거 문장 추출</span><span class="chip">브라우저 내 처리</span></div></div></header>
 <main><div class="wrap"><section class="panel workspace" id="tool"><div class="head"><div><h2>토론 전사문 입력</h2><p>발언자별 텍스트를 분리해 입력하세요. 80자 이상을 권장합니다.</p></div><div class="actions"><button class="btn secondary" id="sample">예시 불러오기</button><button class="btn primary" id="analyze">5개 기준 분석</button></div></div><div class="inputs">
 <div class="speaker"><label>토론자 A</label><input id="name0" value="토론자 A" maxlength="30"><textarea id="text0" placeholder="토론자 A의 전사문"></textarea><div class="count" id="count0">0자</div></div>
@@ -19,7 +19,7 @@
 <div class="criteria" id="criteria"><div class="criterion"><b>① 근거·사실성</b><span>수치·통계·출처</span></div><div class="criterion"><b>② 논리·일관성</b><span>인과·주장 연결</span></div><div class="criterion"><b>③ 대응·반박력</b><span>질문·상대 주장 대응</span></div><div class="criterion"><b>④ 정책 구체성</b><span>대상·일정·재원·수단</span></div><div class="criterion"><b>⑤ 전달·토론태도</b><span>명료성·존중·절제</span></div></div>
 <div class="notice">연구용 MVP입니다. 점수는 공개된 텍스트 지표이며 발언의 진위를 자동 검증하지 않습니다. 방송 자막 이용 시 저작권과 이용약관을 확인하고, 결과는 최종 판단이 아닌 보조자료로 사용하세요.</div><div class="empty" id="empty">전사문을 입력하거나 예시를 불러온 뒤 분석을 실행하세요.</div></section>
 <section id="results"><div class="cards" id="cards"></div><div class="panel compare"><h2>토론자 비교표</h2><div id="table"></div><div class="export"><button class="btn secondary" id="copy">결과 복사</button><button class="btn secondary" id="download">CSV 다운로드</button></div></div></section></div></main>
-<footer class="footer">© 2026 Stargate Corp · <a href="/research/">연구 대시보드</a> · 분석 모델 v0.1</footer>
+<footer class="footer">© 2026 Stargate Corp · <a href="../">연구 대시보드</a> · 분석 모델 v0.1</footer>
 <script>
 const defs=[['evidence','근거·사실성'],['logic','논리·일관성'],['response','대응·반박력'],['policy','정책 구체성'],['delivery','전달·토론태도']];
 const keys={evidence:['통계','자료','보고서','조사','연구','수치','에 따르면','근거','출처','%'],logic:['따라서','그러므로','왜냐하면','때문에','반면','그러나','결과적으로','첫째','둘째','즉'],response:['질문','답변','반박','말씀','지적','동의','상대','후보','방금'],policy:['예산','재원','일정','단계','법안','조례','시행','지원','투자','확대','감축','도입','개편','대상','기한'],respect:['존중','동의','경청','취지는','우려','합의'],attack:['거짓말','무능','선동','궤변','한심','막말','헛소리']};
