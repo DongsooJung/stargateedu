@@ -1,0 +1,550 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>북한경제 워치 | STARGATE RESEARCH</title>
+<meta name="description" content="평양·신의주·혜산 장마당 쌀값·옥수수값·달러·위안 환율과 북중교역을 Daily NK·RFA 등에서 주 2회 자동 수집해 시계열과 도시별 가격 지도로 보여주는 STARGATE 연구 대시보드입니다.">
+<link rel="canonical" href="https://stargateedu.co.kr/stargateedu/research/nk-economy-watch/">
+<meta property="og:title" content="북한경제 워치 | STARGATE RESEARCH">
+<meta property="og:description" content="북한 장마당 시세·환율·북중교역 자동 갱신 대시보드">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: 장마당 시세판(4칸 보드) → 시계열 2단 → 브리핑 피드 + 거시 사이드 → 수집 방식. 숫자는 모노, 마스트헤드만 블랙한산스 */
+:root{
+  --paper:#EEF1F5; --surface:#FAFBFD; --ink:#131B26; --muted:#5A6677; --line:#D3DAE3;
+  --cobalt:#2F5DB8; --ochre:#B07A12; --up:#B3261E; --down:#1F7A4D; --warn:#9A6200;
+  --chip:#E2E8F1; --div-lo:#1F7F8C; --div-hi:#B23E68; --div-mid:#8A93A0;
+  --f-display:"Black Han Sans","IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  --f-body:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+  --f-num:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#11171F; --surface:#18202B; --ink:#E6EAF0; --muted:#93A0B2; --line:#2B3543;
+  --cobalt:#6B8FE0; --ochre:#BD8524; --up:#EF6B5F; --down:#4FBF85; --warn:#E0A84A; --chip:#232D3A; --div-lo:#4FB6C2; --div-hi:#E57A9F; --div-mid:#7D8796; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#11171F; --surface:#18202B; --ink:#E6EAF0; --muted:#93A0B2; --line:#2B3543;
+  --cobalt:#6B8FE0; --ochre:#BD8524; --up:#EF6B5F; --down:#4FBF85; --warn:#E0A84A; --chip:#232D3A; --div-lo:#4FB6C2; --div-hi:#E57A9F; --div-mid:#7D8796; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.6;padding:0 16px;padding-block:0 48px}
+.wrap{max-width:1120px;margin:0 auto}
+a{color:var(--cobalt);text-underline-offset:2px}
+a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--cobalt);outline-offset:2px;border-radius:2px}
+.num{font-family:var(--f-num);font-variant-numeric:tabular-nums}
+h2{font-size:1.05rem;font-weight:700;margin:0;text-wrap:balance}
+.eyebrow{font-size:.72rem;letter-spacing:.08em;color:var(--muted);font-weight:600}
+
+/* masthead */
+.mast{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px 24px;padding-block:28px 14px;border-bottom:3px solid var(--ink)}
+.mast h1{font-family:var(--f-display);font-weight:400;font-size:clamp(1.9rem,5vw,2.9rem);line-height:1.05;margin:0;letter-spacing:-.01em}
+.mast h1 small{display:block;font-family:var(--f-body);font-size:.8rem;font-weight:600;color:var(--muted);letter-spacing:.06em;margin-bottom:6px}
+.clock{display:flex;flex-direction:column;align-items:flex-end;gap:4px;font-size:.82rem;color:var(--muted)}
+.clock .num{font-size:1.05rem;color:var(--ink)}
+.statusbar{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;padding-block:10px;border-bottom:1px solid var(--line);font-size:.82rem;color:var(--muted)}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:2px 10px;border-radius:999px;background:var(--chip);color:var(--ink);font-weight:600;font-size:.78rem}
+.pill i{width:8px;height:8px;border-radius:50%;background:var(--muted);display:inline-block}
+.pill.ok i{background:var(--down)} .pill.stale i{background:var(--warn)} .pill.old i{background:var(--up)}
+.live-dot{animation:blink 2s ease-in-out infinite}
+@keyframes blink{50%{opacity:.25}}
+@media (prefers-reduced-motion:reduce){.live-dot{animation:none}}
+
+/* board */
+section{margin-top:32px}
+.sec-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:4px 16px;margin-bottom:12px}
+.sec-head p{margin:0;font-size:.82rem;color:var(--muted)}
+.board{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border:1px solid var(--ink);background:var(--surface)}
+.cell{padding:16px 16px 14px;border-right:1px solid var(--line);display:flex;flex-direction:column;gap:6px;min-width:0}
+.cell:last-child{border-right:0}
+.cell .label{font-size:.82rem;font-weight:600;display:flex;justify-content:space-between;gap:8px}
+.cell .label span{color:var(--muted);font-weight:400}
+.cell .val{font-family:var(--f-num);font-variant-numeric:tabular-nums;font-size:clamp(1.5rem,3.4vw,2.1rem);font-weight:600;line-height:1.1}
+.cell .val small{font-size:.8rem;font-weight:400;color:var(--muted);margin-left:4px}
+.delta{font-family:var(--f-num);font-size:.82rem;font-weight:500}
+.delta.note{font-family:var(--f-body)}
+.delta.up{color:var(--up)} .delta.down{color:var(--down)} .delta.flat{color:var(--muted)}
+.cell .meta{font-size:.74rem;color:var(--muted)}
+.swatch{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:baseline}
+.derived{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;border:1px solid var(--line);border-top:0;background:var(--surface)}
+.derived div{padding:12px 16px;border-right:1px solid var(--line);font-size:.84rem;min-width:0}
+.derived div:last-child{border-right:0}
+.derived b{display:block;font-family:var(--f-num);font-size:1.15rem;font-weight:600}
+.derived span{color:var(--muted);font-size:.74rem}
+
+/* charts */
+.charts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.chart{background:var(--surface);border:1px solid var(--line);padding:16px;min-width:0;position:relative}
+.chart header{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap;margin-bottom:6px}
+.chart header p{margin:0;font-size:.76rem;color:var(--muted)}
+.legend{display:flex;gap:14px;font-size:.78rem;color:var(--muted)}
+.chart svg{width:100%;height:auto;display:block;overflow:visible}
+.chart svg text{fill:var(--muted);font-family:var(--f-num);font-size:11px}
+.grid line{stroke:var(--line);stroke-width:1}
+.tip{position:absolute;pointer-events:none;background:var(--ink);color:var(--paper);font-size:.76rem;padding:6px 9px;border-radius:4px;line-height:1.45;white-space:nowrap;transform:translate(-50%,-100%);z-index:2}
+.tip b{font-family:var(--f-num)}
+.keys{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:10px;font-size:.78rem;color:var(--muted);align-items:center}
+.keys span{display:inline-flex;align-items:center;gap:6px}
+.empty{padding:28px 16px;text-align:center;color:var(--muted);font-size:.86rem;border:1px dashed var(--line);background:var(--surface)}
+
+/* feed + side */
+.split{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:24px;align-items:start}
+.feed{list-style:none;margin:0;padding:0;border-top:1px solid var(--ink)}
+.feed li{display:grid;grid-template-columns:88px minmax(0,1fr);gap:4px 16px;padding:14px 0;border-bottom:1px solid var(--line)}
+.feed time{font-family:var(--f-num);font-size:.8rem;color:var(--muted);padding-top:2px}
+.feed h3{margin:0 0 4px;font-size:.98rem;line-height:1.45;text-wrap:balance}
+.feed p{margin:0;font-size:.88rem;color:var(--muted);max-width:62ch}
+.feed .src{font-size:.76rem;margin-top:6px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.tag{font-size:.7rem;font-weight:700;letter-spacing:.04em;padding:1px 7px;border-radius:3px;background:var(--chip);color:var(--ink)}
+.tag.market{color:var(--ochre)} .tag.trade{color:var(--cobalt)} .tag.macro{color:var(--down)} .tag.policy{color:var(--up)}
+.side{background:var(--surface);border:1px solid var(--line);padding:16px;display:flex;flex-direction:column;gap:14px}
+.kv{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 12px;font-size:.86rem;margin:0}
+.kv dt{color:var(--muted)} .kv dd{margin:0;font-family:var(--f-num);font-weight:600;text-align:right}
+.bars{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;align-items:end;height:120px;border-bottom:1px solid var(--line);position:relative}
+.bar{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;font-size:.72rem;position:relative}
+.bar i{display:block;width:60%;max-width:34px;background:var(--cobalt);border-radius:3px 3px 0 0}
+.bar i.neg{background:var(--muted);border-radius:0 0 3px 3px}
+.bar b{font-family:var(--f-num);font-weight:500;font-size:.72rem;margin-bottom:2px}
+.bar-x{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;font-family:var(--f-num);font-size:.72rem;color:var(--muted);text-align:center}
+
+/* city map */
+.mapgrid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:16px;align-items:start}
+.mapctl{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;margin-bottom:8px}
+.chips{display:flex;gap:4px;flex-wrap:wrap}
+.chips button{font:inherit;font-size:.8rem;padding:4px 11px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
+.chips button[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.slider{display:flex;align-items:center;gap:8px;flex:1;min-width:200px;font-size:.8rem;color:var(--muted)}
+.slider input{flex:1;min-width:0;accent-color:var(--cobalt)}
+.slider output{font-family:var(--f-num);color:var(--ink);font-weight:600;min-width:84px}
+#nkmap{width:100%;height:auto;display:block}
+#nkmap .nb{fill:var(--chip);stroke:var(--line);stroke-width:.8}
+#nkmap .nk{fill:var(--surface);stroke:var(--ink);stroke-width:1.2}
+#nkmap .sea{fill:var(--paper)}
+#nkmap text{font-family:var(--f-body);font-size:12px;fill:var(--ink)}
+#nkmap text.muted{fill:var(--muted);font-size:10.5px}
+#nkmap text.val{font-family:var(--f-num);font-weight:600;font-size:13px}
+#nkmap .halo{stroke:var(--surface);stroke-width:4;paint-order:stroke;stroke-linejoin:round}
+.divleg{display:flex;align-items:center;gap:8px;font-size:.74rem;color:var(--muted);flex-wrap:wrap;margin-top:6px}
+.divleg .ramp{display:inline-flex;height:10px;border-radius:2px;overflow:hidden}
+.divleg .ramp i{width:22px;display:block}
+.citytbl table{min-width:0}
+.citytbl td,.citytbl th{padding:5px 8px}
+.mapnote{font-size:.78rem;color:var(--muted);margin:8px 0 0;max-width:60ch}
+@media (max-width:860px){.mapgrid{grid-template-columns:minmax(0,1fr)}}
+
+/* pipeline */
+.pipe{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;border:1px solid var(--line);background:var(--surface)}
+.pipe div{padding:14px 16px;border-right:1px solid var(--line);font-size:.84rem;min-width:0}
+.pipe div:last-child{border-right:0}
+.pipe b{display:block;margin-bottom:4px}
+.pipe span{color:var(--muted)}
+details{margin-top:12px;font-size:.84rem}
+summary{cursor:pointer;color:var(--cobalt);font-weight:600}
+.tbl{overflow-x:auto;margin-top:8px}
+table{border-collapse:collapse;width:100%;min-width:560px;font-size:.82rem;background:var(--surface)}
+th,td{padding:7px 10px;border-bottom:1px solid var(--line);text-align:right}
+th:first-child,td:first-child{text-align:left}
+td{font-family:var(--f-num);font-variant-numeric:tabular-nums}
+th{font-weight:600;color:var(--muted);font-size:.76rem}
+footer{margin-top:40px;padding-top:14px;border-top:3px solid var(--ink);font-size:.78rem;color:var(--muted);display:flex;flex-direction:column;gap:6px}
+footer p{margin:0;max-width:80ch}
+
+@media (max-width:860px){
+  .board{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .cell:nth-child(2){border-right:0}
+  .cell:nth-child(-n+2){border-bottom:1px solid var(--line)}
+  .charts,.split{grid-template-columns:minmax(0,1fr)}
+  .pipe{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .pipe div:nth-child(2){border-right:0}
+  .pipe div:nth-child(-n+2){border-bottom:1px solid var(--line)}
+}
+@media (max-width:520px){
+  .derived{grid-template-columns:minmax(0,1fr)}
+  .derived div{border-right:0;border-bottom:1px solid var(--line)}
+  .derived div:last-child{border-bottom:0}
+  .feed li{grid-template-columns:minmax(0,1fr)}
+  .clock{align-items:flex-start}
+}
+</style>
+
+<style>
+body{padding:0!important;margin:0}
+.site-top{position:sticky;top:0;z-index:20;background:#081129;color:#fff;border-bottom:1px solid rgba(217,164,65,.28)}
+.site-top .topbar{max-width:1120px;margin:0 auto;min-height:56px;padding:0 16px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.site-top a{color:#fff;text-decoration:none;font-size:14px}.site-top .brand{font-weight:900;letter-spacing:.4px}.site-top .brand b{color:#f3ce86}.site-top nav{display:flex;gap:16px}
+.page{padding:0 16px 48px}
+.site-foot{padding:24px 16px;background:#07102a;color:#8f9abb;text-align:center;font-size:13px}.site-foot a{color:#f3ce86}
+</style>
+</head>
+<body>
+<header class="site-top"><div class="topbar"><a class="brand" href="../">STARGATE <b>RESEARCH</b></a><nav><a href="../#tools">연구 도구</a><a href="../../">홈으로</a></nav></div></header>
+<main class="page">
+<div class="wrap">
+  <header class="mast">
+    <h1><small>STARGATE · 북한경제 데이터 저널</small>스타게이트 북한경제 워치</h1>
+    <div class="clock" aria-live="off">
+      <span>서울 기준 현재 시각</span>
+      <span class="num" id="kst">—</span>
+    </div>
+  </header>
+
+  <div class="statusbar" id="statusbar">
+    <span class="pill" id="fresh"><i></i><span>데이터 연결 중</span></span>
+    <span id="lastRun">최신 수집 데이터를 불러오는 중입니다.</span>
+    <span id="nextRun"></span>
+  </div>
+
+  <section aria-labelledby="board-h">
+    <div class="sec-head">
+      <h2 id="board-h">장마당 시세판</h2>
+      <p id="boardNote">단위 북한 원. 가장 최근 조사값과, 같은 기관·같은 도시의 직전 조사 대비 변동률</p>
+    </div>
+    <div class="board" id="board">
+      <div class="cell"><div class="label"><span class="lbl"><i class="swatch" style="background:var(--ochre)"></i>쌀</span><span>1kg</span></div><div class="val" id="v-rice">—</div><div class="delta flat" id="d-rice">&nbsp;</div><div class="meta" id="m-rice">시세 데이터 대기</div></div>
+      <div class="cell"><div class="label"><span class="lbl"><i class="swatch" style="background:var(--cobalt)"></i>옥수수</span><span>1kg</span></div><div class="val" id="v-corn">—</div><div class="delta flat" id="d-corn">&nbsp;</div><div class="meta" id="m-corn">시세 데이터 대기</div></div>
+      <div class="cell"><div class="label"><span class="lbl">미 달러</span><span>1 USD</span></div><div class="val" id="v-usd">—</div><div class="delta flat" id="d-usd">&nbsp;</div><div class="meta" id="m-usd">시세 데이터 대기</div></div>
+      <div class="cell"><div class="label"><span class="lbl">중국 위안</span><span>1 CNY</span></div><div class="val" id="v-cny">—</div><div class="delta flat" id="d-cny">&nbsp;</div><div class="meta" id="m-cny">시세 데이터 대기</div></div>
+    </div>
+    <div class="derived">
+      <div><b id="x-wage">—</b><span>노동자 월급 5만 원으로 살 수 있는 쌀 (2024년 인상 월급 기준)</span></div>
+      <div><b id="x-riceusd">—</b><span>쌀 1kg의 달러 환산 가격 (같은 조사일 환율 기준)</span></div>
+      <div><b id="x-ytd">—</b><span>올해 2월 초 평균 대비 쌀값 상승률 (2월 3개 도시 평균 15,133원)</span></div>
+    </div>
+  </section>
+
+  <section aria-labelledby="chart-h">
+    <div class="sec-head">
+      <h2 id="chart-h">시계열</h2>
+      <p>점에 마우스를 올리면 조사일별 값이 표시됩니다</p>
+    </div>
+    <div class="charts">
+      <figure class="chart" style="margin:0">
+        <header><h2 style="font-size:.95rem">곡물 가격 (원/kg)</h2>
+          <div class="legend"><span><i class="swatch" style="background:var(--ochre)"></i>쌀</span><span><i class="swatch" style="background:var(--cobalt)"></i>옥수수</span></div>
+        </header>
+        <div id="c-grain"><div class="empty">조사 데이터가 들어오면 그래프가 그려집니다.</div></div>
+      </figure>
+      <figure class="chart" style="margin:0">
+        <header><h2 style="font-size:.95rem">장마당 달러 환율 (원/USD)</h2><p>공식 환율이 아닌 시장 환율</p></header>
+        <div id="c-usd"><div class="empty">조사 데이터가 들어오면 그래프가 그려집니다.</div></div>
+      </figure>
+    </div>
+    <div class="keys" aria-label="기호 설명">
+      <span><svg width="26" height="12" aria-hidden="true"><line x1="1" y1="6" x2="25" y2="6" stroke="var(--muted)" stroke-width="2"/><circle cx="13" cy="6" r="3.5" fill="var(--muted)"/></svg>Daily NK 평양 정기조사</span>
+      <span><svg width="14" height="12" aria-hidden="true"><circle cx="7" cy="6" r="4" fill="var(--surface)" stroke="var(--muted)" stroke-width="2"/></svg>Daily NK 신의주·혜산</span>
+      <span><svg width="26" height="12" aria-hidden="true"><line x1="1" y1="6" x2="25" y2="6" stroke="var(--muted)" stroke-width="2" stroke-dasharray="2 5" stroke-linecap="round"/></svg>조사 공백 3주 초과 구간</span>
+      <span><svg width="14" height="14" aria-hidden="true"><path d="M7 1L13 7L7 13L1 7Z" fill="var(--muted)"/></svg>RFA 지역 소식통</span>
+      <span id="srcCount" class="num"></span>
+    </div>
+    <details>
+      <summary>표로 보기</summary>
+      <div class="tbl"><table><thead><tr><th>조사일</th><th>기관</th><th>도시</th><th>쌀</th><th>옥수수</th><th>달러</th><th>위안</th><th>원문</th></tr></thead><tbody id="tbody"><tr><td colspan="8" style="text-align:center">데이터 대기</td></tr></tbody></table></div>
+    </details>
+  </section>
+
+
+  <section aria-labelledby="map-h">
+    <div class="sec-head">
+      <h2 id="map-h">도시별 가격 지도</h2>
+      <p>Daily NK 평양·신의주·혜산 동시 조사. 같은 날 3개 도시 평균보다 비싼지 싼지를 표시합니다</p>
+    </div>
+    <div class="mapgrid">
+      <figure class="chart" style="margin:0">
+        <div class="mapctl">
+          <div class="chips" role="group" aria-label="품목 선택">
+            <button type="button" id="it-rice" aria-pressed="true">쌀</button>
+            <button type="button" id="it-corn" aria-pressed="false">옥수수</button>
+            <button type="button" id="it-usd" aria-pressed="false">달러</button>
+            <button type="button" id="it-cny" aria-pressed="false">위안</button>
+          </div>
+          <label class="slider" for="mapdate">조사일 <input type="range" id="mapdate" min="0" max="0" step="1" value="0"><output id="mapdateout">—</output></label>
+        </div>
+        <svg id="nkmap" viewBox="0 0 560 520" role="img" aria-label="북한 3개 도시 가격 지도"><rect class="sea" width="560" height="520"/><path class="nb" d="M531.8,0L530.2,6.3L527.8,16.9L525.1,21L523.2,24.2L521.8,26.4L521.6,33.8L520.6,38.7L516.5,40.4L512.2,43.2L507.5,42.3L502.9,42.7L497.7,44.6L488.1,46.8L482.4,49.8L479.8,52L477.9,54.5L477.6,57L478.8,58.3L484.3,59.2L487.9,63.9L488.6,68.9L484.8,71.7L482.9,68.6L479.5,67.7L473.6,63.1L469.3,58.3L466.1,52.9L466.1,41.3L465.7,39.6L459.7,37.2L458,33.8L455.2,32.2L451.1,33.1L448.2,32L445.8,30.2L443,30L440.6,33L439.2,39.4L435.1,50.1L434.6,56.4L433,65.6L431,77.2L429.6,79.7L425.1,80L423.4,80.8L421,84.7L418.1,85.3L415.5,83.1L411.5,80.8L407.6,80.5L404.3,82.8L400.2,87.8L397.8,91.9L397.1,95.6L396.4,100.3L392.4,104.8L388.5,107.1L380.9,113.6L378.3,116.4L372.8,116.4L366.8,116.1L358.7,118L345.3,118.9L337.4,117.5L327.6,118.7L320,120.9L319,124.2L319.3,128.8L320.7,131.9L322.6,134.1L325.7,140.4L329.1,146.6L334.1,150.4L336.2,154.7L336.5,158.7L334.1,163.7L330.3,170.1L326.9,174.3L324.5,174.1L320.5,171.7L317.8,168.7L311.6,167.7L296.3,169.5L288.7,168.3L285.1,165.8L278.7,165.7L268.6,162.4L262.7,161.5L259.8,159.4L259.3,154.7L256.5,151.5L254.8,147.6L251.2,142.7L247.6,140.4L244.3,139.3L240.5,142.2L236.6,144.9L233.8,144.3L232.3,145L230.7,147.2L224.2,151.8L222.8,156L220.2,164.6L218.5,173.6L216.8,176.9L214.4,177.3L211.8,180.1L206.1,188.5L201.3,196.3L193.9,201.5L190.5,206.3L188.9,210.7L183.6,216.8L176,217.8L170,219.7L166.4,220.1L163.8,222.6L161.6,226.2L160.9,227.7L157.3,227.7L154,230.9L145.6,238.2L139,239.6L130.4,244.3L123,248.1L119.9,250.1L118.9,252.3L117.9,255.2L114.1,255.8L110.8,255.7L102.9,262.3L98.8,267.9L83.6,279.8L77.3,286.6L75.7,295.3L75,294.6L69.5,302.2L58.7,309.4L35.8,310.9L28.6,305.8L26,309.4L23.8,314.1L17.9,315.7L8.6,316L3.3,319.2L0.4,322.6L0,322.7L0,0Z"/><path class="nb" d="M560,16.9L550.2,30.2L542.1,45.9L535.4,50.4L532.3,57.2L526.6,63.6L517.7,61.9L512.5,63L499.8,59.4L496.7,60.9L505.1,73L498.2,90.6L495.3,92.8L495.3,92.8L493.4,90.5L492.9,86.4L490.7,82.5L486.4,77.2L484.8,71.7L488.6,68.9L487.9,63.9L484.3,59.2L478.8,58.3L477.6,57L477.9,54.5L479.8,52L482.4,49.8L488.1,46.8L497.7,44.6L502.9,42.7L507.5,42.3L512.2,43.2L516.5,40.4L520.6,38.7L521.6,33.8L521.8,26.4L523.2,24.2L525.1,21L527.8,16.9L530.2,6.3L531.8,0L560,0Z"/><path class="nb" d="M233.4,520L230.7,515.7L227.6,512.7L228,504.1L224.7,498.4L222.8,495.4L221.8,490.1L222.8,487.8L225.7,486.9L226.4,484.8L226.4,484.8L228.5,483.2L228.5,480.8L228.5,473.4L234.5,468.1L242.6,457.4L246.7,451.6L251.4,446L256.7,442.4L262,440.7L270.3,440L286.1,440.6L289.2,440L300.2,439.4L302.8,440.4L310.7,441L319.7,440.3L324,438.7L328.3,436L331.9,431.2L335.5,422.1L339.6,415L342,413.7L358.2,451.6L373.5,475.9L386.9,493.5L401.7,520L233.4,520ZM219,488.5L218.5,499.6L214.9,499L212.5,498L211.3,495.8L208.9,485.5L211.6,481.3L217.1,484.6ZM510.6,510.1L507.5,512.7L503.9,510.1L503.4,507.4L505.3,505.3L509.6,503.8L511.8,505.8Z"/><path class="nk" d="M342,413.7L339.6,415L335.5,422.1L331.9,431.2L328.3,436L324,438.7L319.7,440.3L310.7,441L302.8,440.4L300.2,439.4L289.2,440L286.1,440.6L270.3,440L262,440.7L256.7,442.4L251.4,446L246.7,451.6L242.6,457.4L234.5,468.1L228.5,473.4L228.5,480.8L228.5,483.2L226.4,484.8L225.7,484L222.3,483.4L208.9,476.6L197.9,480.8L195.1,486.2L192.2,488L187.7,477.3L180.5,477L169,467.5L164,469.4L162.8,473.2L156.6,482L147.8,489L144.9,490L141.8,489.6L142.3,487.5L138.7,479.5L124.9,476.3L119.9,472.9L117.2,472.1L130.8,463.2L134.4,461.5L131.8,459.5L128.9,458.5L117.7,459.8L112,456.9L103.4,457.9L97.6,455.5L109.8,446.8L110.3,441.5L110.1,437.5L116.3,425.8L122.5,419.3L138.5,410.1L145.6,408.8L150.7,409.3L154.7,408.4L150.4,404.8L146.1,403.2L137.8,403.5L129.2,398.2L128.4,392.6L145.2,357L145.4,353.7L142.8,345L142.1,336.5L129.9,331.6L124.6,331L109.3,321.4L103.1,316.5L100.7,318L100.3,325.6L98.1,327.4L94.1,328.9L91.9,320.1L88.6,313.8L78.5,307.2L74.7,303.7L76.6,295.9L75.7,295.3L77.3,286.6L83.6,279.8L98.8,267.9L102.9,262.3L110.8,255.7L114.1,255.8L117.9,255.2L118.9,252.3L119.9,250.1L123,248.1L130.4,244.3L139,239.6L145.6,238.2L154,230.9L157.3,227.7L160.9,227.7L161.6,226.2L163.8,222.6L166.4,220.1L170,219.7L176,217.8L183.6,216.8L188.9,210.7L190.5,206.3L193.9,201.5L201.3,196.3L206.1,188.5L211.8,180.1L214.4,177.3L216.8,176.9L218.5,173.6L220.2,164.6L222.8,156L224.2,151.8L230.7,147.2L232.3,145L233.8,144.3L236.6,144.9L240.5,142.2L244.3,139.3L247.6,140.4L251.2,142.7L254.8,147.6L256.5,151.5L259.3,154.7L259.8,159.4L262.7,161.5L268.6,162.4L278.7,165.7L285.1,165.8L288.7,168.3L296.3,169.5L311.6,167.7L317.8,168.7L320.5,171.7L324.5,174.1L326.9,174.3L330.3,170.1L334.1,163.7L336.5,158.7L336.2,154.7L334.1,150.4L329.1,146.6L325.7,140.4L322.6,134.1L320.7,131.9L319.3,128.8L319,124.2L320,120.9L327.6,118.7L337.4,117.5L345.3,118.9L358.7,118L366.8,116.1L372.8,116.4L378.3,116.4L380.9,113.6L388.5,107.1L392.4,104.8L396.4,100.3L397.1,95.6L397.8,91.9L400.2,87.8L404.3,82.8L407.6,80.5L411.5,80.8L415.5,83.1L418.1,85.3L421,84.7L423.4,80.8L425.1,80L429.6,79.7L431,77.2L433,65.6L434.6,56.4L435.1,50.1L439.2,39.4L440.6,33L443,30L445.8,30.2L448.2,32L451.1,33.1L455.2,32.2L458,33.8L459.7,37.2L465.7,39.6L466.1,41.3L466.1,52.9L469.3,58.3L473.6,63.1L479.5,67.7L482.9,68.6L484.8,71.7L486.4,77.2L490.7,82.5L492.9,86.4L493.4,90.5L495.3,92.8L491.9,95.3L487.4,93.7L480,92.8L470.7,100.7L465.4,103.4L461.6,111.1L454.2,115.8L450.1,120.6L444.9,129L441.6,137.1L433.7,145.5L428.9,155.8L428.7,164.7L433.7,173.8L434.1,181.6L430.6,197.5L432.7,214.3L430.3,220.9L406,232.5L399.8,238.1L390.7,252.9L379.7,258.4L373,264.4L363.7,268.1L357.5,278.5L351,284.3L343.2,288L337.2,292.5L324,292.8L314.7,295.9L308.3,304.6L288.5,314.5L285.6,321.9L287,333.4L287,342.1L285.4,349.4L281.1,347.3L278.7,349.7L276,356.2L277,363.8L283.7,366.3L289.2,369.3L297.1,370.9L302.8,374.5L315.2,390.3L325.2,397.3L327.9,399.8L333.6,403.3L338.9,408.8ZM111.7,335.6L107.9,338.2L107.9,333.7L110.8,330L113.6,329.5Z"/><text class="muted" x="40" y="120">중국</text><text class="muted" x="490" y="40">러시아</text><text class="muted" x="261.3" y="502.8">한국</text><g id="mapdyn"></g></svg>
+        <div class="divleg"><span>평균보다 쌈</span><span class="ramp"><i style="background:var(--div-lo)"></i><i style="background:var(--div-lo);opacity:.45"></i><i style="background:var(--div-mid);opacity:.5"></i><i style="background:var(--div-hi);opacity:.45"></i><i style="background:var(--div-hi)"></i></span><span>평균보다 비쌈</span><span>· 점선 원은 그날 조사값 없음</span></div>
+      </figure>
+      <div class="chart">
+        <header><h2 style="font-size:.95rem">도시 간 가격 격차 (%)</h2>
+          <div class="legend"><span><i class="swatch" style="background:var(--ochre)"></i>쌀</span><span><i class="swatch" style="background:var(--cobalt)"></i>옥수수</span></div>
+        </header>
+        <div id="c-spread"><div class="empty">도시별 조사가 들어오면 그래프가 그려집니다.</div></div>
+        <p class="mapnote">격차 = (최고가 − 최저가) ÷ 평균. 값이 작을수록 세 시장 가격이 함께 움직인다는 뜻(일물일가)이고, 커지면 운송·단속 등으로 지역 시장이 나뉘었다는 신호로 읽을 수 있습니다.</p>
+        <div class="tbl citytbl"><table><thead><tr><th>조사일</th><th>평양</th><th>신의주</th><th>혜산</th><th>격차</th></tr></thead><tbody id="citybody"><tr><td colspan="5" style="text-align:center">데이터 대기</td></tr></tbody></table></div>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="feed-h">
+    <div class="split">
+      <div>
+        <div class="sec-head"><h2 id="feed-h">데이터 브리핑</h2><p>새 수치가 확인되면 자동으로 추가됩니다</p></div>
+        <ul class="feed" id="feed"><li><time>—</time><div><h3>브리핑을 불러오는 중입니다</h3><p>자동 수집이 기록한 최신 브리핑이 이 자리에 표시됩니다.</p></div></li></ul>
+      </div>
+      <aside class="side" aria-labelledby="macro-h">
+        <div><div class="eyebrow">연간 거시지표 · 한국은행 추정</div><h2 id="macro-h" style="margin-top:2px">북한 실질 GDP 성장률</h2></div>
+        <div>
+          <div class="bars" id="bars"></div>
+          <div class="bar-x" id="barx"></div>
+        </div>
+        <dl class="kv">
+          <dt>2025 명목 GNI</dt><dd>48.5조 원</dd>
+          <dt>1인당 GNI</dt><dd>187.3만 원</dd>
+          <dt>한국 대비 1인당</dt><dd>1/28</dd>
+          <dt>2025 대외교역</dt><dd>31.3억 달러</dd>
+          <dt>2025 북중교역 (해관총서)</dt><dd>27.3억 달러</dd>
+          <dt>남북 반출입</dt><dd>3년 연속 0</dd>
+        </dl>
+        <p style="margin:0;font-size:.76rem;color:var(--muted)">출처: 한국은행 「2025년 북한 경제성장률 추정 결과」(2026.7.31), 세계일보·VOA(해관총서 인용). 연 1회 갱신 지표입니다.</p>
+      </aside>
+    </div>
+  </section>
+
+  <section aria-labelledby="pipe-h">
+    <div class="sec-head"><h2 id="pipe-h">데이터가 들어오는 방식</h2><p>주 2회(화·금 오전 8시대) 자동 수집</p></div>
+    <div class="pipe">
+      <div><b>1. 수집</b><span>Daily NK 2주 간격 3개 도시 시세조사, RFA(자유아시아방송) 지역 소식통 보도, 아시아프레스, 중국 해관총서 월간 통계, 한국은행·KDI 발표를 검색합니다.</span></div>
+      <div><b>2. 검증</b><span>시점·도시·단위가 명시된 수치만 채택하고, 기관과 도시를 함께 기록합니다. 범위·추정·역산 값은 시세에 넣지 않고 브리핑으로만 다룹니다.</span></div>
+      <div><b>3. 적재</b><span>시세는 조사일별 1건, 브리핑은 발표일별 1건으로 저장되며 이 페이지에 즉시 반영됩니다.</span></div>
+      <div><b>4. 표시</b><span>마지막 조사일로부터 14일이 지나면 노란색, 30일이 지나면 빨간색으로 신선도를 표시합니다.</span></div>
+    </div>
+  </section>
+
+  <footer>
+    <p>스타게이트 북한경제 워치는 주식회사 별의문이 운영하는 시범 매체입니다. 인터넷신문 등록 전 시범 운영 중이며, 정보 제공용 자료입니다.</p>
+    <p>장마당 시세는 북한 내부 소식통 조사에 기반한 비공식 수치이며 조사 기관마다 차이가 있습니다. RFA 수치는 정기 조사가 아닌 보도 시점의 소식통 전언입니다. 브리핑 요약문은 AI가 작성했고, 원문 링크를 함께 표기합니다.</p>
+  </footer>
+</div>
+
+</main>
+<footer class="site-foot">© 2026 Stargate Corp · <a href="../">STARGATE RESEARCH</a> · 장마당 시세는 소식통 기반 비공식 수치입니다.</footer>
+<script>
+(function(){
+  "use strict";
+  var $ = function(id){ return document.getElementById(id); };
+  var fmt = function(n){ return n==null ? "—" : Math.round(n).toLocaleString("ko-KR"); };
+
+  /* KST clock */
+  function kstParts(d){
+    var f = new Intl.DateTimeFormat("ko-KR",{timeZone:"Asia/Seoul",year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit",second:"2-digit",hour12:false,weekday:"short"});
+    var o = {}; f.formatToParts(d).forEach(function(p){ o[p.type]=p.value; }); return o;
+  }
+  function tick(){ var p = kstParts(new Date()); $("kst").textContent = p.year+"-"+p.month+"-"+p.day+" ("+p.weekday+") "+p.hour+":"+p.minute+":"+p.second; }
+  tick(); setInterval(tick,1000);
+
+  function todayKST(){ var p = kstParts(new Date()); return new Date(p.year+"-"+p.month+"-"+p.day+"T00:00:00Z"); }
+  function daysSince(iso){ return Math.round((todayKST() - new Date(iso+"T00:00:00Z"))/864e5); }
+  function md(iso){ var d = iso.split("-"); return (+d[1])+"/"+(+d[2]); }
+  function esc(s){ return String(s==null?"":s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];}); }
+  function safeUrl(u){ return /^https:\/\//.test(u||"") ? u : null; }
+
+  /* ---------- observations: one per field, keeps 기관·도시 ---------- */
+  var ORG={dailynk:"Daily NK",rfa:"RFA",asiapress:"아시아프레스"};
+  var FIELDS=["rice","corn","usd","cny"];
+  function orgOf(r){ return r.org||"dailynk"; }
+  function obsOf(rows,key){
+    return rows.filter(function(r){ return typeof r[key]==="number"; }).map(function(r){
+      return {date:r.date,t:+new Date(r.date),v:r[key],org:orgOf(r),city:r[key+"City"]||r.city||"",src:r.source,url:r.url};
+    }).sort(function(a,b){ return a.date<b.date?-1:a.date>b.date?1:(a.org==="dailynk"?1:-1); });
+  }
+  function isMain(o){ return o.org==="dailynk" && o.city==="평양"; }
+
+  /* ---------- board ---------- */
+  function setCell(key, rows){
+    var obs=obsOf(rows,key); if(!obs.length) return;
+    var cur=obs[obs.length-1], prev=null;
+    for(var i=obs.length-2;i>=0;i--){ if(obs[i].org===cur.org && obs[i].city===cur.city){ prev=obs[i]; break; } }
+    $("v-"+key).innerHTML = fmt(cur.v)+"<small>원</small>";
+    var d=$("d-"+key);
+    if(prev){
+      var pct=(cur.v-prev.v)/prev.v*100, cls=Math.abs(pct)<0.05?"flat":(pct>0?"up":"down");
+      d.className="delta "+cls;
+      d.textContent=(pct>0?"▲ ":pct<0?"▼ ":"")+Math.abs(pct).toFixed(1)+"%  ("+md(prev.date)+" "+fmt(prev.v)+"원)";
+    } else { d.className="delta flat note"; d.textContent="같은 기관·도시의 직전 조사 없음"; }
+    $("m-"+key).textContent=md(cur.date)+" · "+(ORG[cur.org]||cur.org)+" · "+cur.city;
+  }
+  function renderBoard(rows){
+    FIELDS.forEach(function(k){ setCell(k,rows); });
+    var ro=obsOf(rows,"rice"), r=ro[ro.length-1];
+    if(r){
+      $("x-wage").textContent=(50000/r.v).toFixed(2)+" kg";
+      $("x-ytd").textContent="+"+((r.v/15133-1)*100).toFixed(0)+"%";
+      var same=rows.filter(function(x){ return typeof x.rice==="number" && typeof x.usd==="number"; }).sort(function(a,b){return a.date<b.date?-1:1;}).pop();
+      $("x-riceusd").textContent= same ? "$"+(same.rice/same.usd).toFixed(2)+" ("+md(same.date)+" "+(ORG[orgOf(same)]||"")+")" : "—";
+    }
+  }
+
+  /* ---------- chart: line = Daily NK 평양 정기조사, 점 = 다른 도시·기관 ---------- */
+  function niceTicks(min,max,n){
+    var span=max-min||1, step=Math.pow(10,Math.floor(Math.log10(span/n))), err=span/n/step;
+    step*=err>=7.5?10:err>=3?5:err>=1.5?2:1;
+    var lo=Math.floor(min/step)*step, hi=Math.ceil(max/step)*step, t=[];
+    for(var v=lo; v<=hi+1e-9; v+=step) t.push(v);
+    return t;
+  }
+  function marker(o,cx,cy,color,last){
+    if(o.org==="rfa"){ var s=6.5; return '<path d="M'+cx+' '+(cy-s)+'L'+(cx+s)+' '+cy+'L'+cx+' '+(cy+s)+'L'+(cx-s)+' '+cy+'Z" fill="'+color+'" stroke="var(--surface)" stroke-width="1.5"/>'; }
+    if(!isMain(o)) return '<circle cx="'+cx+'" cy="'+cy+'" r="4.5" fill="var(--surface)" stroke="'+color+'" stroke-width="2"/>';
+    return '<circle cx="'+cx+'" cy="'+cy+'" r="'+(last?5:3.5)+'" fill="'+color+'" stroke="var(--surface)" stroke-width="2"/>';
+  }
+  function lineChart(host, rows, series){
+    var sets=series.map(function(s){ return obsOf(rows,s.key); });
+    var all=[].concat.apply([],sets);
+    if(all.length<2){ host.innerHTML='<div class="empty">비교할 조사가 두 건 이상 쌓이면 그래프가 그려집니다.</div>'; return; }
+    var W=560,H=260,L=56,R=16,T=14,B=30;
+    var t0=Math.min.apply(null,all.map(function(p){return p.t;})), t1=Math.max.apply(null,all.map(function(p){return p.t;}));
+    var vs=all.map(function(p){return p.v;}), ticks=niceTicks(Math.min.apply(null,vs)*0.92,Math.max.apply(null,vs)*1.04,4);
+    var y0=ticks[0], y1=ticks[ticks.length-1];
+    var x=function(t){ return L+(t-t0)/((t1-t0)||1)*(W-L-R); }, y=function(v){ return T+(1-(v-y0)/((y1-y0)||1))*(H-T-B); };
+    var s='<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="'+esc(series.map(function(z){return z.name;}).join(", "))+' 시계열">';
+    s+='<g class="grid">'; ticks.forEach(function(v){ s+='<line x1="'+L+'" x2="'+(W-R)+'" y1="'+y(v)+'" y2="'+y(v)+'"/><text x="'+(L-8)+'" y="'+(y(v)+4)+'" text-anchor="end">'+(v>=1000?(v/1000).toLocaleString("ko-KR")+"천":v)+'</text>'; }); s+='</g>';
+    var dates=Array.from(new Set(all.map(function(p){return p.date;}))).sort(), step=Math.ceil(dates.length/6), lastLX=-99;
+    dates.forEach(function(d,i){ var px=x(+new Date(d)); if((i%step===0||i===dates.length-1) && px-lastLX>34){ s+='<text x="'+px+'" y="'+(H-8)+'" text-anchor="middle">'+md(d)+'</text>'; lastLX=px; } });
+    series.forEach(function(sr,i){
+      var main=sets[i].filter(isMain), rest=sets[i].filter(function(o){return !isMain(o);});
+      for(var j=1;j<main.length;j++){ var a=main[j-1], b=main[j], gap=(b.t-a.t)/864e5>21;
+        s+='<line x1="'+x(a.t).toFixed(1)+'" y1="'+y(a.v).toFixed(1)+'" x2="'+x(b.t).toFixed(1)+'" y2="'+y(b.v).toFixed(1)+'" stroke="'+sr.color+'" stroke-width="2" stroke-linecap="round"'+(gap?' stroke-dasharray="2 5" opacity=".7"':'')+'/>'; }
+      main.forEach(function(q,j){ s+=marker(q,x(q.t),y(q.v),sr.color,j===main.length-1); });
+      rest.forEach(function(q){ s+=marker(q,x(q.t),y(q.v),sr.color,false); });
+      var lp=sets[i][sets[i].length-1];
+      if(lp){ var prevV=sets[i].length>1?sets[i][sets[i].length-2].v:lp.v; s+='<text x="'+(Math.min(x(lp.t),W-R)-8)+'" y="'+(y(lp.v)+(prevV>lp.v?20:-10))+'" text-anchor="end" style="fill:var(--ink);font-weight:600">'+fmt(lp.v)+'</text>'; }
+    });
+    s+='<line id="xh" x1="0" x2="0" y1="'+T+'" y2="'+(H-B)+'" stroke="var(--muted)" stroke-dasharray="3 3" visibility="hidden"/>';
+    s+='<rect x="'+L+'" y="'+T+'" width="'+(W-L-R)+'" height="'+(H-T-B)+'" fill="transparent" class="hit"/></svg><div class="tip" hidden></div>';
+    host.innerHTML=s;
+    var svg=host.querySelector("svg"), tip=host.querySelector(".tip"), xh=svg.querySelector("#xh"), hit=svg.querySelector(".hit");
+    function move(ev){
+      var r=svg.getBoundingClientRect(), sx=(ev.clientX-r.left)/r.width*W;
+      var best=dates.reduce(function(a,d){ return Math.abs(x(+new Date(d))-sx)<Math.abs(x(+new Date(a))-sx)?d:a; },dates[0]);
+      var bx=x(+new Date(best)); xh.setAttribute("x1",bx); xh.setAttribute("x2",bx); xh.setAttribute("visibility","visible");
+      var lines=[]; series.forEach(function(sr,i){ sets[i].forEach(function(o){ if(o.date===best) lines.push('<div><i class="swatch" style="background:'+sr.color+'"></i>'+esc(sr.name)+' <b>'+fmt(o.v)+'원</b> · '+esc(ORG[o.org]||o.org)+' '+esc(o.city)+'</div>'); }); });
+      tip.innerHTML='<div>'+esc(best)+'</div>'+(lines.join("")||'<div>해당 항목 조사 없음</div>');
+      tip.hidden=false; tip.style.left=Math.max(90,Math.min(bx/W*r.width+16,r.width-60))+"px"; tip.style.top=(T/H*r.height+50)+"px";
+    }
+    hit.addEventListener("pointermove",move); hit.addEventListener("pointerdown",move);
+    hit.addEventListener("pointerleave",function(){ tip.hidden=true; xh.setAttribute("visibility","hidden"); });
+  }
+
+  function citiesOf(r){ var c=[r.city]; FIELDS.forEach(function(k){ if(r[k+"City"]) c.push(r[k+"City"]); }); return Array.from(new Set(c.filter(Boolean))).join("·"); }
+  function cellOf(r,k){ return typeof r[k]==="number" ? fmt(r[k])+(r[k+"City"]&&r[k+"City"]!==r.city?'<small style="color:var(--muted)"> '+esc(r[k+"City"])+'</small>':"") : "—"; }
+  function renderTable(rows){
+    $("tbody").innerHTML = rows.slice().reverse().map(function(r){
+      var u=safeUrl(r.url);
+      return "<tr><td>"+esc(r.date)+"</td><td>"+esc(ORG[orgOf(r)]||orgOf(r))+"</td><td>"+esc(citiesOf(r))+"</td><td>"+cellOf(r,"rice")+"</td><td>"+cellOf(r,"corn")+"</td><td>"+cellOf(r,"usd")+"</td><td>"+cellOf(r,"cny")+"</td><td>"+(u?'<a href="'+esc(u)+'" target="_blank" rel="noopener">원문</a>':"")+"</td></tr>";
+    }).join("") || '<tr><td colspan="8" style="text-align:center">데이터 대기</td></tr>';
+  }
+
+  function renderSeries(rows){
+    rows=rows.slice().sort(function(a,b){ return a.date<b.date?-1:a.date>b.date?1:0; });
+    renderBoard(rows);
+    lineChart($("c-grain"), rows, [{key:"rice",name:"쌀",color:"var(--ochre)"},{key:"corn",name:"옥수수",color:"var(--cobalt)"}]);
+    lineChart($("c-usd"), rows, [{key:"usd",name:"달러",color:"var(--cobalt)"}]);
+    renderTable(rows);
+    var last=rows.filter(function(r){ return FIELDS.some(function(k){ return typeof r[k]==="number"; }); }).pop();
+    var counts={}; rows.forEach(function(r){ var o=orgOf(r); counts[o]=(counts[o]||0)+1; });
+    $("srcCount").textContent=Object.keys(counts).map(function(k){ return (ORG[k]||k)+" "+counts[k]+"건"; }).join(" · ");
+    var f=$("fresh");
+    if(last){
+      var dd=daysSince(last.date), cls=dd<=14?"ok":dd<=30?"stale":"old";
+      f.className="pill "+cls;
+      f.innerHTML='<i class="live-dot"></i><span>최근 조사 '+esc(md(last.date))+' · '+dd+'일 경과</span>';
+    }
+  }
+
+  var TAGS={market:"시장",trade:"무역",macro:"거시",policy:"정책"};
+  function renderBriefs(list){
+    list = list.slice().sort(function(a,b){ return a.date<b.date?1:-1; });
+    if(!list.length){ $("feed").innerHTML='<li><time>—</time><div><h3>아직 기록된 브리핑이 없습니다</h3><p>다음 자동 수집 때 새 수치가 확인되면 이 자리에 추가됩니다.</p></div></li>'; return; }
+    $("feed").innerHTML = list.map(function(b){
+      var u=safeUrl(b.url);
+      return '<li><time datetime="'+esc(b.date)+'">'+esc(b.date)+'</time><div><h3>'+esc(b.title)+'</h3><p>'+esc(b.body)+'</p><div class="src"><span class="tag '+esc(b.tag)+'">'+esc(TAGS[b.tag]||"기타")+'</span>'+(u?'<a href="'+esc(u)+'" target="_blank" rel="noopener">'+esc(b.source||"원문")+'</a>':esc(b.source||""))+'<span style="color:var(--muted)">· AI 요약</span></div></div></li>';
+    }).join("");
+  }
+
+  function renderMeta(m){
+    if(!m) return;
+    if(m.lastRun) $("lastRun").textContent = "마지막 자동 수집 "+m.lastRun+(m.note?" · "+m.note:"");
+    if(m.nextRun) $("nextRun").textContent = "다음 수집 예정 "+m.nextRun;
+  }
+
+  /* GDP bars (annual, static) */
+  (function(){
+    var g=[["2021",-0.1],["2022",-0.2],["2023",3.1],["2024",3.7],["2025",3.5]], max=4;
+    $("bars").innerHTML = g.map(function(d){ var h=Math.abs(d[1])/max*85; return '<div class="bar"><b>'+(d[1]>0?"+":"")+d[1]+'%</b><i class="'+(d[1]<0?"neg":"")+'" style="height:'+Math.max(h,3)+'%"></i></div>'; }).join("");
+    $("barx").innerHTML = g.map(function(d){ return "<span>"+d[0]+"</span>"; }).join("");
+  })();
+
+  /* ---------- city map ---------- */
+  var CK=["py","sn","hs"];
+  var CITY={py:{name:"평양",x:168.6,y:378.3,dx:16,dy:4,note:""},sn:{name:"신의주",x:78.1,y:286.9,dx:18,dy:-4,note:"중국 단둥 접경"},hs:{name:"혜산",x:328.8,y:173.4,dx:16,dy:4,note:"중국 창바이 접경"}};
+  var ITEM={rice:"쌀 원/kg",corn:"옥수수 원/kg",usd:"원/달러",cny:"원/위안"};
+  var cityRows=[], curItem="rice", curIdx=-1;
+  function vals(o){ return CK.map(function(k){ return o&&o[k]; }).filter(function(x){ return typeof x==="number"; }); }
+  function rowsFor(item){ return cityRows.filter(function(r){ return vals(r[item]).length>=2; }); }
+  function stats(o){ var v=vals(o), mean=v.reduce(function(a,b){return a+b;},0)/v.length; return {mean:mean,spread:(Math.max.apply(null,v)-Math.min.apply(null,v))/mean*100}; }
+  function drawMap(){
+    var list=rowsFor(curItem), g=$("mapdyn"), sl=$("mapdate");
+    if(!list.length){ g.innerHTML='<text x="280" y="260" text-anchor="middle" class="muted">이 품목의 도시별 동시 조사가 아직 없습니다</text>'; $("mapdateout").textContent="—"; sl.max=0; sl.disabled=true; return; }
+    sl.disabled=false; sl.max=list.length-1; if(curIdx<0||curIdx>list.length-1) curIdx=list.length-1; sl.value=curIdx;
+    var r=list[curIdx], o=r[curItem], st=stats(o);
+    $("mapdateout").textContent=r.date;
+    var maxDev=0; list.forEach(function(x){ var s2=stats(x[curItem]); CK.forEach(function(k){ var v=x[curItem][k]; if(typeof v==="number") maxDev=Math.max(maxDev,Math.abs(v/s2.mean-1)*100); }); }); maxDev=maxDev||1;
+    var s="";
+    CK.forEach(function(k){
+      var c=CITY[k], v=o[k], has=typeof v==="number";
+      if(!has){ s+='<circle cx="'+c.x+'" cy="'+c.y+'" r="11" fill="var(--surface)" stroke="var(--div-mid)" stroke-width="2" stroke-dasharray="3 3"/>'; }
+      else{
+        var dev=(v/st.mean-1)*100, a=Math.min(1,Math.abs(dev)/maxDev), col=Math.abs(dev)<0.15?"var(--div-mid)":(dev>0?"var(--div-hi)":"var(--div-lo)");
+        s+='<circle cx="'+c.x+'" cy="'+c.y+'" r="13" fill="'+col+'" fill-opacity="'+(0.35+0.65*a).toFixed(2)+'" stroke="var(--ink)" stroke-width="1.5"><title>'+c.name+' '+fmt(v)+'원</title></circle>';
+      }
+      var tx=c.x+c.dx, ty=c.y+c.dy, line=0;
+      s+='<text class="halo" x="'+tx+'" y="'+ty+'" font-weight="700">'+c.name+'</text>';
+      s+='<text class="halo val" x="'+tx+'" y="'+(ty+17)+'">'+(has?fmt(v)+"원":"조사값 없음")+'</text>';
+      line=17;
+      if(has){ var dv=(v/st.mean-1)*100; line+=15; s+='<text class="halo muted" x="'+tx+'" y="'+(ty+line)+'">평균 대비 '+(dv>0?"+":"")+dv.toFixed(1)+'%</text>'; }
+      if(c.note){ line+=14; s+='<text class="halo muted" x="'+tx+'" y="'+(ty+line)+'">'+c.note+'</text>'; }
+    });
+    s+='<text class="halo" x="20" y="504"><tspan font-weight="700">'+ITEM[curItem]+'</tspan><tspan class="muted" dx="8">'+r.date+' · 3개 도시 격차 '+st.spread.toFixed(1)+'%</tspan></text>';
+    g.innerHTML=s;
+  }
+  function drawSpread(){
+    var series=[{key:"rice",name:"쌀",color:"var(--ochre)"},{key:"corn",name:"옥수수",color:"var(--cobalt)"}];
+    var pts=series.map(function(sr){ return rowsFor(sr.key).map(function(r){ return {date:r.date,t:+new Date(r.date),v:stats(r[sr.key]).spread}; }); });
+    var all=[].concat.apply([],pts), host=$("c-spread");
+    if(all.length<2){ host.innerHTML='<div class="empty">도시별 동시 조사가 두 건 이상 쌓이면 그래프가 그려집니다.</div>'; return; }
+    var W=520,H=200,L=40,R=14,T=12,B=26, t0=Math.min.apply(null,all.map(function(p){return p.t;})), t1=Math.max.apply(null,all.map(function(p){return p.t;}));
+    var ymax=Math.max(1,Math.ceil(Math.max.apply(null,all.map(function(p){return p.v;})))), stp=ymax>4?1:0.5;
+    var x=function(t){return L+(t-t0)/((t1-t0)||1)*(W-L-R);}, y=function(v){return T+(1-v/ymax)*(H-T-B);};
+    var s='<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="도시 간 가격 격차 추이"><g class="grid">';
+    for(var v=0; v<=ymax+1e-9; v+=stp){ s+='<line x1="'+L+'" x2="'+(W-R)+'" y1="'+y(v)+'" y2="'+y(v)+'"/><text x="'+(L-6)+'" y="'+(y(v)+4)+'" text-anchor="end">'+v+'%</text>'; }
+    s+='</g>';
+    var dates=Array.from(new Set(all.map(function(p){return p.date;}))).sort(), lastX=-99;
+    dates.forEach(function(d){ var px=x(+new Date(d)); if(px-lastX>40){ s+='<text x="'+px+'" y="'+(H-6)+'" text-anchor="middle">'+md(d)+'</text>'; lastX=px; } });
+    series.forEach(function(sr,i){ var p=pts[i];
+      for(var j=1;j<p.length;j++){ var gap=(p[j].t-p[j-1].t)/864e5>21; s+='<line x1="'+x(p[j-1].t)+'" y1="'+y(p[j-1].v)+'" x2="'+x(p[j].t)+'" y2="'+y(p[j].v)+'" stroke="'+sr.color+'" stroke-width="2" stroke-linecap="round"'+(gap?' stroke-dasharray="2 5" opacity=".7"':'')+'/>'; }
+      p.forEach(function(q){ s+='<circle cx="'+x(q.t)+'" cy="'+y(q.v)+'" r="3.5" fill="'+sr.color+'" stroke="var(--surface)" stroke-width="2"><title>'+sr.name+' '+q.date+' 격차 '+q.v.toFixed(1)+'%</title></circle>'; });
+    });
+    host.innerHTML=s+'</svg>';
+  }
+  function drawCityTable(){
+    var list=rowsFor(curItem).slice().reverse();
+    $("citybody").innerHTML=list.map(function(r){ var o=r[curItem]; return "<tr><td>"+esc(r.date)+"</td>"+CK.map(function(k){ return "<td>"+(typeof o[k]==="number"?fmt(o[k]):"—")+"</td>"; }).join("")+"<td>"+stats(o).spread.toFixed(1)+"%</td></tr>"; }).join("") || '<tr><td colspan="5" style="text-align:center">데이터 대기</td></tr>';
+  }
+  function renderCities(list){
+    cityRows=list.slice().sort(function(a,b){ return a.date<b.date?-1:1; }); curIdx=-1;
+    drawMap(); drawSpread(); drawCityTable();
+  }
+  ["rice","corn","usd","cny"].forEach(function(k){ $("it-"+k).addEventListener("click",function(){ curItem=k; curIdx=-1; ["rice","corn","usd","cny"].forEach(function(j){ $("it-"+j).setAttribute("aria-pressed",j===k?"true":"false"); }); drawMap(); drawCityTable(); }); });
+  $("mapdate").addEventListener("input",function(e){ curIdx=+e.target.value; drawMap(); });
+
+  /* data source: site data file (updated by scheduled collection) */
+  fetch("data/latest.json",{cache:"no-store"}).then(function(r){ if(!r.ok) throw new Error(r.status); return r.json(); }).then(function(S){
+    renderSeries(S.series||[]); renderBriefs(S.briefs||[]); renderCities(S.cities||[]); renderMeta(S.meta||{});
+  }).catch(function(e){
+    $("fresh").className="pill old"; $("fresh").innerHTML='<i></i><span>데이터를 불러오지 못했습니다</span>';
+    $("lastRun").textContent="잠시 후 새로고침해 주세요. ("+e.message+")";
+  });
+})();
+</script>
+
+</body>
+</html>
