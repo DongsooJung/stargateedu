@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>문의함 · STARGATE 관리자</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--bg:#0b1026;--panel:#141b38;--panel2:#1a2246;--line:rgba(255,255,255,.09);--text:#eef1fb;--muted:#9aa2c2;--dim:#6b7396;--gold:#e5c378;--blue:#8fa4f6;--ok:#7fd6a4;--warn:#f0b86e;--bad:#f08a8a;--font:"Pretendard Variable",Pretendard,system-ui,sans-serif}
+*{box-sizing:border-box;margin:0}
+body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:14px;line-height:1.5;min-height:100vh}
+button,input,select,textarea{font:inherit;color:inherit}
+.wrap{max-width:1180px;margin:0 auto;padding:24px 16px 60px}
+header{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:20px}
+h1{font-size:20px;font-weight:700;letter-spacing:-.01em}h1 small{font-size:12px;color:var(--gold);font-weight:600;letter-spacing:.12em;margin-right:8px}
+.who{font-size:12px;color:var(--muted);display:flex;gap:10px;align-items:center}
+.btn{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:7px 12px;cursor:pointer}
+.btn:hover{border-color:var(--blue)}.btn.primary{background:var(--blue);color:#0b1026;border-color:var(--blue);font-weight:600}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:16px}
+.kpi{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px}
+.kpi .l{font-size:12px;color:var(--muted)}.kpi .v{font-size:24px;font-weight:700;font-variant-numeric:tabular-nums;margin-top:2px}
+.kpi .s{font-size:11px;color:var(--dim)}.kpi.alert .v{color:var(--bad)}
+.bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+.tabs{display:flex;gap:4px;flex-wrap:wrap}.tab{padding:6px 11px;border-radius:999px;border:1px solid var(--line);background:none;cursor:pointer;color:var(--muted);font-size:13px}
+.tab[aria-pressed=true]{background:var(--panel2);color:var(--text);border-color:var(--blue)}
+.tab b{font-weight:600;margin-left:4px;color:var(--dim)}
+.search{flex:1;min-width:180px;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:7px 10px}
+select.sort{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:7px 10px}
+.list{display:flex;flex-direction:column;gap:8px}
+.item{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px;display:grid;grid-template-columns:54px 1fr auto;gap:14px;align-items:start}
+.item.new{border-left:3px solid var(--gold)}
+.grade{width:54px;text-align:center;border-radius:10px;padding:6px 0;background:var(--panel2)}
+.grade .g{font-size:20px;font-weight:800}.grade .p{font-size:11px;color:var(--muted)}
+.g-S .g{color:var(--gold)}.g-A .g{color:var(--ok)}.g-B .g{color:var(--blue)}.g-C .g,.g-D .g{color:var(--dim)}
+.top{display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
+.name{font-weight:700;font-size:15px}.tag{font-size:11px;padding:2px 7px;border-radius:5px;background:var(--panel2);color:var(--muted)}
+.tag.cat{color:var(--gold)}.age{font-size:12px;color:var(--dim)}.age.late{color:var(--bad)}
+.contact{display:flex;gap:12px;flex-wrap:wrap;margin:4px 0 6px;font-size:13px}
+.contact a{color:var(--blue);text-decoration:none}
+.msg{color:var(--text);white-space:pre-wrap;word-break:break-word;font-size:13.5px}
+.meta{font-size:12px;color:var(--dim);margin-top:6px}
+.side{display:flex;flex-direction:column;gap:6px;width:170px}
+.side select{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:6px 8px}
+.side textarea{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:6px 8px;min-height:54px;resize:vertical;font-size:12.5px}
+.saved{font-size:11px;color:var(--ok);height:14px}
+.empty,.login{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:40px 20px;text-align:center;color:var(--muted)}
+.login{max-width:420px;margin:12vh auto 0;text-align:left;color:var(--text)}
+.login h2{font-size:18px;margin-bottom:6px}.login p{color:var(--muted);font-size:13px;margin-bottom:16px}
+.login input{width:100%;background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin-bottom:10px}
+.login .btn{width:100%;padding:10px}.note{font-size:12px;color:var(--muted);margin-top:10px;min-height:18px}
+.hidden{display:none!important}
+@media(max-width:720px){.item{grid-template-columns:44px 1fr}.grade{width:44px}.side{grid-column:1/-1;width:auto;flex-direction:row;flex-wrap:wrap}.side select{flex:1}.side textarea{flex-basis:100%}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <section id="loginView" class="login hidden">
+    <h2>관리자 로그인</h2>
+    <p>등록된 관리자 이메일로 로그인 링크를 보내 드립니다.</p>
+    <form id="loginForm"><input id="email" type="email" autocomplete="email" placeholder="관리자 이메일" required><button class="btn primary" type="submit">로그인 링크 받기</button></form>
+    <div class="note" id="loginNote" role="status"></div>
+  </section>
+
+  <section id="appView" class="hidden">
+    <header>
+      <h1><small>STARGATE</small>통합 문의함</h1>
+      <div class="who"><span id="whoami"></span><button class="btn" id="refresh" type="button">새로고침</button><button class="btn" id="csv" type="button">CSV</button><button class="btn" id="logout" type="button">로그아웃</button></div>
+    </header>
+    <div class="kpis" id="kpis"></div>
+    <div class="bar">
+      <div class="tabs" id="tabs" role="group" aria-label="상태 필터"></div>
+      <input class="search" id="q" type="search" placeholder="이름·연락처·내용 검색">
+      <select class="sort" id="sort" aria-label="정렬"><option value="created">최신순</option><option value="score">점수순</option></select>
+    </div>
+    <div class="list" id="list"></div>
+  </section>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script>
+const SUPABASE_URL = "https://inftexpcnfinglwlrvsj.supabase.co";
+const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImluZnRleHBjbmZpbmdsd2xydnNqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI5MTMyMzgsImV4cCI6MjA4ODQ4OTIzOH0.HONuULp0L3B5T0gTiwJMnowjJonJzzNHhUV_LtpDQoI";
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+
+const CAT = {koi:"KOI·정보올림피아드",math:"수학 심화",ai_dev:"AI 개발·외주",publishing:"전자출판",partnership:"제휴·투자",other:"기타"};
+const ST = [["new","신규"],["contacted","연락함"],["consulted","상담완료"],["enrolled","등록"],["closed","종료"],["spam","스팸"]];
+const STL = Object.fromEntries(ST);
+let rows = [], filter = "open";
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const tel = p => p.length===11 ? `${p.slice(0,3)}-${p.slice(3,7)}-${p.slice(7)}` : p.startsWith("02") ? (p.length===10?`02-${p.slice(2,6)}-${p.slice(6)}`:`02-${p.slice(2,5)}-${p.slice(5)}`) : `${p.slice(0,3)}-${p.slice(3,6)}-${p.slice(6)}`;
+function ago(t){const m=(Date.now()-new Date(t))/6e4;if(m<60)return`${Math.max(1,Math.round(m))}분 전`;if(m<1440)return`${Math.round(m/60)}시간 전`;return`${Math.round(m/1440)}일 전`}
+
+async function boot(){
+  const { data:{ session } } = await sb.auth.getSession();
+  if (!session) { $("loginView").classList.remove("hidden"); $("appView").classList.add("hidden"); return; }
+  $("loginView").classList.add("hidden"); $("appView").classList.remove("hidden");
+  $("whoami").textContent = session.user.email;
+  await load();
+}
+
+$("loginForm").onsubmit = async e => {
+  e.preventDefault();
+  const email = $("email").value.trim().toLowerCase();
+  $("loginNote").textContent = "발송 중…";
+  const { error } = await sb.auth.signInWithOtp({ email, options:{ emailRedirectTo: location.origin + location.pathname } });
+  $("loginNote").textContent = error ? `발송 실패: ${error.message}` : "메일함의 로그인 링크를 눌러 주세요. 관리자로 등록된 이메일만 문의를 볼 수 있습니다.";
+};
+$("logout").onclick = async () => { await sb.auth.signOut(); location.reload(); };
+$("refresh").onclick = load;
+$("q").oninput = render; $("sort").onchange = render;
+
+async function load(){
+  $("list").innerHTML = `<div class="empty">불러오는 중…</div>`;
+  const { data, error } = await sb.from("inquiries")
+    .select("id,created_at,category,name,phone,email,student_grade,preferred_time,message,is_guardian,marketing_ok,source_site,provider,utm,score,grade,status,owner_memo,first_contacted_at")
+    .order("created_at", { ascending:false }).limit(500);
+  if (error) { $("list").innerHTML = `<div class="empty">불러오기 실패: ${esc(error.message)}</div>`; return; }
+  rows = data;
+  if (!rows.length) {
+    // RLS 때문에 관리자 목록에 없는 계정은 0건으로 보임
+    $("list").innerHTML = `<div class="empty">표시할 문의가 없습니다.<br><small>문의가 있는데 안 보인다면 이 계정이 관리자 목록(inquiry_admins)에 등록되어 있는지 확인해 주세요.</small></div>`;
+  }
+  kpis(); tabs(); if (rows.length) render();
+}
+
+function kpis(){
+  const d30 = rows.filter(r => Date.now()-new Date(r.created_at) < 30*864e5);
+  const fresh = rows.filter(r => r.status==="new");
+  const late = fresh.filter(r => Date.now()-new Date(r.created_at) > 864e5);
+  const enrolled = d30.filter(r => r.status==="enrolled").length;
+  const contacted = rows.filter(r => r.first_contacted_at).map(r => (new Date(r.first_contacted_at)-new Date(r.created_at))/36e5).sort((a,b)=>a-b);
+  const med = contacted.length ? contacted[Math.floor(contacted.length/2)].toFixed(1)+"h" : "-";
+  const k = [
+    ["최근 30일 접수", d30.length, `S·A ${d30.filter(r=>"SA".includes(r.grade)).length}건`],
+    ["미응대", fresh.length, `24시간 초과 ${late.length}건`, late.length>0],
+    ["30일 등록 전환", d30.length ? Math.round(enrolled/d30.length*100)+"%" : "-", `${enrolled}건 등록`],
+    ["첫 연락 중앙값", med, "접수 → 연락함"],
+  ];
+  $("kpis").innerHTML = k.map(([l,v,s,a]) => `<div class="kpi${a?" alert":""}"><div class="l">${l}</div><div class="v">${v}</div><div class="s">${s}</div></div>`).join("");
+}
+
+function tabs(){
+  const count = s => s==="open" ? rows.filter(r=>["new","contacted","consulted"].includes(r.status)).length : s==="all" ? rows.length : rows.filter(r=>r.status===s).length;
+  const t = [["open","진행 중"],...ST,["all","전체"]];
+  $("tabs").innerHTML = t.map(([k,l]) => `<button class="tab" type="button" data-k="${k}" aria-pressed="${filter===k}">${l}<b>${count(k)}</b></button>`).join("");
+  $("tabs").querySelectorAll(".tab").forEach(b => b.onclick = () => { filter = b.dataset.k; tabs(); render(); });
+}
+
+function view(){
+  const q = $("q").value.trim().toLowerCase(), qd = q.replace(/\D/g,"");
+  let v = rows.filter(r => filter==="all" ? true : filter==="open" ? ["new","contacted","consulted"].includes(r.status) : r.status===filter);
+  if (q) v = v.filter(r => (r.name+" "+r.message+" "+(r.owner_memo||"")).toLowerCase().includes(q) || (qd.length>=3 && r.phone.includes(qd)));
+  if ($("sort").value==="score") v = [...v].sort((a,b)=>(b.score??0)-(a.score??0));
+  return v;
+}
+
+function render(){
+  const v = view();
+  if (!v.length) { $("list").innerHTML = `<div class="empty">조건에 맞는 문의가 없습니다.</div>`; return; }
+  $("list").innerHTML = v.map(r => {
+    const late = r.status==="new" && Date.now()-new Date(r.created_at) > 864e5;
+    const src = [r.source_site, r.utm?.utm_source && `utm:${r.utm.utm_source}`, r.utm?.utm_campaign, r.provider!=="direct" && r.provider].filter(Boolean).join(" · ");
+    return `<article class="item ${r.status==="new"?"new":""}" data-id="${r.id}">
+      <div class="grade g-${esc(r.grade)}"><div class="g">${esc(r.grade||"-")}</div><div class="p">${r.score??"-"}점</div></div>
+      <div>
+        <div class="top"><span class="name">${esc(r.name)}</span>${r.is_guardian?'<span class="tag">보호자</span>':""}<span class="tag cat">${esc(CAT[r.category]||r.category)}</span>${r.student_grade?`<span class="tag">${esc(r.student_grade)}</span>`:""}<span class="age${late?" late":""}">${ago(r.created_at)}${late?" · 미응대":""}</span></div>
+        <div class="contact"><a href="tel:${r.phone}">📞 ${tel(r.phone)}</a><a href="sms:${r.phone}">문자</a>${r.email?`<a href="mailto:${esc(r.email)}">${esc(r.email)}</a>`:""}${r.preferred_time?`<span>🕑 ${esc(r.preferred_time)}</span>`:""}</div>
+        <div class="msg">${esc(r.message)}</div>
+        <div class="meta">${new Date(r.created_at).toLocaleString("ko-KR",{dateStyle:"short",timeStyle:"short"})} · ${esc(src)}${r.marketing_ok?" · 소식수신 동의":""}</div>
+      </div>
+      <div class="side">
+        <select aria-label="상태">${ST.map(([k,l])=>`<option value="${k}"${r.status===k?" selected":""}>${l}</option>`).join("")}</select>
+        <textarea aria-label="메모" placeholder="메모 (통화 결과, 다음 액션)">${esc(r.owner_memo||"")}</textarea>
+        <div class="saved"></div>
+      </div>
+    </article>`;
+  }).join("");
+  $("list").querySelectorAll(".item").forEach(el => {
+    const id = el.dataset.id, sel = el.querySelector("select"), ta = el.querySelector("textarea"), ok = el.querySelector(".saved");
+    const save = async patch => {
+      ok.textContent = "저장 중…";
+      const { error } = await sb.from("inquiries").update(patch).eq("id", id);
+      if (error) { ok.textContent = "저장 실패"; ok.style.color = "var(--bad)"; return; }
+      Object.assign(rows.find(r => r.id===id), patch); ok.style.color = ""; ok.textContent = "저장됨";
+      setTimeout(() => ok.textContent = "", 1500);
+    };
+    sel.onchange = async () => { await save({ status: sel.value }); await load(); };
+    ta.onblur = () => { if ((ta.value||"") !== (rows.find(r=>r.id===id).owner_memo||"")) save({ owner_memo: ta.value.slice(0,2000) }); };
+  });
+}
+
+$("csv").onclick = () => {
+  const cols = ["created_at","grade","score","status","category","name","phone","email","student_grade","preferred_time","message","source_site","owner_memo"];
+  const q = s => `"${String(s ?? "").replace(/"/g,'""')}"`;
+  const body = view().map(r => cols.map(c => q(c==="category"?CAT[r[c]]:c==="status"?STL[r[c]]:r[c])).join(",")).join("\r\n");
+  const blob = new Blob(["﻿" + cols.join(",") + "\r\n" + body], { type:"text/csv;charset=utf-8" });
+  const a = document.createElement("a"); a.href = URL.createObjectURL(blob);
+  a.download = `상담 문의 목록_${new Date().toISOString().slice(0,10).replace(/-/g,"")}.csv`; a.click();
+};
+
+sb.auth.onAuthStateChange((ev) => { if (ev === "SIGNED_IN" || ev === "SIGNED_OUT") boot(); });
+boot();
+</script>
+</body>
+</html>
