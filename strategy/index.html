@@ -6,12 +6,12 @@
 <title>STARGATE 전략 대시보드</title>
 <meta name="description" content="STARGATE 시장·사업·운영 전략 대시보드">
 <style>:root{--bg:#07111f;--panel:#0e1c2d;--line:#263b51;--text:#eef5fb;--muted:#9fb1c4;--blue:#4f9cff;--green:#41d6a3;--gold:#f3c969;--max:1120px}*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 80% 0,#153455 0,transparent 34%),var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Noto Sans KR",sans-serif;line-height:1.6}a{color:inherit;text-decoration:none}.wrap{width:min(var(--max),calc(100% - 36px));margin:auto}.top{display:flex;justify-content:space-between;padding:22px 0;color:var(--muted);font-size:14px}.hero{padding:70px 0 36px}.kicker{color:var(--blue);font-weight:800;letter-spacing:.08em}.hero h1{font-size:clamp(40px,7vw,72px);line-height:1.08;margin:12px 0 18px}.hero p{max-width:760px;color:#c8d5e3;font-size:19px}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;padding:26px 0 70px}.card{border:1px solid var(--line);border-radius:18px;background:rgba(14,28,45,.88);padding:22px;transition:.2s}.card:hover{transform:translateY(-3px);border-color:#4f9cff}.tag{display:inline-block;color:var(--green);font-size:12px;font-weight:800;letter-spacing:.06em;margin-bottom:14px}.card h2{font-size:21px;margin:0 0 9px}.card p{color:var(--muted);font-size:14px;margin:0}.new{border-color:#6b5a2e;background:linear-gradient(135deg,rgba(243,201,105,.12),rgba(14,28,45,.9))}.new .tag{color:var(--gold)}footer{padding:32px 0 50px;color:var(--muted);font-size:13px}@media(max-width:820px){.grid{grid-template-columns:1fr}.hero{padding-top:44px}}.catalog-controls{display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;padding:12px 0}.category-filters{display:flex;gap:8px;flex-wrap:wrap}.category-filters button,.sort-control select{border:1px solid #3c536b;background:#102236;color:var(--text);border-radius:10px;padding:10px 13px;font:600 14px system-ui,-apple-system,"Noto Sans KR",sans-serif}.category-filters button{cursor:pointer}.category-filters button[aria-pressed="true"]{background:#21446a;border-color:#6ba9ef}.category-filters button span{color:#b3c6d8;margin-left:3px}.sort-control{display:flex;align-items:center;gap:9px;color:var(--muted);font-size:14px;font-weight:700}.catalog-count{margin:5px 0 18px;color:var(--muted);font-size:14px}.collection{padding:12px 0 8px}.collection[hidden]{display:none}.collection-head{display:flex;justify-content:space-between;align-items:end;gap:16px;border-top:1px solid var(--line);padding-top:22px}.collection-head h2{font-size:24px;margin:0 0 4px}.collection-head p{color:var(--muted);font-size:14px;margin:0}.collection-head span{color:var(--green);font-size:14px;font-weight:800;white-space:nowrap}.collection .grid{padding:20px 0 34px}.card:focus-visible,.category-filters button:focus-visible,.sort-control select:focus-visible{outline:2px solid var(--gold);outline-offset:3px}@media(max-width:820px){.catalog-controls{align-items:stretch}.sort-control{margin-left:auto}}
-</style>
+.catalog-search{display:flex;flex-direction:column;gap:8px;margin-bottom:18px}.catalog-search label{font-weight:700;color:var(--muted);font-size:14px}.catalog-search input{width:100%;border:1px solid #3c536b;background:#102236;color:var(--text);border-radius:12px;padding:14px;font:16px system-ui,-apple-system,"Noto Sans KR",sans-serif}.catalog-search input:focus-visible{outline:2px solid var(--gold);outline-offset:3px}.catalog-note{color:var(--muted);font-size:13px;margin:0 0 24px}[hidden]{display:none!important}</style>
 </head>
 <body>
 <div class="wrap top">
 <a href="/">← STARGATE EDU</a>
-<span>Strategy Hub · 2026.10.06</span>
+<span>Strategy Hub · 분류 정비 2026.10.16</span>
 </div>
 <main class="wrap">
 <section class="hero">
@@ -19,25 +19,24 @@
 <h1>STARGATE<br>전략 대시보드</h1>
 <p>시장 리서치, 사업기회, 운영 자동화와 데이터 기반 의사결정 보고서를 한 곳에서 관리합니다.</p>
 </section>
+<div class="catalog-search"><label for="search">보고서 검색</label><input id="search" type="search" placeholder="기업명·산업·주제로 검색" autocomplete="off"></div>
 <div class="catalog-controls" aria-label="전략 보고서 분류와 정렬">
 <div class="category-filters" role="group" aria-label="분야 선택">
-<button class="selected" type="button" data-category="전체" aria-pressed="true">전체 <span>30</span></button>
-<button type="button" data-category="기업·산업 분석" aria-pressed="false">기업·산업 분석 <span>10</span></button>
+<button type="button" data-category="전체" aria-pressed="true">전체 <span>30</span></button>
+<button type="button" data-category="기업·재무" aria-pressed="false">기업·재무 <span>5</span></button>
+<button type="button" data-category="산업·시장" aria-pressed="false">산업·시장 <span>6</span></button>
 <button type="button" data-category="입찰·사업기회" aria-pressed="false">입찰·사업기회 <span>8</span></button>
-<button type="button" data-category="시장·실시간 데이터" aria-pressed="false">시장·실시간 데이터 <span>7</span></button>
+<button type="button" data-category="데이터·모니터링" aria-pressed="false">데이터·모니터링 <span>5</span></button>
+<button type="button" data-category="교육·수요" aria-pressed="false">교육·수요 <span>1</span></button>
 <button type="button" data-category="실행·성장" aria-pressed="false">실행·성장 <span>5</span></button>
 </div>
 <label class="sort-control">정렬 <select id="sort"><option value="recommended">추천순</option><option value="name">가나다순</option></select></label>
 </div>
-<p class="catalog-count" id="catalog-count" role="status" aria-live="polite">30개 보고서</p>
-<section class="collection" data-category="기업·산업 분석" aria-label="기업·산업 분석">
-<div class="collection-head"><div><h2>기업·산업 분석</h2><p>제품·재무·사업모델 비교</p></div><span>10개</span></div>
+<p class="catalog-count" id="catalog-count" role="status" aria-live="polite">30개 보고서 · 6개 분야</p>
+<p class="catalog-note">주제에 따라 분류했습니다. 자료의 기준일과 데이터 연결 상태는 각 보고서에서 확인하세요. 교육 시연에는 샘플 데이터가 포함되어 있습니다.</p>
+<section class="collection" data-category="기업·재무" aria-label="기업·재무">
+<div class="collection-head"><div><h2>기업·재무</h2><p>기업 실적·수익구조·사업모델 비교</p></div><span>5개</span></div>
 <div class="grid">
-<a class="card new" href="/strategy/healthcare-companies/">
-<div class="tag">NEW · HEALTHCARE COMPANIES</div>
-<h2>🩺 헬스케어 기업 대시보드</h2>
-<p>국내 6개 기업의 의료 AI·비대면 진료·건강관리 제품과 고객 접점, 검토 지표를 분야별로 비교합니다.</p>
-</a>
 <a class="card new" href="/strategy/kcd-company-analysis/">
 <div class="tag">NEW · COMPANY ANALYSIS</div>
 <h2>📊 한국신용데이터(KCD) 기업 분석</h2>
@@ -53,16 +52,6 @@
 <h2>🇹🇼 대만 쿠팡 3개년 성장</h2>
 <p>2024~2026 매출 성장 신호·활성고객·NT$247.5억 투자·4번째 스마트 FC·70% 익일배송과 STARGATE 실행전략.</p>
 </a>
-<a class="card new" href="/strategy/interior-3way/">
-<div class="tag">NEW · 3-WAY BENCHMARK</div>
-<h2>🏗️ 오늘의집 · 한샘 · LX하우시스</h2>
-<p>플랫폼형·브랜드/시공형·자재 제조형 3개 모델의 2023~2025 실적·직원·수익구조 비교.</p>
-</a>
-<a class="card new" href="/strategy/interior-ohouse/">
-<div class="tag">DEEP DIVE · INDUSTRY & COMPANY</div>
-<h2>🏠 인테리어업 · 오늘의집 3개년</h2>
-<p>2023~2025 국내 인테리어 시장과 오늘의집 매출·손익·직원·사업모델·시공 확장.</p>
-</a>
 <a class="card new" href="/strategy/oliveyoung-financial/">
 <div class="tag">NEW · FINANCIAL INTELLIGENCE</div>
 <h2>🫒 올리브영 3개년 재무 × 남성시장</h2>
@@ -72,6 +61,31 @@
 <div class="tag">NEW · GLOBAL FINANCIALS</div>
 <h2>🛒 Amazon 3개년 재무</h2>
 <p>2023~2025 매출·이익·AWS·현금흐름과 AI 인프라 투자전략.</p>
+</a>
+</div>
+</section>
+<section class="collection" data-category="산업·시장" aria-label="산업·시장">
+<div class="collection-head"><div><h2>산업·시장</h2><p>산업 구조·수요 변화·진입전략</p></div><span>6개</span></div>
+<div class="grid">
+<a class="card new" href="/strategy/healthcare-companies/">
+<div class="tag">NEW · HEALTHCARE COMPANIES</div>
+<h2>🩺 헬스케어 기업 대시보드</h2>
+<p>국내 6개 기업의 의료 AI·비대면 진료·건강관리 제품과 고객 접점, 검토 지표를 분야별로 비교합니다.</p>
+</a>
+<a class="card new" href="/strategy/air-cargo-healthcare/">
+<div class="tag">UPDATED · OCTOBER 2026</div>
+<h2>✈️ 항공화물 C-커머스·헬스케어</h2>
+<p>IATA 8월 CTK·ACTK·운임, 주요 노선과 C-커머스 규제, 인천·대한항공·콜드체인 기회·위험을 기존 10년 자료와 통합.</p>
+</a>
+<a class="card new" href="/strategy/interior-3way/">
+<div class="tag">NEW · 3-WAY BENCHMARK</div>
+<h2>🏗️ 오늘의집 · 한샘 · LX하우시스</h2>
+<p>플랫폼형·브랜드/시공형·자재 제조형 3개 모델의 2023~2025 실적·직원·수익구조 비교.</p>
+</a>
+<a class="card new" href="/strategy/interior-ohouse/">
+<div class="tag">DEEP DIVE · INDUSTRY & COMPANY</div>
+<h2>🏠 인테리어업 · 오늘의집 3개년</h2>
+<p>2023~2025 국내 인테리어 시장과 오늘의집 매출·손익·직원·사업모델·시공 확장.</p>
 </a>
 <a class="card" href="/strategy/pet-market-petfriends/">
 <div class="tag">MARKET REPORT</div>
@@ -86,7 +100,7 @@
 </div>
 </section>
 <section class="collection" data-category="입찰·사업기회" aria-label="입찰·사업기회">
-<div class="collection-head"><div><h2>입찰·사업기회</h2><p>상업시설·조달·B2B 기회</p></div><span>8개</span></div>
+<div class="collection-head"><div><h2>입찰·사업기회</h2><p>상업시설·공공조달·B2B 프로젝트와 채용 기회</p></div><span>8개</span></div>
 <div class="grid">
 <a class="card new" href="/strategy/seoul-transport-hub-retail/">
 <div class="tag">NEW · SEOUL TRANSPORT HUB RETAIL</div>
@@ -130,8 +144,8 @@
 </a>
 </div>
 </section>
-<section class="collection" data-category="시장·실시간 데이터" aria-label="시장·실시간 데이터">
-<div class="collection-head"><div><h2>시장·실시간 데이터</h2><p>가격·수요·운영 현황</p></div><span>7개</span></div>
+<section class="collection" data-category="데이터·모니터링" aria-label="데이터·모니터링">
+<div class="collection-head"><div><h2>데이터·모니터링</h2><p>가격·운항·지역 공급·날씨 관측 화면</p></div><span>5개</span></div>
 <div class="grid">
 <a class="card new" href="/strategy/taiwan-commerce-radar/">
 <div class="tag">NEW · TAIWAN COMMERCE RADAR</div>
@@ -142,11 +156,6 @@
 <div class="tag">LIVE · PUBLIC DATA API</div>
 <h2>🛬 인천공항 화물편 실시간</h2>
 <p>당일 도착·지연·결항, 출발지·항공사 집중도를 공공데이터 API로 10분마다 갱신.</p>
-</a>
-<a class="card new" href="/strategy/air-cargo-healthcare/">
-<div class="tag">UPDATED · OCTOBER 2026</div>
-<h2>✈️ 항공화물 C-커머스·헬스케어</h2>
-<p>IATA 8월 CTK·ACTK·운임, 주요 노선과 C-커머스 규제, 인천·대한항공·콜드체인 기회·위험을 기존 10년 자료와 통합.</p>
 </a>
 <a class="card new" href="/strategy/pet-data-radar/">
 <div class="tag">NEW · LIVE DATA</div>
@@ -163,15 +172,20 @@
 <h2>월간 날씨 캘린더</h2>
 <p>날씨 데이터를 활용한 월간 의사결정 보조 화면.</p>
 </a>
+</div>
+</section>
+<section class="collection" data-category="교육·수요" aria-label="교육·수요">
+<div class="collection-head"><div><h2>교육·수요</h2><p>교육시장 분석과 샘플 기반 시연</p></div><span>1개</span></div>
+<div class="grid">
 <a class="card" href="/strategy/kimstudy-math/">
-<div class="tag">EDU MARKET</div>
+<div class="tag">SAMPLE · 교육 시연</div>
 <h2>김과외 수학 전략</h2>
 <p>익명 샘플로 수학 교육 전략 화면을 시연.</p>
 </a>
 </div>
 </section>
 <section class="collection" data-category="실행·성장" aria-label="실행·성장">
-<div class="collection-head"><div><h2>실행·성장</h2><p>운영·광고·목표관리</p></div><span>5개</span></div>
+<div class="collection-head"><div><h2>실행·성장</h2><p>운영·광고·자동화·목표관리와 리더십</p></div><span>5개</span></div>
 <div class="grid">
 <a class="card new" href="/strategy/growth-control/">
 <div class="tag">NEW · OPERATING DASHBOARD</div>
@@ -200,10 +214,56 @@
 </a>
 </div>
 </section>
+<p id="catalog-empty" class="catalog-count" hidden>검색 결과가 없습니다. 검색어나 분류를 변경해 주세요.</p>
 </main>
 <footer class="wrap">© 2026 주식회사 별의문(STARGATE) · Strategy Dashboard</footer>
 <script>
-const sections=[...document.querySelectorAll('.collection')];const buttons=[...document.querySelectorAll('[data-category]')];const sort=document.getElementById('sort');const count=document.getElementById('catalog-count');function update(){const selected=buttons.find(button=>button.getAttribute('aria-pressed')==='true').dataset.category;let total=0;sections.forEach(section=>{const show=selected==='전체'||section.dataset.category===selected;section.hidden=!show;if(show)total+=section.querySelectorAll('.card').length;const grid=section.querySelector('.grid');const cards=[...grid.querySelectorAll('.card')];cards.sort((a,b)=>sort.value==='name'?a.querySelector('h2').textContent.replace(/^[^\p{L}\p{N}]+/u,'').localeCompare(b.querySelector('h2').textContent.replace(/^[^\p{L}\p{N}]+/u,''),'ko'):Number(a.dataset.order)-Number(b.dataset.order));grid.append(...cards)});count.textContent=`${total}개 보고서`};sections.forEach(section=>[...section.querySelectorAll('.card')].forEach((card,index)=>card.dataset.order=index));buttons.forEach(button=>button.addEventListener('click',()=>{buttons.forEach(item=>item.setAttribute('aria-pressed',String(item===button)));update()}));sort.addEventListener('change',update);
+const sections = [...document.querySelectorAll('.collection')];
+const buttons = [...document.querySelectorAll('.category-filters button')];
+const sort = document.getElementById('sort');
+const search = document.getElementById('search');
+const count = document.getElementById('catalog-count');
+const empty = document.getElementById('catalog-empty');
+const normalize = text => text.normalize('NFKC').toLocaleLowerCase('ko').replace(/\s+/g, ' ').trim();
+const title = card => card.querySelector('h2').textContent.replace(/^[^\p{L}\p{N}]+/u, '');
+function update() {
+  const selected = buttons.find(button => button.getAttribute('aria-pressed') === 'true').dataset.category;
+  const terms = normalize(search.value).split(' ').filter(Boolean);
+  let total = 0;
+  let visibleSections = 0;
+  sections.forEach(section => {
+    const grid = section.querySelector('.grid');
+    const cards = [...grid.querySelectorAll('.card')];
+    let visible = 0;
+    cards.forEach(card => {
+      card.hidden = !terms.every(term => normalize(card.textContent).includes(term));
+      if (!card.hidden) visible++;
+    });
+    const show = (selected === '전체' || section.dataset.category === selected) && visible > 0;
+    section.hidden = !show;
+    section.querySelector('.collection-head > span').textContent = terms.length ? visible + ' / ' + cards.length + '개' : cards.length + '개';
+    if (show) { total += visible; visibleSections++; }
+    cards.sort((a,b) => sort.value === 'name'
+      ? title(a).localeCompare(title(b), 'ko')
+      : Number(a.dataset.order) - Number(b.dataset.order));
+    grid.append(...cards);
+  });
+  count.textContent = total + '개 보고서 · ' + visibleSections + '개 분야';
+  empty.hidden = total > 0;
+}
+sections.forEach(section => [...section.querySelectorAll('.card')].forEach((card,index) => card.dataset.order = index));
+buttons.forEach(button => {
+  const total = sections.filter(section => button.dataset.category === '전체' || section.dataset.category === button.dataset.category)
+    .reduce((sum,section) => sum + section.querySelectorAll('.card').length, 0);
+  button.querySelector('span').textContent = total;
+  button.addEventListener('click', () => {
+    buttons.forEach(item => item.setAttribute('aria-pressed', String(item === button)));
+    update();
+  });
+});
+sort.addEventListener('change', update);
+search.addEventListener('input', update);
+update();
 </script>
 </body>
 </html>
