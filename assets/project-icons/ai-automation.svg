@@ -1,0 +1,12 @@
+<svg width="200" height="160" viewBox="0 0 200 160" xmlns="http://www.w3.org/2000/svg">
+  <rect width="200" height="160" fill="#f7f8fc" rx="12"/>
+  <circle cx="100" cy="60" r="28" fill="none" stroke="#0b1738" stroke-width="4"/>
+  <circle cx="100" cy="60" r="8" fill="#d9a441"/>
+  <path d="M100 32 L100 20 M100 88 L100 100 M72 60 L60 60 M128 60 L140 60" stroke="#0b1738" stroke-width="4" stroke-linecap="round"/>
+  <path d="M79 41 L70 32 M121 41 L130 32 M79 79 L70 88 M121 79 L130 88" stroke="#0b1738" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="70" cy="32" r="4" fill="#d9a441"/>
+  <circle cx="130" cy="32" r="4" fill="#d9a441"/>
+  <circle cx="70" cy="88" r="4" fill="#d9a441"/>
+  <circle cx="130" cy="88" r="4" fill="#d9a441"/>
+  <text x="100" y="140" font-family="Arial, sans-serif" font-size="12" font-weight="700" fill="#0b1738" text-anchor="middle">AI êŸT</text>
+</svg>

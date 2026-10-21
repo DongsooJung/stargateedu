@@ -1,0 +1,6 @@
+<svg width="200" height="160" viewBox="0 0 200 160" xmlns="http://www.w3.org/2000/svg">
+  <rect width="200" height="160" fill="#f7f8fc" rx="12"/>
+  <path d="M50 70 Q50 45 75 45 L110 45 Q120 45 120 55 L120 80 Q120 90 110 90 L75 90 L55 105 L60 90 Q50 90 50 80 Z" fill="none" stroke="#0b1738" stroke-width="3"/>
+  <path d="M80 100 Q80 90 95 90 L130 90 Q150 90 150 105 L150 75 Q150 100 135 100 L140 115 L125 100 L95 100 Z" fill="none" stroke="#d9a441" stroke-width="3"/>
+  <text x="100" y="140" font-family="Arial, sans-serif" font-size="12" font-weight="700" fill="#0b1738" text-anchor="middle"> ` „</text>
+</svg>

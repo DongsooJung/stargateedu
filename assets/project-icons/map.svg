@@ -1,0 +1,7 @@
+<svg width="200" height="160" viewBox="0 0 200 160" xmlns="http://www.w3.org/2000/svg">
+  <rect width="200" height="160" fill="#f7f8fc" rx="12"/>
+  <path d="M100 35 Q100 50 85 65 Q80 70 80 75 Q80 82 85 82 Q92 82 92 75 Q92 70 100 60 Q108 70 108 75 Q108 82 115 82 Q120 82 120 75 Q120 70 115 65 Q100 50 100 35" fill="#d9a441" stroke="#0b1738" stroke-width="3"/>
+  <circle cx="100" cy="42" r="8" fill="#0b1738"/>
+  <path d="M50 95 L60 85 L75 90 L85 80 L100 85 L115 75 L130 82 L145 75 L150 85" fill="none" stroke="#0b1738" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="100" y="135" font-family="Arial, sans-serif" font-size="12" font-weight="700" fill="#0b1738" text-anchor="middle">У юд</text>
+</svg>
