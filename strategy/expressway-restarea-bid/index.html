@@ -33,6 +33,23 @@
 </div>
 </section>
 
+<section id="business-calculator">
+<div class="section-head"><div><h2>전문매장 사업성 계산기</h2><p>가정값 입력 · 월 영업이익과 손익분기 매출 즉시 계산</p></div></div>
+<div class="panel"><div class="filters" style="grid-template-columns:repeat(3,1fr)">
+<label>월매출 (만원)<input id="calc-sales" type="number" min="0" value="3500"></label>
+<label>매출원가율 (%)<input id="calc-cogs" type="number" min="0" max="100" value="35"></label>
+<label>임대·수수료율 (%)<input id="calc-fee" type="number" min="0" max="100" value="9"></label>
+<label>월 인건비 (만원)<input id="calc-labor" type="number" min="0" value="800"></label>
+<label>기타 월고정비 (만원)<input id="calc-fixed" type="number" min="0" value="450"></label>
+<label>초기투자금 (만원)<input id="calc-capex" type="number" min="0" value="6000"></label>
+</div><div class="kpis" style="margin-bottom:8px"><div class="kpi"><small>월 영업이익 추정</small><strong id="calc-profit">—</strong><span>만원</span></div><div class="kpi"><small>영업이익률</small><strong id="calc-margin">—</strong></div><div class="kpi"><small>월 손익분기 매출</small><strong id="calc-bep">—</strong><span>만원</span></div><div class="kpi"><small>단순 회수기간</small><strong id="calc-payback">—</strong><span>개월</span></div></div>
+<div class="note">모든 입력값은 예시 가정입니다. 부가세·법인세·금융비용·감가상각·설비교체·운전자본은 제외합니다. 임대료율 9%는 개편 정책상 전망치이지 확정 계약조건이 아닙니다.</div></div></section>
+<section id="new-business"><div class="section-head"><div><h2>신규 수익화 사업 제안</h2><p>직접 운영 이전에 데이터 사업부터 검증</p></div></div><div class="grid3">
+<article class="strategy"><b>01 · 구독형</b><h3>입찰 레이더 Pro</h3><p>공고 변경 감시·마감 알림·자격조건 분석·경쟁 입찰 비교. 월 9.9만원 가설을 고객 인터뷰로 검증.</p></article>
+<article class="strategy"><b>02 · 프로젝트형</b><h3>휴게소 수요·매출 예측</h3><p>교통량, 계절성, 휴일, 주변 상권과 공간계량모형을 결합한 점포별 매출 시나리오 보고서.</p></article>
+<article class="strategy"><b>03 · B2B 운영형</b><h3>AI 재고·혼잡 최적화</h3><p>POS·재고·시간대별 유입을 연동해 폐기율, 대기시간, 인력배치를 최적화하는 운영 SaaS.</p></article>
+</div><div class="note" style="margin-top:14px">2026년 10월 보도 기준 직계약 시범 8곳은 기존 시설 자산 인수·명도 문제로 지연 중이며, 2027년 설 전 운영을 목표로 논의되고 있습니다. 입찰 개시 여부는 한국도로공사 원문에서 재확인해야 합니다. <a href="https://www.inews24.com/view/wnrd/2012660" target="_blank" rel="noopener">관련 보도 ↗</a></div></section>
+
 <section id="strategy">
 <div class="section-head"><div><h2>STARGATE 수주 전략</h2><p>단독 수주보다 적합한 역할을 먼저 고르는 구조</p></div></div>
 <div class="grid3">
@@ -74,6 +91,9 @@ function optionFill(id,values){const el=$(id);[...new Set(values.filter(Boolean)
 function render(){const q=$('#q').value.trim().toLowerCase(),cat=$('#category').value,fit=$('#fit').value,min=Number($('#threshold').value||0);const items=state.items.filter(x=>(!q||JSON.stringify(x).toLowerCase().includes(q))&&(!cat||x.category===cat)&&(!fit||x.fit===fit)&&Number(x.score||0)>=min).sort((a,b)=>Number(b.score||0)-Number(a.score||0));$('#rows').innerHTML=items.length?items.map(x=>`<tr><td class="score">${esc(x.score)}</td><td><strong>${esc(x.title)}</strong><br><small>${esc(x.organization)} · ${esc(x.region)}</small></td><td>${esc(x.category)}</td><td><span class="tag ${statusClass(x.status)}">${esc(x.status)}</span><br><small>${esc(x.deadline)}</small></td><td>${esc(x.fit)}</td><td>${esc(x.reason)}</td><td><a href="${esc(x.url)}" target="_blank" rel="noopener" style="color:var(--blue);font-weight:800">원문 ↗</a><br><small>${esc(x.source)}</small></td></tr>`).join(''):`<tr><td colspan="7" class="empty">조건에 맞는 공고가 없습니다.</td></tr>`}
 async function init(){try{const r=await fetch('/strategy/expressway-restarea-bid/data/opportunities.json?t='+Date.now(),{cache:'no-store'});if(!r.ok)throw new Error('HTTP '+r.status);const data=await r.json();state.items=Array.isArray(data.opportunities)?data.opportunities:[];$('#kpi-total').textContent=state.items.length.toLocaleString('ko-KR');$('#kpi-high').textContent=state.items.filter(x=>Number(x.score)>=85).length.toLocaleString('ko-KR');$('#kpi-direct').textContent=state.items.filter(x=>String(x.fit).includes('직접')).length.toLocaleString('ko-KR');optionFill('#category',state.items.map(x=>x.category));optionFill('#fit',state.items.map(x=>x.fit));const updated=data.updatedAt?new Date(data.updatedAt):null;$('#data-status').textContent=updated&&!isNaN(updated)?'최근 갱신 '+new Intl.DateTimeFormat('ko-KR',{dateStyle:'medium',timeStyle:'short',timeZone:'Asia/Seoul'}).format(updated):'데이터 연결';$('#update-label').textContent='AUTO COLLECT · '+state.items.length+' ITEMS';render()}catch(e){$('#data-status').textContent='데이터 로드 실패 · 새로고침 필요';$('#rows').innerHTML='<tr><td colspan="7" class="empty">공고 데이터 파일을 불러오지 못했습니다.</td></tr>'}}
 ['#q','#category','#fit','#threshold'].forEach(id=>$(id).addEventListener(id==='#q'?'input':'change',render));init();
+</script>
+<script>
+(function(){const ids=['sales','cogs','fee','labor','fixed','capex'];const fmt=x=>Number.isFinite(x)?x.toLocaleString('ko-KR',{maximumFractionDigits:1}):'—';function recalc(){const v=Object.fromEntries(ids.map(k=>[k,Math.max(0,Number(document.getElementById('calc-'+k).value)||0)]));const rate=1-(v.cogs+v.fee)/100;const profit=v.sales*rate-v.labor-v.fixed;document.getElementById('calc-profit').textContent=fmt(profit);document.getElementById('calc-margin').textContent=v.sales?fmt(profit/v.sales*100)+'%':'—';document.getElementById('calc-bep').textContent=rate>0?fmt((v.labor+v.fixed)/rate):'산출 불가';document.getElementById('calc-payback').textContent=profit>0?fmt(v.capex/profit):'회수 불가'}ids.forEach(k=>document.getElementById('calc-'+k).addEventListener('input',recalc));recalc()})();
 </script>
 </body>
 </html>
