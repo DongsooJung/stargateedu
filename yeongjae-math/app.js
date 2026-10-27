@@ -65,7 +65,7 @@ function renderPhases() {
   phasesEl.innerHTML = (pack.phases || []).map((phase) => {
     const on = today.phase?.id === phase.id;
     const label = today.status === "current" && on ? "지금" : today.status === "upcoming" && on ? "다음" : phase.estimate ? "예상" : "일정";
-    return `<article class="phase${on ? " on" : ""}"><small>${esc(label)}${phase.estimate ? " · 예상" : ""}</small><strong>${esc(phase.title)}</strong><small>${esc(phase.start)} – ${esc(phase.end)}</small><p class="muted">${esc(phase.note)}</p></article>`;
+    return `<article class="phase${on ? " on" : ""}"><small>${esc(label)}</small><strong>${esc(phase.title)}</strong><small>${esc(phase.start)} – ${esc(phase.end)}</small><p class="muted">${esc(phase.note)}</p></article>`;
   }).join("");
 }
 
@@ -240,7 +240,14 @@ function render() {
   else if (current.name === "links") renderLinks();
   else if (current.name === "solve") renderSolver(problems().find((problem) => problem.id === current.id), progress);
   else renderSolver(nextUnsolved(problems(), progress), progress);
-  sourceEl.textContent = pack.source?.message || "";
+  const sourceCopy = {
+    seed: "자작 문항입니다. 기출 원문은 싣지 않습니다.",
+    cached: "자작 문항입니다. 기출 원문은 싣지 않습니다.",
+    live: "노션에 공개된 자작 문항을 보여 줍니다.",
+    error: "마지막으로 확인된 문항을 보여 줍니다.",
+    setup: "공개 문항을 아직 연결하지 못했습니다.",
+  };
+  sourceEl.textContent = sourceCopy[pack.source?.status] || pack.source?.message || "";
 }
 
 async function init() {
