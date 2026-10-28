@@ -12,7 +12,7 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.13;ba
 a{color:inherit;text-decoration:none}.wrap{width:min(1180px,calc(100% - 36px));margin:auto}.top{height:72px;display:flex;align-items:center;justify-content:space-between;color:var(--muted);font-size:14px;border-bottom:1px solid rgba(255,255,255,.07)}.brand{font-weight:900;letter-spacing:.14em;color:var(--text)}.brand b{color:var(--cyan)}
 .board{min-height:calc(100vh - 150px);display:grid;align-content:center;padding:42px 0 30px}.eyebrow{display:flex;align-items:center;gap:10px;color:var(--cyan);font-size:12px;font-weight:900;letter-spacing:.16em}.pulse{width:8px;height:8px;border-radius:50%;background:var(--cyan);box-shadow:0 0 18px var(--cyan);animation:pulse 1.8s infinite}
 .quote-stage{position:relative;display:grid;place-items:center;min-height:430px;padding:48px 6%;margin:22px 0;border:1px solid var(--line);border-radius:28px;background:linear-gradient(135deg,rgba(10,18,32,.95),rgba(5,12,23,.8));box-shadow:0 30px 90px rgba(0,0,0,.35);overflow:hidden}.quote-stage:after{content:"“";position:absolute;right:4%;bottom:-90px;font:700 290px/1 Georgia,serif;color:rgba(104,225,253,.06)}
-.quote{text-align:center;max-width:1000px;position:relative;z-index:1}.quote p{font-size:clamp(31px,5.4vw,70px);line-height:1.32;letter-spacing:-.045em;font-weight:850;margin:0;text-wrap:balance}.quote .author{margin-top:34px;color:var(--gold);font-size:clamp(16px,2vw,21px);font-weight:800}.quote .context{margin-top:8px;color:var(--muted);font-size:13px}
+.quote{text-align:center;max-width:1000px;position:relative;z-index:1}.quote p{font-size:clamp(31px,5.4vw,70px);line-height:1.32;letter-spacing:-.045em;font-weight:850;margin:0;text-wrap:balance}.quote .author{margin-top:34px;color:var(--gold);font-size:clamp(16px,2vw,21px);font-weight:800}.quote .context{margin-top:8px;color:var(--muted);font-size:13px}.quote .source{display:inline-block;margin-top:13px;color:var(--cyan);text-decoration:underline;text-underline-offset:4px;font-size:13px;font-weight:700}.quote .source:hover,.quote .source:focus-visible{color:#fff}.quote .source[hidden]{display:none}
 .controls{display:grid;grid-template-columns:auto 1fr auto;gap:18px;align-items:center}.buttons,.tools{display:flex;gap:8px}.btn{min-width:44px;height:44px;border:1px solid var(--line);border-radius:12px;background:#0a1728;color:var(--text);font:inherit;font-weight:800;cursor:pointer}.btn:hover,.btn:focus-visible{border-color:var(--cyan);outline:none}.btn.primary{background:var(--cyan);color:#021018;border-color:var(--cyan)}.progress{height:5px;background:#13243a;border-radius:99px;overflow:hidden}.progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--cyan),var(--green));border-radius:99px}
 .meta{display:flex;justify-content:space-between;gap:16px;margin-top:15px;color:var(--muted);font-size:13px}.filters{display:flex;gap:8px;flex-wrap:wrap;margin-top:24px}.filter{border:1px solid var(--line);border-radius:999px;background:transparent;color:var(--muted);padding:8px 13px;font:inherit;font-size:13px;font-weight:800;cursor:pointer}.filter.active{color:#021018;background:var(--green);border-color:var(--green)}
 footer{padding:18px 0 30px;display:flex;justify-content:space-between;color:var(--muted);font-size:12px}.hint{color:#6f829a}
@@ -26,15 +26,15 @@ footer{padding:18px 0 30px;display:flex;justify-content:space-between;color:var(
 <header class="wrap top"><a href="/strategy/">← 전략 대시보드</a><div class="brand">STARGATE <b>MAXIM</b></div><span>Execution · Learning · Leadership</span></header>
 <main class="wrap board">
 <div class="eyebrow"><i class="pulse"></i> LIVE MAXIM BOARD</div>
-<section class="quote-stage" aria-live="polite"><div class="quote" id="quoteBox"><p id="quoteText"></p><div class="author" id="quoteAuthor"></div><div class="context" id="quoteContext"></div></div></section>
+<section class="quote-stage" aria-live="polite"><div class="quote" id="quoteBox"><p id="quoteText"></p><div class="author" id="quoteAuthor"></div><div class="context" id="quoteContext"></div><a class="source" id="quoteSource" href="#" target="_blank" rel="noopener noreferrer" hidden>원문 출처 보기 ↗</a></div></section>
 <div class="controls">
 <div class="buttons"><button class="btn" id="prev" aria-label="이전 격언">←</button><button class="btn primary" id="play" aria-label="자동 재생 일시정지">Ⅱ</button><button class="btn" id="next" aria-label="다음 격언">→</button></div>
 <div class="progress" aria-hidden="true"><i id="bar"></i></div>
 <div class="tools"><button class="btn" id="copy" aria-label="격언 복사">복사</button><button class="btn" id="full" aria-label="전체화면">전체</button></div>
 </div>
-<div class="meta"><span id="counter">01 / 12</span><span id="category">실행</span><span>8초마다 자동 전환</span></div>
+<div class="meta"><span id="counter">01 / 18</span><span id="category">실행</span><span>8초마다 자동 전환</span></div>
 <div class="filters" aria-label="격언 카테고리">
-<button class="filter active" data-filter="전체">전체</button><button class="filter" data-filter="실행">실행</button><button class="filter" data-filter="학습">학습</button><button class="filter" data-filter="리더십">리더십</button>
+<button class="filter active" data-filter="전체">전체</button><button class="filter" data-filter="실행">실행</button><button class="filter" data-filter="학습">학습</button><button class="filter" data-filter="리더십">리더십</button><button class="filter" data-filter="AI">AI</button>
 </div>
 </main>
 <footer class="wrap"><span>© 2026 주식회사 별의문(STARGATE)</span><span class="hint">← → 이동 · Space 재생/정지 · F 전체화면</span></footer>
@@ -52,17 +52,22 @@ const quotes=[
 {text:"경영이란 일을 올바르게 하는 것이고, 리더십이란 올바른 일을 하는 것이다.",author:"피터 드러커",context:"경영과 방향",category:"리더십"},
 {text:"혼자서는 할 수 있는 일이 적지만, 함께하면 많은 일을 할 수 있다.",author:"헬렌 켈러",context:"협업과 조직",category:"리더십"},
 {text:"리더십과 배움은 서로에게 없어서는 안 된다.",author:"존 F. 케네디",context:"성장하는 리더",category:"리더십"},
-{text:"본보기가 되는 것은 다른 사람에게 영향을 주는 주된 방법이 아니라 유일한 방법이다.",author:"알베르트 슈바이처",context:"행동으로 이끄는 리더십",category:"리더십"}
+{text:"본보기가 되는 것은 다른 사람에게 영향을 주는 주된 방법이 아니라 유일한 방법이다.",author:"알베르트 슈바이처",context:"행동으로 이끄는 리더십",category:"리더십"},
+{text:"암호화폐는 분산시키지만 AI는 중앙집중화한다.",author:"피터 틸 · 번역",context:"2018 · 리드 호프먼과의 대담 · 기술과 권력 집중",category:"AI",sourceLabel:"2018 대담 원문",source:"https://www.bishoprockcap.com/assets/library/peter-thiel/February%202018%20Cardinal%20Conversations%20-%20Reid%20Hoffman%20and%20Peter%20Thiel%20on%20Technology%20and%20Politics%20%5BNEW%5D%20%28transcript%29"},
+{text:"2023~2024년의 AI는 1999년의 인터넷과 같다.",author:"피터 틸 · 번역",context:"2024 · All-In Summit · 기술의 잠재력과 투자 위험",category:"AI",sourceLabel:"2024 All-In 발언록",source:"https://lawwu.github.io/transcripts/transcript_SYRunzR9fbk.html"},
+{text:"AI가 인류를 파괴하는 것보다 AI를 막으려는 인간들이 더 걱정된다.",author:"피터 틸 · 번역",context:"2024 · Conversations with Tyler · 기술 규제와 권력",category:"AI",sourceLabel:"2024 대담 원문",source:"https://www.bishoprockcap.com/assets/library/peter-thiel/September%202024%20Peter%20Thiel%20Political%20Theology%20%28Conversations%20with%20Tyler%2C%202024%29%20%28transcript%29"},
+{text:"나는 오랫동안 AI라는 말에 거부감이 있었다. 끔찍한 유행어가 될 수 있기 때문이다.",author:"피터 틸 · 번역",context:"2025 · The Spectator 인터뷰 · 유행어보다 실체",category:"AI",sourceLabel:"2025 인터뷰 원문",source:"https://www.spectator.com.au/2025/12/ive-been-allergic-to-ai-for-a-long-time-an-interview-with-peter-thiel/"},
+{text:"인터넷을 금지했었고 이제 AI까지 금지한다면, 경제성장은 사실상 사라질 것이다.",author:"피터 틸 · 번역",context:"2026 · The Builders 대담 · 혁신과 경제성장",category:"AI",sourceLabel:"2026 인터뷰 발언록",source:"https://omny.fm/shows/the-builders/peter-thiel"}
 ];
 let filter="전체",visible=[...quotes],index=0,playing=true,timer,startAt;
 const DURATION=8000,q=id=>document.getElementById(id);
 function refreshList(){visible=filter==="전체"?[...quotes]:quotes.filter(x=>x.category===filter);index=0;render()}
-function render(){const item=visible[index];const box=q("quoteBox");box.classList.remove("enter");void box.offsetWidth;box.classList.add("enter");q("quoteText").textContent=item.text;q("quoteAuthor").textContent="— "+item.author;q("quoteContext").textContent=item.context;q("category").textContent=item.category;q("counter").textContent=String(index+1).padStart(2,"0")+" / "+String(visible.length).padStart(2,"0");restart()}
+function render(){const item=visible[index];const box=q("quoteBox");box.classList.remove("enter");void box.offsetWidth;box.classList.add("enter");q("quoteText").textContent=item.text;q("quoteAuthor").textContent="— "+item.author;q("quoteContext").textContent=item.context;const source=q("quoteSource");source.hidden=!item.source;if(item.source){source.href=item.source;source.textContent="출처 · "+item.sourceLabel+" ↗"}q("category").textContent=item.category;q("counter").textContent=String(index+1).padStart(2,"0")+" / "+String(visible.length).padStart(2,"0");restart()}
 function move(delta){index=(index+delta+visible.length)%visible.length;render()}
 function restart(){clearInterval(timer);startAt=Date.now();q("bar").style.width="0%";if(playing)timer=setInterval(()=>{const p=(Date.now()-startAt)/DURATION*100;q("bar").style.width=Math.min(p,100)+"%";if(p>=100)move(1)},80)}
 function toggle(){playing=!playing;q("play").textContent=playing?"Ⅱ":"▶";restart()}
 q("prev").onclick=()=>move(-1);q("next").onclick=()=>move(1);q("play").onclick=toggle;
-q("copy").onclick=async()=>{const item=visible[index];try{await navigator.clipboard.writeText("“"+item.text+"” — "+item.author);q("copy").textContent="완료";setTimeout(()=>q("copy").textContent="복사",1200)}catch(e){q("copy").textContent="실패"}};
+q("copy").onclick=async()=>{const item=visible[index];try{await navigator.clipboard.writeText("“"+item.text+"” — "+item.author+(item.source?"\n출처: "+item.source:""));q("copy").textContent="완료";setTimeout(()=>q("copy").textContent="복사",1200)}catch(e){q("copy").textContent="실패"}};
 q("full").onclick=()=>document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen();
 document.querySelectorAll(".filter").forEach(btn=>btn.onclick=()=>{document.querySelectorAll(".filter").forEach(x=>x.classList.remove("active"));btn.classList.add("active");filter=btn.dataset.filter;refreshList()});
 document.addEventListener("keydown",e=>{if(e.key==="ArrowLeft")move(-1);if(e.key==="ArrowRight")move(1);if(e.code==="Space"){e.preventDefault();toggle()}if(e.key.toLowerCase()==="f")q("full").click()});
