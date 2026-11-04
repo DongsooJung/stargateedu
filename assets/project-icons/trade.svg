@@ -1,0 +1,11 @@
+<svg width="200" height="160" viewBox="0 0 200 160" xmlns="http://www.w3.org/2000/svg">
+  <rect width="200" height="160" fill="#f7f8fc" rx="12"/>
+  <circle cx="70" cy="65" r="20" fill="none" stroke="#0b1738" stroke-width="4"/>
+  <text x="70" y="72" font-family="Arial, sans-serif" font-size="18" font-weight="700" fill="#d9a441" text-anchor="middle">$</text>
+  <circle cx="130" cy="65" r="20" fill="none" stroke="#0b1738" stroke-width="4"/>
+  <text x="130" y="72" font-family="Arial, sans-serif" font-size="18" font-weight="700" fill="#d9a441" text-anchor="middle">©</text>
+  <path d="M92 60 L108 60 M92 70 L108 70" stroke="#d9a441" stroke-width="3" stroke-linecap="round"/>
+  <path d="M103 55 L110 60 L103 65" fill="#d9a441"/>
+  <path d="M97 75 L90 70 L97 65" fill="#d9a441"/>
+  <text x="100" y="125" font-family="Arial, sans-serif" font-size="12" font-weight="700" fill="#0b1738" text-anchor="middle">4í X(</text>
+</svg>

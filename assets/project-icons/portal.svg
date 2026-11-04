@@ -1,0 +1,8 @@
+<svg width="200" height="160" viewBox="0 0 200 160" xmlns="http://www.w3.org/2000/svg">
+  <rect width="200" height="160" fill="#f7f8fc" rx="12"/>
+  <circle cx="100" cy="70" r="35" fill="none" stroke="#0b1738" stroke-width="4"/>
+  <circle cx="100" cy="70" r="25" fill="none" stroke="#d9a441" stroke-width="3"/>
+  <circle cx="100" cy="70" r="15" fill="none" stroke="#0b1738" stroke-width="3"/>
+  <circle cx="100" cy="70" r="5" fill="#d9a441"/>
+  <text x="100" y="130" font-family="Arial, sans-serif" font-size="12" font-weight="700" fill="#0b1738" text-anchor="middle">Portal</text>
+</svg>
