@@ -1,0 +1,54 @@
+name: Update gifted math snapshot
+
+on:
+  schedule:
+    - cron: "41 */6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: write
+
+concurrency:
+  group: update-yeongjae-math
+  cancel-in-progress: true
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Fetch public Notion math rows
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          NOTION_YEONGJAE_TOPIC_SOURCE: ${{ vars.NOTION_YEONGJAE_TOPIC_SOURCE }}
+          NOTION_YEONGJAE_PROBLEM_SOURCE: ${{ vars.NOTION_YEONGJAE_PROBLEM_SOURCE }}
+        run: node scripts/update-yeongjae-math.mjs
+
+      - name: Commit refreshed snapshot
+        id: snapshot
+        run: |
+          if git diff --quiet -- yeongjae-math/data/latest.json; then
+            echo "No gifted math changes"
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          git config user.name "stargate-status-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add -- yeongjae-math/data/latest.json
+          git commit -m "data: refresh gifted math snapshot"
+          git push
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+
+      - name: Publish refreshed snapshot
+        if: steps.snapshot.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run pages.yml --ref main
