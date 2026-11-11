@@ -1,0 +1,7 @@
+<svg width="200" height="160" viewBox="0 0 200 160" xmlns="http://www.w3.org/2000/svg">
+  <rect width="200" height="160" fill="#f7f8fc" rx="12"/>
+  <path d="M85 50 L65 50 Q55 50 55 60 L55 70 Q55 80 65 80 L85 80" stroke="#0b1738" stroke-width="5" stroke-linecap="round" fill="none"/>
+  <path d="M115 50 L135 50 Q145 50 145 60 L145 70 Q145 80 135 80 L115 80" stroke="#d9a441" stroke-width="5" stroke-linecap="round" fill="none"/>
+  <line x1="85" y1="65" x2="115" y2="65" stroke="#0b1738" stroke-width="5" stroke-linecap="round"/>
+  <text x="100" y="125" font-family="Arial, sans-serif" font-size="12" font-weight="700" fill="#0b1738" text-anchor="middle">Ál È</text>
+</svg>
