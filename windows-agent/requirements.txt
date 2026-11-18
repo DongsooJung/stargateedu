@@ -1,0 +1,7 @@
+fastapi==0.116.1
+uvicorn[standard]==0.35.0
+pywinauto==0.6.9
+pyautogui==0.9.54
+Pillow==11.3.0
+pydantic==2.11.7
+python-dotenv==1.1.1

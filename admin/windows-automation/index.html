@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Stargate Windows Automation</title>
+  <style>
+    body{font-family:system-ui,-apple-system,Segoe UI,sans-serif;margin:0;background:#f6f7f9;color:#111827}
+    main{max-width:1100px;margin:40px auto;padding:0 20px}
+    h1{margin-bottom:6px}.muted{color:#6b7280}.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:24px}
+    .card{background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:18px;box-shadow:0 4px 14px rgba(0,0,0,.04)}
+    label{display:block;font-size:13px;font-weight:700;margin:12px 0 6px}input,textarea,select{width:100%;box-sizing:border-box;border:1px solid #d1d5db;border-radius:10px;padding:10px}
+    textarea{min-height:240px;font-family:ui-monospace,monospace}.row{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+    button{border:0;border-radius:10px;padding:10px 14px;font-weight:700;cursor:pointer;background:#111827;color:#fff}.secondary{background:#e5e7eb;color:#111827}.danger{background:#b91c1c}
+    pre{background:#0b1020;color:#d1fae5;border-radius:12px;padding:14px;overflow:auto;min-height:180px;white-space:pre-wrap}.status{font-weight:800}.ok{color:#047857}.bad{color:#b91c1c}
+    @media(max-width:800px){.grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+<main>
+  <h1>Windows 자동화</h1>
+  <div class="muted">스타게이트 로컬 Windows RPA 에이전트 제어 콘솔</div>
+
+  <div class="grid">
+    <section class="card">
+      <h2>연결</h2>
+      <label>에이전트 주소</label>
+      <input id="agentUrl" value="http://127.0.0.1:8765" />
+      <label>Agent Token</label>
+      <input id="token" type="password" placeholder="STARGATE_AGENT_TOKEN" />
+      <div class="row">
+        <button onclick="checkHealth()">상태 확인</button>
+        <button class="secondary" onclick="loadRuns()">실행 기록</button>
+      </div>
+      <p>상태: <span id="status" class="status">확인 전</span></p>
+    </section>
+
+    <section class="card">
+      <h2>빠른 작업</h2>
+      <label>템플릿</label>
+      <select id="template" onchange="applyTemplate()">
+        <option value="notepad">메모장 테스트</option>
+        <option value="calculator">계산기 2+3</option>
+        <option value="windows">열린 창 목록</option>
+      </select>
+      <div class="row">
+        <button onclick="applyTemplate()">템플릿 불러오기</button>
+        <button onclick="runTask()">실행</button>
+      </div>
+      <p class="muted">실행 명령은 아래 JSON을 사용합니다. 허용된 프로그램만 실행됩니다.</p>
+    </section>
+  </div>
+
+  <section class="card" style="margin-top:18px">
+    <h2>작업 JSON</h2>
+    <textarea id="payload"></textarea>
+  </section>
+
+  <section class="card" style="margin-top:18px">
+    <h2>결과 / 감사 로그</h2>
+    <pre id="output">준비됨</pre>
+  </section>
+</main>
+<script src="./windows-automation.js"></script>
+</body>
+</html>
