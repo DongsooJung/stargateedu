@@ -1,0 +1,7 @@
+<svg width="200" height="160" viewBox="0 0 200 160" xmlns="http://www.w3.org/2000/svg">
+  <rect width="200" height="160" fill="#f7f8fc" rx="12"/>
+  <circle cx="100" cy="65" r="32" fill="none" stroke="#0b1738" stroke-width="4"/>
+  <path d="M92 55 Q92 45 100 45 Q108 45 108 53 Q108 58 104 60 L100 63 L100 70" stroke="#d9a441" stroke-width="5" stroke-linecap="round" fill="none"/>
+  <circle cx="100" cy="80" r="4" fill="#d9a441"/>
+  <text x="100" y="135" font-family="Arial, sans-serif" font-size="12" font-weight="700" fill="#0b1738" text-anchor="middle">FAQ</text>
+</svg>
