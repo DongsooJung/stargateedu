@@ -1,11 +1,15 @@
-# STARGATE EDU — 공식 홈페이지 (stargateedu.co.kr)
+# STARGATE EDU 랜딩 — GitHub Pages 프로젝트 사이트
 
-GitHub Pages로 호스팅되는 STARGATE EDU 공식 원페이지 랜딩 사이트입니다.
+GitHub Pages로 호스팅되는 STARGATE EDU 원페이지 랜딩입니다.
+
+> **게시 위치**: 이 저장소의 Pages는 커스텀 도메인 없이 **`https://stargateedu.co.kr/stargateedu/` 하위 경로**로 서비스됩니다.
+> `stargateedu.co.kr` 루트 도메인은 `DongsooJung/dongsoojung.github.io` 저장소(포털)가 서비스합니다.
+> 따라서 이 저장소의 `CNAME` 파일은 제거했습니다(루트 도메인을 중복으로 주장하던 잔여 파일이었고, 실제 Pages 설정에는 반영되지 않았습니다).
 
 ## 구성
 
 - `index.html` — 메인 랜딩(한글 UTF-8, 반응형, 인쇄 대응)
-- `CNAME` — 커스텀 도메인 매핑(`stargateedu.co.kr`)
+- ~~`CNAME`~~ — 제거됨(루트 도메인은 포털 저장소가 서비스)
 - `.nojekyll` — Jekyll 빌드 비활성화(순정 HTML 직접 서빙)
 - `robots.txt` — 크롤링 허용 + sitemap 지시
 - `sitemap.xml` — 검색엔진 색인용
@@ -21,9 +25,9 @@ GitHub Pages로 호스팅되는 STARGATE EDU 공식 원페이지 랜딩 사이�
 
 ## 배포 파이프라인
 
-1. `main` 브랜치에 푸시 → GitHub Actions 없이 GitHub Pages가 자동 배포
-2. `CNAME`이 있으면 GitHub Pages가 자동으로 `stargateedu.co.kr` 매핑
-3. DNS 전환 완료 후 `Settings → Pages → Enforce HTTPS` 체크
+1. `main` 브랜치에 푸시 → `.github/workflows/pages.yml`이 GitHub Pages로 배포
+2. 게시 주소: `https://stargateedu.co.kr/stargateedu/` (프로젝트 사이트, 커스텀 도메인 없음)
+3. 루트 도메인 HTTPS·커스텀 도메인은 `dongsoojung.github.io` 저장소 Settings → Pages에서 관리
 
 ### 환율 데이터 자동 갱신
 
